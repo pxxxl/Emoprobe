@@ -8,7 +8,7 @@
 <font color="aqua">请求正文参数：</font>
 |参数名|类型|注释|
 |:---:|:---:|:---:|
-|bv_url|str|请求爬取和分析的b站视频url地址或BV号|
+|bv|str|请求爬取和分析的b站视频BV号|
 
 <font color="aqua">返回参数（json格式）</font>
 
@@ -36,7 +36,7 @@
 |参数名|类型|内容|注释|
 |:---:|:---:|:---:|:---:|
 |comment|str|单个评论句子|待分析的评论，由用户输入|
-|bv|str|目标评论的视频|B站视频的BV号或url|
+|bv|str|目标评论的视频|B站视频的BV号|
 
 <font color="aqua">返回参数（json格式）</font>
 
