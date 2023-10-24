@@ -6,3 +6,19 @@
     align-items: center;
     justify-content: center;
 }
+
+.direction-column-flex{
+    flex-direction: column;
+}
+.direction-row-flex{
+    flex-direction: row;
+}
+.border{
+    border: solid black 0.5px!important;
+}
+.select-no{
+    user-select: none;
+}
+#app{
+    min-height: 100vh;
+}

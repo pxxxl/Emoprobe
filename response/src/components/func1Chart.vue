@@ -1,13 +1,14 @@
 <template>
-<p>这是图标一</p>
+<p>data</p>
 <div class="echarts-box">
-    <div id="myEcharts" :style="{ width: '900px', height: '300px' }"></div>
+    <div id="myEcharts" :style="{ width: '900px', height: '300px' }">
+    <!-- data chart show -->
+    </div>
 </div>
 <div id="comment-show">
 <!-- PUT COMMENT DATA -->
-<!-- 
-  <table>
-    <tr>
+  <table id="table">
+    <tr id="head" class="com-width">
       <th>名字</th>
       <th>IP地址</th>
       <th>性别</th>
@@ -17,7 +18,7 @@
       <th>回复</th>
       <th>情感</th>
     </tr>
-    <tr v-for="(item,index) of comment_arr" v-bind:key="index">
+    <tr v-for="(item,index) of comment_arr" v-bind:key="index" class="com-width">
       <td>
         {{item.user_name}}
       </td>
@@ -44,7 +45,7 @@
       </td>
     </tr>
   </table>
-   -->
+  
 </div>
 </template>
 
@@ -63,3 +64,18 @@ export default{
     }
 }
 </script>
+<style scoped>
+#head{
+  user-select: none;
+}
+
+#table{
+  margin: auto;
+  height: auto;
+  width: 100vh;
+}
+
+.com-width{
+  width: auto;
+}
+</style>
