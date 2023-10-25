@@ -2,11 +2,22 @@
 .dis-flex{
     display: flex;;
 }
+.left-float{
+    float: left;
+}
+.right-float{
+    float: right;
+}
 .center-flex{
     align-items: center;
     justify-content: center;
 }
-
+.justify-content-center{
+    justify-content: center;
+}
+.align-items-center{
+    align-items: center;
+}
 .direction-column-flex{
     flex-direction: column;
 }
