@@ -111,7 +111,7 @@ def parserHtml(html) -> List:
 
     for i in range(len(s['data']['replies'])):
         comment = s['data']['replies'][i]
-        comment_dict = {}
+        comment_dict: Dict[str, Any] = {}
 
         username = comment['member']['uname']
         user_uid = '未知'
