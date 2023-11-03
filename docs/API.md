@@ -270,7 +270,7 @@ bv_list是评论列表，其中所有对象均为字符串，格式是'BVXXXXXXX
 
 ## 快速感知评论信息
 
-> /api/v1/comments
+> /api/v1/sentence
 
 *请求方式：POST
 **正文参数：**
