@@ -14,8 +14,8 @@ def get_video_info(bv: str) -> Dict:
     returns:
     Dict:{
         "video_bvid": str,
-        "video_aid": int,
-        "owner_uid": int,
+        "video_aid": str,
+        "owner_uid": str,
         "owner_name": str,
         "video_title": str,
         "video_partition": str,
@@ -28,7 +28,7 @@ def get_video_info(bv: str) -> Dict:
         "video_share": int,
         "video_reply": int,
         "video_dislike": int,
-        "video_cid": int
+        "video_cid": str
     }
     """
     v = video.Video(bvid=bv)
@@ -40,8 +40,8 @@ def get_video_info(bv: str) -> Dict:
 
     info = asyncio.run(async_get_video_info(v))
     res['video_bvid'] = info['bvid']
-    res['video_aid'] = info['aid']
-    res['owner_uid'] = info['owner']['mid']
+    res['video_aid'] = str(info['aid'])
+    res['owner_uid'] = str(info['owner']['mid'])
     res['owner_name'] = info['owner']['name']
     res['video_title'] = info['title']
     res['video_partition'] = info['tname']
@@ -54,11 +54,35 @@ def get_video_info(bv: str) -> Dict:
     res['video_share'] = info['stat']['share']
     res['video_reply'] = info['stat']['reply']
     res['video_dislike'] = info['stat']['dislike']
-    res['video_cid'] = info['cid']
+    res['video_cid'] = str(info['cid'])
     return res
 
 
-def fetchURL(url) -> str:
+def fetchURL(url: str) -> str:
+    """
+    input:
+    - url: str, like:'https://api.bilibili.com'
+
+    returns:
+    Dict:{
+        "video_bvid": str,
+        "video_aid": str,
+        "owner_uid": str,
+        "owner_name": str,
+        "video_title": str,
+        "video_partition": str,
+        "video_tables": str,
+        "video_pubdate": int,
+        "video_duration": int,
+        "video_like": int,
+        "video_coin": int,
+        "video_favorite": int,
+        "video_share": int,
+        "video_reply": int,
+        "video_dislike": int,
+        "video_cid": str
+    }
+    """
     headers = {
         'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36',
@@ -75,6 +99,7 @@ def fetchURL(url) -> str:
         print(e)
     except:
         print("Unknown Error !")
+    return ''
 
 
 def parserHtml(html) -> List:
@@ -97,14 +122,14 @@ def parserHtml(html) -> List:
         likes = comment['like']
         rcounts = comment['rcount']
 
-        comment_dict['user_uid'] = user_uid
-        comment_dict['user_name'] = username
-        comment_dict['user_ip'] = user_ip
-        comment_dict['user_sex'] = sex
-        comment_dict['comment_date'] = ctime
-        comment_dict['comment_text'] = content
-        comment_dict['comment_like'] = likes
-        comment_dict['comment_reply'] = rcounts
+        comment_dict['user_uid'] = str(user_uid)
+        comment_dict['user_name'] = str(username)
+        comment_dict['user_ip'] = str(user_ip)
+        comment_dict['user_sex'] = str(sex)
+        comment_dict['comment_date'] = str(ctime)
+        comment_dict['comment_text'] = str(content)
+        comment_dict['comment_like'] = int(likes)
+        comment_dict['comment_reply'] = int(rcounts)
 
         commentlist.append(comment_dict)
 
@@ -121,6 +146,14 @@ def crawl_comment(oid: int) -> List:
         comments += commentlist
 
     return comments
+
+
+def crawl_all_info_of_video(bv: str) -> Dict:
+    video_dict = get_video_info(bv)
+    video_cid = int(video_dict['cid'])
+    video_aid = int(video_dict['aid'])
+    video_comments = crawl_comment(video_cid)
+    return video_dict
 
 
 if __name__ == '__main__':
