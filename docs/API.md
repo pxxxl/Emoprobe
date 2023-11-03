@@ -101,18 +101,36 @@ data对象：
 | 字段    | 类型 | 内容     | 备注                          |
 | ------- | ---- | -------- | ----------------------------- |
 | operationTime    | str  | 时间   | 后端处理这条视频的评论的时间，示例："2023-10-08 12:40:32" |
-| comments | list  | 评论列表 |                        |
+| video_aid       | str  | 视频aid号    | 字符串，但是是数字                       |
+| owner_uid       | str  | UP主用户uid |  字符串，但是是数字                      |
+| owner_name      | str  | UP主用户名   |                        |
+| video_title     | str  | 视频标题     |                        |
+| video_partition | str  | 视频分区     |                        |
+| video_tables    | str  | 视频分区     |                        |
+| video_pubdate   | str  | 视频发布时间 | 格式为"2023-10-08 12:40:32"       |
+| video_duration  | num  | 视频时长     | 单位为秒               |
+| video_like      | num  | 点赞数       |                        |
+| video_coin      | num  | 投币数       |                        |
+| video_favorite  | num  | 收藏数       |                        |
+| video_share     | num  | 分享数       |                        |
+| video_reply     | num  | 评论数       |                        |
+| video_dislike   | num  | 点踩数       |                        |
+| video_cid       | num  | 视频cid号    |                        |
+| comments       | list  | 评论列表    |                        |
+
 
 comments列表，其中所有对象都以以下格式组织：
 
 | 字段  | 类型 | 内容     | 备注                          |
 | ------- | ---- | -------- | ----------------------------- |
-| name    | str  | 用户名   |  |
-| sex | str  | 性别 | 有“保密”、“男”、“女”                       |
-| time     | str  | 1        |   示例："2023-10-08 12:40:32"                            |
-| content     | str  | 评论内容        |                               |
-| likeNum     | num  | 点赞数量        |                               |
-| commentNum     | num  | 子评论数量        |                               |
+| user_uid          |      |   str       |  字符串，但是是数字                        |
+| user_name         |      |   str       |                          |
+| user_ip           |      |   str       |                          |
+| user_sex          |      |  str        | 有“保密”、“男”、“女”   |
+| comment_date      |      |  str        | 示例："2023-10-08 12:40:32" |
+| comment_text      |      |  str        |                          |
+| comment_like      |      |  num        | 点赞数量                         |
+| comment_reply     |      |  num        | 回复数量                         |
 | emotion     | str  | 情感        |                               |
 
 
@@ -127,25 +145,44 @@ comments列表，其中所有对象都以以下格式组织：
 | ------- | ---- | ------------------------ | -------------- | ------------------------------------ |
 
 **附带信息：**
+
+根对象：
 | 字段    | 类型 | 内容     | 备注                          |
 | ------- | ---- | -------- | ----------------------------- |
-| comments    | list  | 评论列表   | |
+| bv              | str  | 视频bv号     | 形式：“BVXXXXXX”       |
+| video_aid       | str  | 视频aid号    | 字符串，但是是数字                       |
+| owner_uid       | str  | UP主用户uid |  字符串，但是是数字                      |
+| owner_name      | str  | UP主用户名   |                        |
+| video_title     | str  | 视频标题     |                        |
+| video_partition | str  | 视频分区     |                        |
+| video_tables    | str  | 视频分区     |                        |
+| video_pubdate   | str  | 视频发布时间 | 格式为"2023-10-08 12:40:32"       |
+| video_duration  | num  | 视频时长     | 单位为秒               |
+| video_like      | num  | 点赞数       |                        |
+| video_coin      | num  | 投币数       |                        |
+| video_favorite  | num  | 收藏数       |                        |
+| video_share     | num  | 分享数       |                        |
+| video_reply     | num  | 评论数       |                        |
+| video_dislike   | num  | 点踩数       |                        |
+| video_cid       | num  | 视频cid号    |                        |
+| comments       | list  | 评论列表    |                        |
 
 comments列表，其中所有对象都以以下格式组织：
 
-| 字段  | 类型 | 内容     | 备注                          |
-| ------- | ---- | -------- | ----------------------------- |
-| name    | str  | 用户名   |  |
-| sex | str  | 性别 | 有“保密”、“男”、“女”                       |
-| time     | str  | 1        |   示例："2023-10-08 12:40:32"           |
-| content     | str  | 评论内容        |                               |
-| likeNum     | num  | 点赞数量        |                               |
-| commentNum     | num  | 子评论数量        |                           |
-
+| 字段              | 类型 | 内容     | 备注                     |
+| ----------------- | ---- | -------- | ------------------------ |
+| user_uid          |      |   str       |  字符串，但是是数字                        |
+| user_name         |      |   str       |                          |
+| user_ip           |      |   str       |                          |
+| user_sex          |      |  str        | 有“保密”、“男”、“女”   |
+| comment_date      |      |  str        | 示例："2023-10-08 12:40:32" |
+| comment_text      |      |  str        |                          |
+| comment_like      |      |  num        | 点赞数量                         |
+| comment_reply     |      |  num        | 回复数量                         |
 
 
 **效果：**
-获取视频信息，需要预先准备好评论数据。
+获取视频信息，需要预先准备好评论文件（json格式）。
 
 将保存这些信息进入数据库。
 
@@ -154,7 +191,7 @@ comments列表，其中所有对象都以以下格式组织：
 
 | 字段    | 类型 | 内容     | 备注                          |
 | ------- | ---- | -------- | ----------------------------- |
-| code    | num  | 返回值   | 200：成功<br />407：数据库找不到此资源 |
+| code    | num  | 返回值   | 200：成功<br />409：失败 |
 | msg | str  | 错误信息 | 默认为0                       |
 | data     | obj  | 数据        |                               |
 
@@ -163,19 +200,38 @@ data对象：
 | 字段    | 类型 | 内容     | 备注                          |
 | ------- | ---- | -------- | ----------------------------- |
 | operationTime    | str  | 时间   | 后端处理这条视频的评论的时间，示例："2023-10-08 12:40:32" |
-| comments | list  | 评论列表 |                        |
+| video_aid       | str  | 视频aid号    | 字符串，但是是数字                       |
+| owner_uid       | str  | UP主用户uid |  字符串，但是是数字                      |
+| owner_name      | str  | UP主用户名   |                        |
+| video_title     | str  | 视频标题     |                        |
+| video_partition | str  | 视频分区     |                        |
+| video_tables    | str  | 视频分区     |                        |
+| video_pubdate   | str  | 视频发布时间 | 格式为"2023-10-08 12:40:32"       |
+| video_duration  | num  | 视频时长     | 单位为秒               |
+| video_like      | num  | 点赞数       |                        |
+| video_coin      | num  | 投币数       |                        |
+| video_favorite  | num  | 收藏数       |                        |
+| video_share     | num  | 分享数       |                        |
+| video_reply     | num  | 评论数       |                        |
+| video_dislike   | num  | 点踩数       |                        |
+| video_cid       | num  | 视频cid号    |                        |
+| comments       | list  | 评论列表    |                        |
+
 
 comments列表，其中所有对象都以以下格式组织：
 
 | 字段  | 类型 | 内容     | 备注                          |
 | ------- | ---- | -------- | ----------------------------- |
-| name    | str  | 用户名   |  |
-| sex | str  | 性别 | 有“保密”、“男”、“女”                       |
-| time     | str  | 1        |   示例："2023-10-08 12:40:32"                            |
-| content     | str  | 评论内容        |                               |
-| likeNum     | num  | 点赞数量        |                               |
-| commentNum     | num  | 子评论数量        |                               |
+| user_uid          |      |   str       |  字符串，但是是数字                        |
+| user_name         |      |   str       |                          |
+| user_ip           |      |   str       |                          |
+| user_sex          |      |  str        | 有“保密”、“男”、“女”   |
+| comment_date      |      |  str        | 示例："2023-10-08 12:40:32" |
+| comment_text      |      |  str        |                          |
+| comment_like      |      |  num        | 点赞数量                         |
+| comment_reply     |      |  num        | 回复数量                         |
 | emotion     | str  | 情感        |                               |
+
 
 
 ## 获取视频列表
@@ -212,7 +268,7 @@ data对象：
 bv_list是评论列表，其中所有对象均为字符串，格式是'BVXXXXXXXX'
 
 
-## 快速感知评论信息（用于调试）
+## 快速感知评论信息
 
 > /api/v1/debug/comments
 
@@ -235,9 +291,8 @@ comments列表，其中所有对象都以以下格式组织：
 
 
 **效果：**
-感知评论内容，数据不进入数据库。
+感知单独的评论内容，数据也会进入数据库。
 
-用于调试系统感知和响应功能是否正常。
 
 **json回复：**
 根对象：
