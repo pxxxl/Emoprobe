@@ -4,6 +4,7 @@ from bilibili_api import video
 import json
 import requests
 import time
+import json
 
 
 def get_video_info(bv: str) -> Dict:
@@ -94,7 +95,6 @@ def fetchURL(url: str) -> str:
         return r.text
     except requests.HTTPError as e:
         print(e)
-        print("HTTPError")
     except requests.RequestException as e:
         print(e)
     except:
@@ -103,10 +103,7 @@ def fetchURL(url: str) -> str:
 
 
 def parserHtml(html) -> List:
-    try:
-        s = json.loads(html)
-    except:
-        print('error')
+    s = json.loads(html)
     commentlist = []
 
     for i in range(len(s['data']['replies'])):
