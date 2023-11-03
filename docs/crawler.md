@@ -41,7 +41,7 @@ data对象：
 | video_share     | num  | 分享数       |                        |
 | video_reply     | num  | 评论数       |                        |
 | video_dislike   | num  | 点踩数       |                        |
-| video_cid       | num  | 视频cid号    |                        |
+| video_cid       | str  | 视频cid号    | 字符串，但是是数字                       |
 | comments       | list  | 评论列表    |                        |
 
 comments对象为一列表，其中所有列表项均为以下对象：

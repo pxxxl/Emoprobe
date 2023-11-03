@@ -115,7 +115,7 @@ data对象：
 | video_share     | num  | 分享数       |                        |
 | video_reply     | num  | 评论数       |                        |
 | video_dislike   | num  | 点踩数       |                        |
-| video_cid       | num  | 视频cid号    |                        |
+| video_cid       | str  | 视频cid号    | 字符串，但是是数字                       |
 | comments       | list  | 评论列表    |                        |
 
 
@@ -164,7 +164,7 @@ comments列表，其中所有对象都以以下格式组织：
 | video_share     | num  | 分享数       |                        |
 | video_reply     | num  | 评论数       |                        |
 | video_dislike   | num  | 点踩数       |                        |
-| video_cid       | num  | 视频cid号    |                        |
+| video_cid       | str  | 视频cid号    | 字符串，但是是数字                       |
 | comments       | list  | 评论列表    |                        |
 
 comments列表，其中所有对象都以以下格式组织：
@@ -214,7 +214,7 @@ data对象：
 | video_share     | num  | 分享数       |                        |
 | video_reply     | num  | 评论数       |                        |
 | video_dislike   | num  | 点踩数       |                        |
-| video_cid       | num  | 视频cid号    |                        |
+| video_cid       | str  | 视频cid号    | 字符串，但是是数字                       |
 | comments       | list  | 评论列表    |                        |
 
 
