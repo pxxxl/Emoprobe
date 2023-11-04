@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class Comment {
     private String userId;
     private String userName;
-    private String userIP;
+    private String userIp;
     private String userSex;
     private LocalDateTime commentDate;
     private String commentText;

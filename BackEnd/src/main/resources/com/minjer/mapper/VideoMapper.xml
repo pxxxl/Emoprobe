@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.minjer.mapper.VideoMapper">
+
+    <resultMap id="VideoResultMap" type="com.minjer.pojo.Video">
+        <id column="video_bvid" property="videoBvid"/>
+        <result column="video_aid" property="videoAid"/>
+        <result column="owner_uid" property="ownerUid"/>
+        <result column="owner_name" property="ownerName"/>
+        <result column="video_title" property="videoTitle"/>
+        <result column="video_partition" property="videoPartition"/>
+        <result column="video_tables" property="videoTables"/>
+        <result column="video_pubdate" property="videoPubdate"/>
+        <result column="video_duration" property="videoDuration"/>
+        <result column="video_like" property="videoLike"/>
+        <result column="video_coin" property="videoCoin"/>
+        <result column="video_favorite" property="videoFavorite"/>
+        <result column="video_share" property="videoShare"/>
+        <result column="video_reply" property="videoReply"/>
+        <result column="video_dislike" property="videoDislike"/>
+        <result column="video_cid" property="videoCid"/>
+        <result column="video_savedate" property="videoSavedate"/>
+    </resultMap>
+
+    <insert id="addVideo">
+        insert into video (video_bvid, video_aid, owner_uid, owner_name, video_title, video_partition, video_tables,
+                           video_pubdate, video_duration, video_like, video_coin, video_favorite, video_share,
+                           video_reply, video_dislike, video_cid, video_savedate)
+        values (#{videoBvid}, #{videoAid}, #{ownerUid}, #{ownerName}, #{videoTitle}, #{videoPartition}, #{videoTables},
+                #{videoPubdate}, #{videoDuration}, #{videoLike}, #{videoCoin}, #{videoFavorite}, #{videoShare},
+                #{videoReply}, #{videoDislike}, #{videoCid}, #{videoSavedate});
+    </insert>
+
+    <delete id="delByVideoBvid">
+        delete
+        from video
+        where video_bvid = #{bv}
+    </delete>
+
+    <select id="selectByBv" resultMap="VideoResultMap">
+        select *
+        from video
+        where video_bvid = #{bv}
+    </select>
+</mapper>
