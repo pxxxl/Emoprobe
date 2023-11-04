@@ -32,7 +32,7 @@ data对象：
 | owner_name      | str  | UP主用户名   |                        |
 | video_title     | str  | 视频标题     |                        |
 | video_partition | str  | 视频分区     |                        |
-| video_tables    | str  | 视频分区     |                        |
+| video_tables    | str  | 视频标签      |                        |
 | video_pubdate   | str  | 视频发布时间 | 格式为"2023-10-08 12:40:32"       |
 | video_duration  | num  | 视频时长     | 单位为秒               |
 | video_like      | num  | 点赞数       |                        |
@@ -57,3 +57,4 @@ comments对象为一列表，其中所有列表项均为以下对象：
 | comment_like      |      |  num        | 点赞数量                         |
 | comment_reply     |      |  num        | 回复数量                         |
 
+如果调用时指定-o参数，则不会打印到标准输出，而是输出到文件。
