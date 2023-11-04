@@ -12,5 +12,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Result {
     private Integer code;
-    private Integer message;
+    private String message;
+
+    public static Result success(){
+        return new Result(200,"");
+    }
+
+    public static Result success(String message){
+        return new Result(200,message);
+    }
 }
