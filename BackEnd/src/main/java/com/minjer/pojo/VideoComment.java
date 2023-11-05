@@ -4,13 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * @author Minjer
- */
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Sentence {
-    private String sentenceText;
-    private String sentenceEmotion;
+public class VideoComment {
+    private Video video;
+    private List<Comment> comments;
+
 }

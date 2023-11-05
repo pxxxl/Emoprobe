@@ -14,11 +14,20 @@ public class Result {
     private Integer code;
     private String message;
 
-    public static Result success(){
-        return new Result(200,"");
+    public Result(int code) {
+        this.code = code;
+        this.message = "";
     }
 
-    public static Result success(String message){
-        return new Result(200,message);
+    public static Result success() {
+        return new Result(200, "");
+    }
+
+    public static Result success(String message) {
+        return new Result(200, message);
+    }
+
+    public static Result code(int code) {
+        return new Result(code);
     }
 }

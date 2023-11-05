@@ -18,8 +18,9 @@ public class Video {
     private String ownerUid;
     private String ownerName;
     private String videoTitle;
+    private String videoPartition;
     private String videoTables;
-    private LocalDateTime videoPubDate;
+    private LocalDateTime videoPubdate;
     private Integer videoDuration;
     private Integer videoLike;
     private Integer videoCoin;
@@ -28,5 +29,5 @@ public class Video {
     private Integer videoReply;
     private Integer videoDislike;
     private String videoCid;
-    private LocalDateTime videoSaveDate;
+    private LocalDateTime videoSavedate;
 }

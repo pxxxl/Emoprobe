@@ -1,3 +1,6 @@
+server:
+  address: localhost
+  port: 8080
 
 spring:
   datasource:
@@ -5,3 +8,7 @@ spring:
     username: root
     password: minjer
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+logging:
+  level:
+    com.minjer.mapper: DEBUG
