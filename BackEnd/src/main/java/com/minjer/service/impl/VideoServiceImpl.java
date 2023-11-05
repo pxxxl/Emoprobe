@@ -22,7 +22,7 @@ public class VideoServiceImpl implements VideoService {
 
     /**
      * 添加视频信息进入数据库
-     * 待测试
+     * 待测试（接入爬虫和分析模型的测试）
      * 1.进行数据库查询，是否能找到对应视频，若找不到则继续，若找到则返回
      * 2.调用爬虫获取视频对象
      * 3.处理返回结果，调用情感处理模型
@@ -77,6 +77,48 @@ public class VideoServiceImpl implements VideoService {
                     code = 200;
                 }
             }
+        }
+        return code;
+    }
+
+    /**
+     * 根据视频bv号删除视频
+     * 通过受影响行数判断是否删除成功
+     *
+     * @param bv
+     * @return 消息码
+     * 200 成功
+     * 407 数据库中不存在该视频
+     */
+    @Override
+    public int deleteVideo(String bv) {
+        int ans = videoMapper.delByVideoBvid(bv);
+        int code = 407;
+        if (ans != 0) {
+            return 407;
+        }
+        return code;
+    }
+
+    /**
+     * 根据bv号更新视频信息
+     * 待测试（接入爬虫和分析模型的测试）
+     * 通过受影响行数判断是否更新成功
+     * 1.进行删除操作，若返回为0则说明数据库中不存在该视频，直接返回
+     * 2.调用addVideo方法，将视频信息重新分析并添加进数据库
+     * @param bv
+     * @return 消息码
+     * 200 成功
+     * 407 数据库中不存在该视频
+     */
+    @Override
+    public int updateVideo(String bv) {
+        int code = 407;
+        if (videoMapper.delByVideoBvid(bv) != 0) {
+
+            addVideo(bv);
+
+            code = 200;
         }
         return code;
     }

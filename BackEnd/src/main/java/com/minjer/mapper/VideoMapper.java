@@ -21,6 +21,7 @@ public interface VideoMapper {
     /**
      * 根据bv号删除视频，同时会删除comment表中关联的评论
      * @param bv
+     * @return 删除的行数
      */
-    public void delByVideoBvid(String bv);
+    public int delByVideoBvid(String bv);
 }

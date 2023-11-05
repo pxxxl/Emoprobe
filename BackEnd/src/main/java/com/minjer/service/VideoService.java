@@ -11,4 +11,25 @@ public interface VideoService {
      * 406 出现错误
      */
     public int addVideo(String bv);
+
+
+    /**
+     * 从数据库删除视频
+     *
+     * @param bv
+     * @return 消息码
+     * 200 成功
+     * 407 数据库中不存在该视频
+     */
+    public int deleteVideo(String bv);
+
+    /**
+     * 更新视频信息
+     *
+     * @param bv
+     * @return 消息码
+     * 200 成功
+     * 407 数据库中不存在该视频
+     */
+    public int updateVideo(String bv);
 }
