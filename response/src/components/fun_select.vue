@@ -1,6 +1,6 @@
 <template>
     <div id="select-part" class=""> 
-            <img src="../assets/picture/blueArch.png" alt="" :style="{boxShadow:`var(--el-box-shadow-dark)`}">
+            <img src="/resource/picture/blueArch.png" alt="" :style="{boxShadow:`var(--el-box-shadow-dark)`}">
                  <el-select v-model="enter" effect="light" :popper-append-to-body="false" class="select-style">
                     <el-option value="selectA" id="seA" v-bind:label="fun1"></el-option>
                     <el-option value="selectB" id="seB" v-bind:label="fun2"></el-option>

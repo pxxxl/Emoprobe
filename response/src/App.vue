@@ -1,11 +1,14 @@
 <template>
 
 <FUNC_SELECT @select ="SelectChange" />
+<div id="mainpart">
 <FUN1  v-if="select == 0"/>
 <FUN2  v-if="select == 1"/>
 <FUN3 v-if="select == 2"/>
 
 <BACKTOP />
+</div>
+
 </template>
 
 <script>
@@ -36,3 +39,12 @@ export default{
     },
 }
 </script>
+
+<style scoped>
+#mainpart{
+    margin-left: 10%;
+    margin-right: 10%;
+    min-height: 90vh;
+    background-color: var(--color-Appmainpart);
+}
+</style>

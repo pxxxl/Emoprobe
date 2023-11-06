@@ -17,9 +17,7 @@
                 <template #trigger>
                     <el-button slot="trigger" class="select-file-elbutton border" type="default" @mouseleave="(event)=>event.target.blur()">选择文件</el-button>
                 </template>
-                <!-- {{filelist.length}} -->
                 <div v-if="filelist.length > 0" class="fl">
-                    <!-- {{filelist[0].name}} -->
                     <upload-item v-for="file in filelist" 
                                 :file="file" 
                                 :key="file.uid" 
@@ -40,6 +38,7 @@
         </form>
     </div>
     <func2Chart />
+    <NothingShow />
 </template>
 
 <script>
@@ -48,6 +47,7 @@ import axios from 'axios';
 import { ElMessage } from 'element-plus';
 import {getInterFace,ShowErrorMessage} from '@/assets/g.js';
 import uploadItem from './upload-item.vue';
+import NothingShow from './NothingsShow.vue'
 
 // import { Comment, ref } from 'vue'
 export default{
@@ -63,7 +63,8 @@ export default{
     components:{
         func2Chart,
         ElMessage,
-        uploadItem
+        uploadItem,
+        NothingShow
     },
     methods:{
         beforeUpload(file){

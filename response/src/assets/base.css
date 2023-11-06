@@ -1,6 +1,6 @@
 :root{
     --lite-black:rgba(13, 18, 15, 0.7);
-    --full-whilte::rgba(255,255,255,1);
+    --full-whilte:rgba(255,255,255,1);
     --greeedn-blue:rgb(19, 228, 211);
     --blue-deep:#337ecc;
     --blue-mid-deep:#409eff;
@@ -11,7 +11,8 @@
     --color-background: var(--full-whilte);
     --color-button:var(--greeedn-blue);
     --color-head:var(--blue-mid-deep);
-    --coloe-inputborder:var(--greeedn-blue);
+    --color-inputborder:var(--greeedn-blue);
+    --color-Appmainpart:var(--full-whilte);
 }
 
 body{

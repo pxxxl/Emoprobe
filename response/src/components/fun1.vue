@@ -6,7 +6,7 @@
             <el-button type="primary" native="button" class="button center" @mouseleave="(event)=>event.target.blur()" @click="Postdata">{{ commitNotice }}</el-button>
         </form>
         <func1Chart v-bind:comment_arr = "com" v-bind:chart_data = "show" v-if="success"/>
-        <img src="" alt="">
+        <NothingShow v-if="!success"/>
     </div>
 </template>
 
@@ -14,6 +14,7 @@
 import func1Chart from './func1Chart.vue'//import the component
 import axios from 'axios'
 import {getInterFace,translateBV,ShowErrorMessage} from '@/assets/g.js'
+import NothingShow from './NothingsShow.vue'
 
 export default{
     data() {
@@ -28,27 +29,27 @@ export default{
         }
     },
     components:{
-        func1Chart
+        func1Chart,
+        NothingShow
     },
     props:["op1"],
     methods: {
         Postdata(){
             alert("啥都没有！");
             let postdata = this.video;
-            if(postdata.video[0] != 'B' || postdata.video[1] != 'V')
-                postdata.video = translateBV(postdata.video);
-            axios.post(this.api,JSON.stringify(postdata))
-            .then(function (response){
-                let result = JSON.parse(response);
-                if(result == null){
-                    console.log(console.error());
-                    alert("接收数据错误");
+            if(postdata[0] !== 'B' || postdata[1] !== 'V')
+                postdata = translateBV(postdata.video);
+            axios({
+                url:this.api,
+                params:{
+                    bv:postdata.video,
+                    autopost:1
                 }
-                this.com = result.data;
-                //TODO
-            }).catch((error) => {
-                ShowErrorMessage("error:posting data" + error);
-            });
+            }).then((response)=>{
+                console.log(response);
+            }).catch((error)=>{
+                ShowErrorMessage(error);
+            })
         }
     },
     mounted() {
