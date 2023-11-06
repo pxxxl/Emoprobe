@@ -100,7 +100,14 @@ data对象：
 
 | 字段    | 类型 | 内容     | 备注                          |
 | ------- | ---- | -------- | ----------------------------- |
+| video       | object  | 视频信息    |        |
+| comments       | list  | 评论列表    |                        |
+
+video对象：
+| 字段    | 类型 | 内容     | 备注                          |
+| ------- | ---- | -------- | ----------------------------- |
 | operationTime    | str  | 时间   | 后端处理这条视频的评论的时间，示例："2023-10-08 12:40:32" |
+| video_bid       | str  | 视频bv号    | 形式：“BVXXXXXX”       |
 | video_aid       | str  | 视频aid号    | 字符串，但是是数字                       |
 | owner_uid       | str  | UP主用户uid |  字符串，但是是数字                      |
 | owner_name      | str  | UP主用户名   |                        |
@@ -108,15 +115,14 @@ data对象：
 | video_partition | str  | 视频分区     |                        |
 | video_tables    | str  | 视频分区     |                        |
 | video_pubdate   | str  | 视频发布时间 | 格式为"2023-10-08 12:40:32"       |
-| video_duration  | num  | 视频时长     | 单位为秒               |
+| video_duration  | num  | 视频时长     | 单位为秒                |
 | video_like      | num  | 点赞数       |                        |
 | video_coin      | num  | 投币数       |                        |
 | video_favorite  | num  | 收藏数       |                        |
 | video_share     | num  | 分享数       |                        |
 | video_reply     | num  | 评论数       |                        |
 | video_dislike   | num  | 点踩数       |                        |
-| video_cid       | str  | 视频cid号    | 字符串，但是是数字                       |
-| comments       | list  | 评论列表    |                        |
+| video_cid       | str  | 视频cid号    | 字符串，但是是数字       |
 
 
 comments列表，其中所有对象都以以下格式组织：
@@ -149,7 +155,14 @@ comments列表，其中所有对象都以以下格式组织：
 根对象：
 | 字段    | 类型 | 内容     | 备注                          |
 | ------- | ---- | -------- | ----------------------------- |
-| bv              | str  | 视频bv号     | 形式：“BVXXXXXX”       |
+| video              | obj  | 视频信息     |        |
+| comments       | list  | 评论列表    |                        |
+
+
+video对象：
+| 字段    | 类型 | 内容     | 备注                          |
+| ------- | ---- | -------- | ----------------------------- |
+| video_bid       | str  | 视频bv号    | 形式：“BVXXXXXX”       |
 | video_aid       | str  | 视频aid号    | 字符串，但是是数字                       |
 | owner_uid       | str  | UP主用户uid |  字符串，但是是数字                      |
 | owner_name      | str  | UP主用户名   |                        |
@@ -157,15 +170,15 @@ comments列表，其中所有对象都以以下格式组织：
 | video_partition | str  | 视频分区     |                        |
 | video_tables    | str  | 视频分区     |                        |
 | video_pubdate   | str  | 视频发布时间 | 格式为"2023-10-08 12:40:32"       |
-| video_duration  | num  | 视频时长     | 单位为秒               |
+| video_duration  | num  | 视频时长     | 单位为秒                |
 | video_like      | num  | 点赞数       |                        |
 | video_coin      | num  | 投币数       |                        |
 | video_favorite  | num  | 收藏数       |                        |
 | video_share     | num  | 分享数       |                        |
 | video_reply     | num  | 评论数       |                        |
 | video_dislike   | num  | 点踩数       |                        |
-| video_cid       | str  | 视频cid号    | 字符串，但是是数字                       |
-| comments       | list  | 评论列表    |                        |
+| video_cid       | str  | 视频cid号    | 字符串，但是是数字       |
+
 
 comments列表，其中所有对象都以以下格式组织：
 
@@ -199,7 +212,15 @@ data对象：
 
 | 字段    | 类型 | 内容     | 备注                          |
 | ------- | ---- | -------- | ----------------------------- |
+| video              | obj  | 视频信息     |        |
+| comments       | list  | 评论列表    |                        |
+
+
+video对象：
+| 字段    | 类型 | 内容     | 备注                          |
+| ------- | ---- | -------- | ----------------------------- |
 | operationTime    | str  | 时间   | 后端处理这条视频的评论的时间，示例："2023-10-08 12:40:32" |
+| video_bid       | str  | 视频bv号    | 形式：“BVXXXXXX”       |
 | video_aid       | str  | 视频aid号    | 字符串，但是是数字                       |
 | owner_uid       | str  | UP主用户uid |  字符串，但是是数字                      |
 | owner_name      | str  | UP主用户名   |                        |
@@ -207,15 +228,14 @@ data对象：
 | video_partition | str  | 视频分区     |                        |
 | video_tables    | str  | 视频分区     |                        |
 | video_pubdate   | str  | 视频发布时间 | 格式为"2023-10-08 12:40:32"       |
-| video_duration  | num  | 视频时长     | 单位为秒               |
+| video_duration  | num  | 视频时长     | 单位为秒                |
 | video_like      | num  | 点赞数       |                        |
 | video_coin      | num  | 投币数       |                        |
 | video_favorite  | num  | 收藏数       |                        |
 | video_share     | num  | 分享数       |                        |
 | video_reply     | num  | 评论数       |                        |
 | video_dislike   | num  | 点踩数       |                        |
-| video_cid       | str  | 视频cid号    | 字符串，但是是数字                       |
-| comments       | list  | 评论列表    |                        |
+| video_cid       | str  | 视频cid号    | 字符串，但是是数字       |
 
 
 comments列表，其中所有对象都以以下格式组织：
