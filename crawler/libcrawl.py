@@ -96,7 +96,7 @@ def parserHtml(html) -> List:
         comment_dict: Dict[str, Any] = {}
 
         username = comment['member']['uname']
-        user_uid = '未知'
+        user_uid = 0
         user_ip = '未知'
         sex = comment['member']['sex']
         ctime = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(comment['ctime']))
