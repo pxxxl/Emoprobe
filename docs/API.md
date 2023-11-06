@@ -171,14 +171,14 @@ comments列表，其中所有对象都以以下格式组织：
 
 | 字段              | 类型 | 内容     | 备注                     |
 | ----------------- | ---- | -------- | ------------------------ |
-| user_uid          |      |   str       |  字符串，但是是数字                        |
-| user_name         |      |   str       |                          |
-| user_ip           |      |   str       |                          |
-| user_sex          |      |  str        | 有“保密”、“男”、“女”   |
-| comment_date      |      |  str        | 示例："2023-10-08 12:40:32" |
-| comment_text      |      |  str        |                          |
-| comment_like      |      |  num        | 点赞数量                         |
-| comment_reply     |      |  num        | 回复数量                         |
+| user_uid          |         str|       |  字符串，但是是数字                        |
+| user_name         |         str|       |                          |
+| user_ip           |         str |      |                          |
+| user_sex          |        str   |     | 有“保密”、“男”、“女”   |
+| comment_date      |        str    |    | 示例："2023-10-08 12:40:32" |
+| comment_text      |        str     |   |                          |
+| comment_like      |        num      |  | 点赞数量                         |
+| comment_reply     |        num       | | 回复数量                         |
 
 
 **效果：**
