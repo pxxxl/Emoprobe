@@ -3,6 +3,8 @@ package com.minjer.mapper;
 import com.minjer.pojo.Video;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface VideoMapper {
     /**
@@ -24,4 +26,10 @@ public interface VideoMapper {
      * @return 删除的行数
      */
     public int delByVideoBvid(String bv);
+
+    /**
+     * 获取所有视频
+     * @return 所有视频
+     */
+    public List<Video> selectAll();
 }

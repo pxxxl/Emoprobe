@@ -39,7 +39,11 @@ public class CommentMapperTests {
 
     @Test
     public void selectByBvid() {
-        commentMapper.selectAllByVideoBvid("hgwiudq");
+
+        List<Comment> list = commentMapper.selectAllByVideoBvid("BV1Dd4y1B7uP");
+        for (Comment comment : list) {
+            System.out.println(comment);
+        }
     }
 
 }

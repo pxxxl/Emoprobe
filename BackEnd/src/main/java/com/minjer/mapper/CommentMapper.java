@@ -24,7 +24,7 @@ public interface CommentMapper {
      * @param bv bv号
      * @return 符合条件的评论列表
      */
-    public List<Comment>  selectAllByVideoBvid(String bv);
+    public List<Comment> selectAllByVideoBvid(String bv);
 
     /**
      * 按照评论id查找评论信息

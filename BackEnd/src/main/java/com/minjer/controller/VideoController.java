@@ -59,27 +59,29 @@ public class VideoController {
 
     /**
      * 获取指定视频信息
-     * 未开始
+     * 待测试
      *
-     * @param bv 视频bv号
-     * @param autopost
-     * @return
+     * @param bv       视频bv号
+     * @param autopost 是否会爬取信息
+     * @return 含有数据的结果信息
      */
     @RequestMapping(value = "/api/v1/videos", method = RequestMethod.GET)
     public Result getVideoInfo(String bv, int autopost) {
 
-        return Result.success("获取指定视频信息");
+        Result result = videoService.getVideoInfo(bv, autopost);
+        return result;
     }
 
     /**
      * 获取视频列表
-     * 未开始
+     * 待测试
      *
-     * @return
+     * @return 含有数据的结果信息
      */
     @RequestMapping(value = "/api/v1/videos/list", method = RequestMethod.GET)
     public Result getVideos() {
-        return Result.success("获取视频列表");
+        Result result = videoService.getVideoList();
+        return result;
     }
 
 }

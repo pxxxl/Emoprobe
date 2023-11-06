@@ -1,5 +1,6 @@
 package com.minjer.pojo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Result {
+    @JsonProperty("code")
     private Integer code;
+    @JsonProperty("msg")
     private String message;
 
     public Result(int code) {
