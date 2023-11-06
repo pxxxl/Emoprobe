@@ -1,3 +1,4 @@
 .idea/
 .mypy_cache/
 **/.gitignore
+crawler/__pycache__/
