@@ -21,20 +21,20 @@ public class VideoMapperTests {
     private VideoMapper videoMapper;
 
     @Test
-    void selectByBv(){
+    void selectByBv() {
         System.out.println(videoMapper.selectByBv("BV1Dd4y1B7uP"));
         System.out.println(videoMapper.selectByBv("BV1Dd"));
     }
 
     @Test
-    void addVideo(){
+    void addVideo() {
         Video video = videoMapper.selectByBv("BV1Dd4y1B7uP");
-        video.setVideoBvid("hgwiudq");
+        video.setVideoBvid("uhdkw");
         videoMapper.addVideo(video);
     }
 
     @Test
-    void delByBvid(){
-        videoMapper.delByVideoBvid("hgwiudq");
+    void delByBvid() {
+        System.out.println(videoMapper.delByVideoBvid("hgwiddudq"));
     }
 }

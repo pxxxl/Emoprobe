@@ -45,4 +45,8 @@
         from video
         where video_bvid = #{bv}
     </select>
+    <select id="selectAll" resultMap="VideoResultMap">
+        select *
+        from video
+    </select>
 </mapper>

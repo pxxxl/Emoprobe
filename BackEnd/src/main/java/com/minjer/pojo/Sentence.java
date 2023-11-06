@@ -1,5 +1,6 @@
 package com.minjer.pojo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Sentence {
+    @JsonProperty("content")
     private String sentenceText;
+    @JsonProperty("emotion")
     private String sentenceEmotion;
 }

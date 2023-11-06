@@ -19,6 +19,7 @@ public class VideoController {
 
     /**
      * 添加视频信息进入数据库
+     * 待测试
      *
      * @param bv
      * @return 不含数据的结果信息
@@ -31,51 +32,56 @@ public class VideoController {
 
     /**
      * 从数据库删除视频
-     * 未开始
+     * 待测试
      *
      * @param bv
-     * @return
+     * @return 不含数据的结果信息
      */
     @RequestMapping(value = "/api/v1/videos", method = RequestMethod.DELETE)
     public Result deleteVideo(String bv) {
-        return Result.success("从数据库删除视频");
+        int code = videoService.deleteVideo(bv);
+        return Result.code(code);
     }
 
     /**
      * 更新视频信息
-     * 未开始
+     * 待测试
      *
      * @param bv
-     * @return
+     * @return 不含数据的结果信息
      */
     @RequestMapping(value = "/api/v1/videos", method = RequestMethod.PUT)
     public Result updateVideo(String bv) {
-        return Result.success("更新视频信息");
+        int code = videoService.updateVideo(bv);
+        return Result.code(code);
     }
 
 
     /**
      * 获取指定视频信息
-     * 未开始
+     * 待测试
      *
      * @param bv       视频bv号
-     * @param autopost
-     * @return
+     * @param autopost 是否会爬取信息
+     * @return 含有数据的结果信息
      */
     @RequestMapping(value = "/api/v1/videos", method = RequestMethod.GET)
     public Result getVideoInfo(String bv, int autopost) {
-        return Result.success("获取指定视频信息");
+
+        Result result = videoService.getVideoInfo(bv, autopost);
+        return result;
     }
 
     /**
      * 获取视频列表
-     * 未开始
+     * 待测试
      *
-     * @return
+     * @return 含有数据的结果信息
      */
     @RequestMapping(value = "/api/v1/videos/list", method = RequestMethod.GET)
     public Result getVideos() {
-        return Result.success("获取视频列表");
+        Result result = videoService.getVideoList();
+        return result;
     }
 
 }
