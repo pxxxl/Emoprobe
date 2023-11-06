@@ -43,7 +43,7 @@ def main():
 
     emotions = inf(comments)
 
-    result = {'emotions': emotions}
+    result = {'emotions': emotions, 'comments': comments}
     result_json = json.dumps(result)
 
     if args.o is not None:
