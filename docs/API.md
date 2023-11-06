@@ -60,7 +60,7 @@
 **效果：**
 重新爬取指定视频基本信息与评论信息，并进行情绪感知，并替换原本视频的所有信息。
 
-注意，如果服务器原本不保存此BV号的视频信息，则服务器将不会爬取信息。
+注意，如果服务器原本没有此BV号的视频信息，则服务器将不会爬取信息。
 
 **json回复：**
 根对象：
@@ -85,7 +85,7 @@
 **效果：**
 获取视频信息，将不会更新或爬取视频信息。
 
-如果autopost为1，将自动爬取视频信息，但同样不会更新已经在数据库中的视频信息。
+如果autopost为1，而且数据库里原本没有此BV号的视频信息，则服务器将自动爬取视频信息，然后将处理后的视频信息返回；如果autopost为1，但是数据库里已经有此BV号的视频信息，则服务器不会重新爬取此BV号的视频信息，而是将视频信息直接返回。
 
 **json回复：**
 根对象：
@@ -100,7 +100,14 @@ data对象：
 
 | 字段    | 类型 | 内容     | 备注                          |
 | ------- | ---- | -------- | ----------------------------- |
-| operationTime    | str  | 时间   | 后端处理这条视频的评论的时间，示例："2023-10-08 12:40:32" |
+| video       | object  | 视频信息    |        |
+| comments       | list  | 评论列表    |                        |
+
+video对象：
+| 字段    | 类型 | 内容     | 备注                          |
+| ------- | ---- | -------- | ----------------------------- |
+| operation_time    | str  | 时间   | 后端处理这条视频的评论的时间，示例："2023-10-08 12:40:32" |
+| video_bid       | str  | 视频bv号    | 形式：“BVXXXXXX”       |
 | video_aid       | str  | 视频aid号    | 字符串，但是是数字                       |
 | owner_uid       | str  | UP主用户uid |  字符串，但是是数字                      |
 | owner_name      | str  | UP主用户名   |                        |
@@ -108,15 +115,14 @@ data对象：
 | video_partition | str  | 视频分区     |                        |
 | video_tables    | str  | 视频分区     |                        |
 | video_pubdate   | str  | 视频发布时间 | 格式为"2023-10-08 12:40:32"       |
-| video_duration  | num  | 视频时长     | 单位为秒               |
+| video_duration  | num  | 视频时长     | 单位为秒                |
 | video_like      | num  | 点赞数       |                        |
 | video_coin      | num  | 投币数       |                        |
 | video_favorite  | num  | 收藏数       |                        |
 | video_share     | num  | 分享数       |                        |
 | video_reply     | num  | 评论数       |                        |
 | video_dislike   | num  | 点踩数       |                        |
-| video_cid       | str  | 视频cid号    | 字符串，但是是数字                       |
-| comments       | list  | 评论列表    |                        |
+| video_cid       | str  | 视频cid号    | 字符串，但是是数字       |
 
 
 comments列表，其中所有对象都以以下格式组织：
@@ -149,7 +155,14 @@ comments列表，其中所有对象都以以下格式组织：
 根对象：
 | 字段    | 类型 | 内容     | 备注                          |
 | ------- | ---- | -------- | ----------------------------- |
-| bv              | str  | 视频bv号     | 形式：“BVXXXXXX”       |
+| video              | obj  | 视频信息     |        |
+| comments       | list  | 评论列表    |                        |
+
+
+video对象：
+| 字段    | 类型 | 内容     | 备注                          |
+| ------- | ---- | -------- | ----------------------------- |
+| video_bid       | str  | 视频bv号    | 形式：“BVXXXXXX”       |
 | video_aid       | str  | 视频aid号    | 字符串，但是是数字                       |
 | owner_uid       | str  | UP主用户uid |  字符串，但是是数字                      |
 | owner_name      | str  | UP主用户名   |                        |
@@ -157,28 +170,28 @@ comments列表，其中所有对象都以以下格式组织：
 | video_partition | str  | 视频分区     |                        |
 | video_tables    | str  | 视频分区     |                        |
 | video_pubdate   | str  | 视频发布时间 | 格式为"2023-10-08 12:40:32"       |
-| video_duration  | num  | 视频时长     | 单位为秒               |
+| video_duration  | num  | 视频时长     | 单位为秒                |
 | video_like      | num  | 点赞数       |                        |
 | video_coin      | num  | 投币数       |                        |
 | video_favorite  | num  | 收藏数       |                        |
 | video_share     | num  | 分享数       |                        |
 | video_reply     | num  | 评论数       |                        |
 | video_dislike   | num  | 点踩数       |                        |
-| video_cid       | str  | 视频cid号    | 字符串，但是是数字                       |
-| comments       | list  | 评论列表    |                        |
+| video_cid       | str  | 视频cid号    | 字符串，但是是数字       |
+
 
 comments列表，其中所有对象都以以下格式组织：
 
 | 字段              | 类型 | 内容     | 备注                     |
 | ----------------- | ---- | -------- | ------------------------ |
-| user_uid          |      |   str       |  字符串，但是是数字                        |
-| user_name         |      |   str       |                          |
-| user_ip           |      |   str       |                          |
-| user_sex          |      |  str        | 有“保密”、“男”、“女”   |
-| comment_date      |      |  str        | 示例："2023-10-08 12:40:32" |
-| comment_text      |      |  str        |                          |
-| comment_like      |      |  num        | 点赞数量                         |
-| comment_reply     |      |  num        | 回复数量                         |
+| user_uid          |         str|       |  字符串，但是是数字                        |
+| user_name         |         str|       |                          |
+| user_ip           |         str |      |                          |
+| user_sex          |        str   |     | 有“保密”、“男”、“女”   |
+| comment_date      |        str    |    | 示例："2023-10-08 12:40:32" |
+| comment_text      |        str     |   |                          |
+| comment_like      |        num      |  | 点赞数量                         |
+| comment_reply     |        num       | | 回复数量                         |
 
 
 **效果：**
@@ -199,7 +212,15 @@ data对象：
 
 | 字段    | 类型 | 内容     | 备注                          |
 | ------- | ---- | -------- | ----------------------------- |
-| operationTime    | str  | 时间   | 后端处理这条视频的评论的时间，示例："2023-10-08 12:40:32" |
+| video              | obj  | 视频信息     |        |
+| comments       | list  | 评论列表    |                        |
+
+
+video对象：
+| 字段    | 类型 | 内容     | 备注                          |
+| ------- | ---- | -------- | ----------------------------- |
+| operation_time    | str  | 时间   | 后端处理这条视频的评论的时间，示例："2023-10-08 12:40:32" |
+| video_bid       | str  | 视频bv号    | 形式：“BVXXXXXX”       |
 | video_aid       | str  | 视频aid号    | 字符串，但是是数字                       |
 | owner_uid       | str  | UP主用户uid |  字符串，但是是数字                      |
 | owner_name      | str  | UP主用户名   |                        |
@@ -207,15 +228,14 @@ data对象：
 | video_partition | str  | 视频分区     |                        |
 | video_tables    | str  | 视频分区     |                        |
 | video_pubdate   | str  | 视频发布时间 | 格式为"2023-10-08 12:40:32"       |
-| video_duration  | num  | 视频时长     | 单位为秒               |
+| video_duration  | num  | 视频时长     | 单位为秒                |
 | video_like      | num  | 点赞数       |                        |
 | video_coin      | num  | 投币数       |                        |
 | video_favorite  | num  | 收藏数       |                        |
 | video_share     | num  | 分享数       |                        |
 | video_reply     | num  | 评论数       |                        |
 | video_dislike   | num  | 点踩数       |                        |
-| video_cid       | str  | 视频cid号    | 字符串，但是是数字                       |
-| comments       | list  | 评论列表    |                        |
+| video_cid       | str  | 视频cid号    | 字符串，但是是数字       |
 
 
 comments列表，其中所有对象都以以下格式组织：
@@ -238,7 +258,7 @@ comments列表，其中所有对象都以以下格式组织：
 
 > /api/v1/videos/list
 
-*请求方式：GET
+*请求方式：GET*
 **正文参数：**
 
 | 参数名  | 类型 | 内容                     | 必要性         | 备注                                 |
@@ -246,9 +266,7 @@ comments列表，其中所有对象都以以下格式组织：
 
 
 **效果：**
-感知评论内容，数据不进入数据库。
-
-用于调试系统感知功能是否正常。
+获取视频基本信息列表。
 
 **json回复：**
 根对象：
@@ -263,9 +281,15 @@ data对象：
 
 | 字段    | 类型 | 内容     | 备注                          |
 | ------- | ---- | -------- | ----------------------------- |
-| bv_list | list  | 评论列表 |                        |
+| videos    | list  | 视频基本信息   |  |
 
-bv_list是评论列表，其中所有对象均为字符串，格式是'BVXXXXXXXX'
+videos列表里的对象：
+
+| 字段    | 类型 | 内容     | 备注                          |
+| ------- | ---- | -------- | ----------------------------- |
+| video_bid       | str  | BV号 |    形式：“BVXXXXXX”                    |
+| video_title     | str  | 视频标题     |                        |
+| operation_time     | str  | 处理时间    |  后端处理这条视频的评论的时间，示例："2023-10-08 12:40:32"                      |
 
 
 ## 快速感知评论信息
@@ -307,7 +331,7 @@ data对象：
 
 | 字段    | 类型 | 内容     | 备注                          |
 | ------- | ---- | -------- | ----------------------------- |
-| operationTime    | str  | 时间   | 后端处理这些评论的时间，示例："2023-10-08 12:40:32" |
+| operation_time    | str  | 时间   | 后端处理这些评论的时间，示例："2023-10-08 12:40:32" |
 | comments | list  | 评论列表 |                        |
 
 comments列表，其中所有对象都以以下格式组织：

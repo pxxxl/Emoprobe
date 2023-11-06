@@ -14,7 +14,7 @@ def get_video_info(bv: str) -> Dict:
 
     returns:
     Dict:{
-        "video_bvid": str,
+        "video_bid": str,
         "video_aid": str,
         "owner_uid": str,
         "owner_name": str,
@@ -40,7 +40,7 @@ def get_video_info(bv: str) -> Dict:
         return info
 
     info = asyncio.run(async_get_video_info(v))
-    res['video_bvid'] = info['bvid']
+    res['video_bid'] = info['bvid']
     res['video_aid'] = str(info['aid'])
     res['owner_uid'] = str(info['owner']['mid'])
     res['owner_name'] = info['owner']['name']
@@ -65,24 +65,7 @@ def fetchURL(url: str) -> str:
     - url: str, like:'https://api.bilibili.com'
 
     returns:
-    Dict:{
-        "video_bvid": str,
-        "video_aid": str,
-        "owner_uid": str,
-        "owner_name": str,
-        "video_title": str,
-        "video_partition": str,
-        "video_tables": str,
-        "video_pubdate": int,
-        "video_duration": int,
-        "video_like": int,
-        "video_coin": int,
-        "video_favorite": int,
-        "video_share": int,
-        "video_reply": int,
-        "video_dislike": int,
-        "video_cid": str
-    }
+    - html: str, json string
     """
     headers = {
         'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
@@ -91,7 +74,6 @@ def fetchURL(url: str) -> str:
     try:
         r = requests.get(url,headers=headers)
         r.raise_for_status()
-        print(r.url)
         return r.text
     except requests.HTTPError as e:
         print(e)
@@ -104,7 +86,10 @@ def fetchURL(url: str) -> str:
 
 def parserHtml(html) -> List:
     s = json.loads(html)
-    commentlist = []
+    commentlist: List[Any] = []
+
+    if s['data'] is None or s['data']['replies'] is None:
+        return commentlist
 
     for i in range(len(s['data']['replies'])):
         comment = s['data']['replies'][i]
@@ -147,16 +132,25 @@ def crawl_comment(oid: int) -> List:
 
 def crawl_all_info_of_video(bv: str) -> Dict:
     video_dict = get_video_info(bv)
-    video_cid = int(video_dict['cid'])
-    video_aid = int(video_dict['aid'])
+    video_cid = int(video_dict['video_cid'])
     video_comments = crawl_comment(video_cid)
-    return video_dict
+    video_data = {
+        'video': video_dict,
+        'comments': video_comments
+    }
+    final_dict = {
+        'code': 0,
+        'msg': '',
+        'data': video_data
+    }
+    return final_dict
 
 
 if __name__ == '__main__':
-    info = get_video_info("BV1uv411q7Mv")
+    info = crawl_all_info_of_video("BV1uv411q7Mv")
     print(info)
 
 # bvid="BV1uv411q7Mv"
 # aid=243922477
 # cid=214334689
+# https://api.bilibili.com/x/v2/reply?type=1&oid=214334689&pn=1
