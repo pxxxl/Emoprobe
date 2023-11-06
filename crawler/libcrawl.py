@@ -14,7 +14,7 @@ def get_video_info(bv: str) -> Dict:
 
     returns:
     Dict:{
-        "video_bvid": str,
+        "video_bid": str,
         "video_aid": str,
         "owner_uid": str,
         "owner_name": str,
@@ -40,7 +40,7 @@ def get_video_info(bv: str) -> Dict:
         return info
 
     info = asyncio.run(async_get_video_info(v))
-    res['video_bvid'] = info['bvid']
+    res['video_bid'] = info['bvid']
     res['video_aid'] = str(info['aid'])
     res['owner_uid'] = str(info['owner']['mid'])
     res['owner_name'] = info['owner']['name']
@@ -154,9 +154,10 @@ def crawl_all_info_of_video(bv: str) -> Dict:
 
 
 if __name__ == '__main__':
-    info = get_video_info("BV1uv411q7Mv")
+    info = crawl_all_info_of_video("BV1uv411q7Mv")
     print(info)
 
 # bvid="BV1uv411q7Mv"
 # aid=243922477
 # cid=214334689
+# https://api.bilibili.com/x/v2/reply?type=1&oid=214334689&pn=1
