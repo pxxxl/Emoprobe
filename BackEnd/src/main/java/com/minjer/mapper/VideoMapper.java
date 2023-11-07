@@ -5,6 +5,9 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
+/**
+ * 视频信息的数据库操作
+ */
 @Mapper
 public interface VideoMapper {
     /**

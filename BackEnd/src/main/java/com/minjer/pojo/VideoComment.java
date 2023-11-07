@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class VideoComment {
 
+    @JsonProperty("video")
     private Video video;
     @JsonProperty("comments")
     private List<Comment> comments;

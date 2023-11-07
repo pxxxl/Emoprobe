@@ -4,5 +4,17 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.minjer.mapper.SentenceMapper">
+    <resultMap id="SentenceMap" type="com.minjer.pojo.Sentence">
+        <result column="sentence_text" property="sentenceText"/>
+        <result column="sentence_emotion" property="sentenceEmotion"/>
+        <result column="sentence_savetime" property="sentenceSavetime"/>
+    </resultMap>
 
+    <insert id="addSentences">
+        insert into sentence(sentence_text, sentence_emotion, sentence_savetime)
+        VALUES
+        <foreach collection="list" index="index" separator="," item="item">
+            (#{item.sentenceText},#{item.sentenceEmotion},#{item.sentenceSavetime})
+        </foreach>
+    </insert>
 </mapper>

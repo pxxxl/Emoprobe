@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 /**
  * @author Minjer
  */
@@ -16,4 +18,6 @@ public class Sentence {
     private String sentenceText;
     @JsonProperty("emotion")
     private String sentenceEmotion;
+    @JsonProperty("operation_time")
+    private LocalDateTime sentenceSavetime;
 }

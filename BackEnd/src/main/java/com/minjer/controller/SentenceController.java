@@ -18,13 +18,15 @@ public class SentenceController {
 
     /**
      * 快速感知评论信息
-     * 未开始
+     * 待接入测试
      *
-     * @param sentences
-     * @return
+     * @param sentences 评论句子列表
+     * @return 含数据的结果
      */
     @RequestMapping(value = "/api/v1/sentence", method = RequestMethod.POST)
-    public Result handleSentences(ArrayList<Sentence> sentences) {
-        return Result.success("快速感知评论信息");
+    public Result handleSentences(ArrayList<String> sentences) {
+
+        Result result = sentenceService.handleSentences(sentences);
+        return result;
     }
 }

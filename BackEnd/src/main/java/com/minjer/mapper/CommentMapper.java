@@ -5,6 +5,9 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
+/**
+ * 评论的数据库操作
+ */
 @Mapper
 public interface CommentMapper {
     /**

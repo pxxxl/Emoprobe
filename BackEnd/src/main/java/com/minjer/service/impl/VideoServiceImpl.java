@@ -69,13 +69,13 @@ public class VideoServiceImpl implements VideoService {
                 }
 
                 // 向情感分析模块发送数据
-                List<Sentence> handledData = EmotionModule.handleSentence(rawData);
+                List<String> handledData = EmotionModule.handleSentence(rawData);
 
                 // 正确处理了所有消息并拿到结果
                 if (handledData != null) {
                     // 将结果整合起来
                     for (int i = 0; i < comments.size(); i++) {
-                        comments.get(i).setCommentEmotion(handledData.get(i).getSentenceEmotion());
+                        comments.get(i).setCommentEmotion(handledData.get(i));
                     }
 
                     // 向数据库中添加数据
