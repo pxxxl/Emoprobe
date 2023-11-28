@@ -121,7 +121,7 @@ def parserHtml(html) -> List:
 def crawl_comment(oid: int) -> List:
     oid_str = str(oid)
     comments: List = []
-    for page in range(0,10):
+    for page in range(1,10):
         url = 'https://api.bilibili.com/x/v2/reply?type=1&oid=' + oid_str + '&pn=' + str(page)
         html = fetchURL(url)
         commentlist = parserHtml(html)
@@ -132,8 +132,8 @@ def crawl_comment(oid: int) -> List:
 
 def crawl_all_info_of_video(bv: str) -> Dict:
     video_dict = get_video_info(bv)
-    video_cid = int(video_dict['video_cid'])
-    video_comments = crawl_comment(video_cid)
+    video_aid = int(video_dict['video_aid'])
+    video_comments = crawl_comment(video_aid)
     video_data = {
         'video': video_dict,
         'comments': video_comments
@@ -147,10 +147,15 @@ def crawl_all_info_of_video(bv: str) -> Dict:
 
 
 if __name__ == '__main__':
-    info = crawl_all_info_of_video("BV1uv411q7Mv")
+    info = crawl_all_info_of_video("BV1Dw411P7iP")
     print(info)
 
 # bvid="BV1uv411q7Mv"
 # aid=243922477
 # cid=214334689
 # https://api.bilibili.com/x/v2/reply?type=1&oid=214334689&pn=1
+
+# bvid="BV1Dw411P7iP"
+# aid=278833997
+# cid=1343348373
+# https://api.bilibili.com/x/v2/reply?type=1&oid=278833997&pn=1

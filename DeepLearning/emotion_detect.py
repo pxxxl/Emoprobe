@@ -9,6 +9,18 @@ def inf(comments: str) -> List[str]:
     emotion_list = [str(SnowNLP(comment).sentiments) for comment in comments]
     return emotion_list
 
+
+def get_error_json_string() -> str:
+    result_dict = {
+        "code": 1,
+        'msg': 'An error occurred.',
+        'comments': None,
+        'emotions': None
+    }
+    result_json_string = json.dumps(result_dict)
+    return result_json_string
+
+
 def parse_arguments():
     parser = argparse.ArgumentParser(description='AI情绪感知接口')
     parser.add_argument('-i', metavar='<以json字符串组织的评论列表>', help='读取以json字符串组织的评论列表')
@@ -21,7 +33,7 @@ def main():
     args = parse_arguments()
 
     if args.i is None and args.fi is None:
-        print('请提供评论列表')
+        print(get_error_json_string())
         return
 
     if args.fi is not None:
@@ -29,16 +41,16 @@ def main():
             with open(args.fi, 'r', encoding='utf-8') as file:
                 comments = json.load(file)['comments']
         except FileNotFoundError:
-            print('指定的文件路径不存在')
+            print(get_error_json_string())
             return
         except json.JSONDecodeError:
-            print('无法解析JSON文件')
+            print(get_error_json_string())
             return
     else:
         try:
             comments = json.loads(args.i)['comments']
         except json.JSONDecodeError:
-            print('无法解析JSON字符串')
+            print(get_error_json_string())
             return
 
     emotions = inf(comments)
@@ -51,7 +63,7 @@ def main():
             with open(args.o, 'w', encoding='utf-8') as file:
                 file.write(result_json)
         except IOError:
-            print('无法写入文件')
+            print(get_error_json_string())
     else:
         print(result_json)
 
