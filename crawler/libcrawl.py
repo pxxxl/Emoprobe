@@ -40,6 +40,9 @@ def get_video_info(bv: str) -> Dict:
         return info
 
     info = asyncio.run(async_get_video_info(v))
+
+    pubdate = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(info['pubdate']))
+
     res['video_bid'] = info['bvid']
     res['video_aid'] = str(info['aid'])
     res['owner_uid'] = str(info['owner']['mid'])
@@ -47,7 +50,7 @@ def get_video_info(bv: str) -> Dict:
     res['video_title'] = info['title']
     res['video_partition'] = info['tname']
     res['video_tables'] = info['tname']
-    res['video_pubdate'] = info['pubdate']
+    res['video_pubdate'] = pubdate
     res['video_duration'] = info['duration']
     res['video_like'] = info['stat']['like']
     res['video_coin'] = info['stat']['coin']
@@ -96,7 +99,7 @@ def parserHtml(html) -> List:
         comment_dict: Dict[str, Any] = {}
 
         username = comment['member']['uname']
-        user_uid = 0
+        user_uid = comment['member']['mid']
         user_ip = '未知'
         sex = comment['member']['sex']
         ctime = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(comment['ctime']))
@@ -121,12 +124,13 @@ def parserHtml(html) -> List:
 def crawl_comment(oid: int) -> List:
     oid_str = str(oid)
     comments: List = []
-    for page in range(1,10):
+    for page in range(1,1000):
         url = 'https://api.bilibili.com/x/v2/reply?type=1&oid=' + oid_str + '&pn=' + str(page)
         html = fetchURL(url)
         commentlist = parserHtml(html)
+        if len(commentlist) == 0:
+            break
         comments += commentlist
-
     return comments
 
 
