@@ -5,6 +5,7 @@ import json
 import requests
 import time
 import json
+import emoji
 
 
 def get_video_info(bv: str) -> Dict:
@@ -121,6 +122,17 @@ def parserHtml(html) -> List:
     return commentlist
 
 
+def replace_emoji(text: str) -> str:
+    """
+    input:
+    - text: str
+
+    returns:
+    - text: str
+    """
+    return emoji.demojize(text)
+
+
 def crawl_comment(oid: int) -> List:
     oid_str = str(oid)
     comments: List = []
@@ -131,6 +143,7 @@ def crawl_comment(oid: int) -> List:
         if len(commentlist) == 0:
             break
         comments += commentlist
+    comments = [replace_emoji(comment) for comment in comments]
     return comments
 
 
