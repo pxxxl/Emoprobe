@@ -92,6 +92,12 @@ def parserHtml(html) -> List:
     s = json.loads(html)
     commentlist: List[Any] = []
 
+    if s is None:
+        return commentlist
+    
+    if s['code'] != 0:
+        return commentlist
+
     if s['data'] is None or s['data']['replies'] is None:
         return commentlist
 
@@ -164,7 +170,7 @@ def crawl_all_info_of_video(bv: str) -> Dict:
 
 
 if __name__ == '__main__':
-    info = crawl_all_info_of_video("BV1Dw411P7iP")
+    info = crawl_all_info_of_video("BV1Dd4y1B7uP")
     print(info)
 
 # bvid="BV1uv411q7Mv"
@@ -176,3 +182,5 @@ if __name__ == '__main__':
 # aid=278833997
 # cid=1343348373
 # https://api.bilibili.com/x/v2/reply?type=1&oid=278833997&pn=1
+
+# bvid="BV1Dd4y1B7uP"
