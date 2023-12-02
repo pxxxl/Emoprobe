@@ -409,7 +409,7 @@ video对象：
 | video_coin      | num  | 投币数       |                        |
 | video_favorite  | num  | 收藏数       |                        |
 | video_share     | num  | 分享数       |                        |
-| video_reply     | num  | 评论数       |                        |
+| video_reply     | num  | 评论数       | 是视频的总评论数，包含所有评论（但是评论的子评论不会包含进comments列表）      |
 | video_dislike   | num  | 点踩数       |                        |
 | video_cid       | str  | 视频cid号    | 字符串，但是是数字       |
 

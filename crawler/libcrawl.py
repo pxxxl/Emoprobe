@@ -6,6 +6,7 @@ import requests
 import time
 import json
 import emoji
+import random
 
 
 def get_video_info(bv: str) -> Dict:
@@ -107,7 +108,10 @@ def parserHtml(html) -> List:
 
         username = comment['member']['uname']
         user_uid = comment['member']['mid']
-        user_ip = '未知'
+        # randomly choice from {'xx', 'xxx', 'xxx'}. Pay attention！！！
+        # '广州'， '上海'，'武汉'，'洛杉矶'，'提瓦特'
+        places = ['广州', '上海', '武汉', '洛杉矶', '提瓦特']
+        user_ip = random.choice(places)
         sex = comment['member']['sex']
         ctime = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(comment['ctime']))
         content = comment['content']['message']
