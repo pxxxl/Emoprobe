@@ -110,13 +110,13 @@ def parserHtml(html) -> List:
 
         username = comment['member']['uname']
         user_uid = comment['member']['mid']
-        # if 'location' in comment['reply_control'] is not None:
-        #     ip_string = comment['reply_control']['location']
-        #     user_ip = ip_string.replace("IP属地：", "")
-        # else:
-        #     user_ip = '未知'
-        places = ['基沃托斯', '星穹铁道', '提瓦特', '交界地', '洛斯里克高墙', '罗德兰', '苇名']
-        user_ip = random.choice(places)
+        if 'location' in comment['reply_control'] is not None:
+            ip_string = comment['reply_control']['location']
+            user_ip = ip_string.replace("IP属地：", "")
+        else:
+            user_ip = '未知'
+        # places = ['基沃托斯', '星穹铁道', '提瓦特', '交界地', '洛斯里克高墙', '罗德兰', '苇名']
+        # user_ip = random.choice(places)
         sex = comment['member']['sex']
         ctime = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(comment['ctime']))
         content = comment['content']['message']
@@ -151,7 +151,7 @@ def replace_emoji(text: str) -> str:
 def crawl_comment(oid: int, cookie: str) -> List:
     oid_str = str(oid)
     comments: List = []
-    for page in range(1,1000):
+    for page in range(1,100):
         url = 'https://api.bilibili.com/x/v2/reply?type=1&oid=' + oid_str + '&pn=' + str(page)
         html = fetchURL(url, cookie)
         commentlist = parserHtml(html)
@@ -177,7 +177,7 @@ def get_cookie(config_path: str) -> str:
     return cookie
 
 
-def get_config_file_path() -> str:
+def get_default_config_file_path() -> str:
     """
     returns:
     - config_file_path: str
@@ -188,7 +188,7 @@ def get_config_file_path() -> str:
     return config_file_path
 
 
-def crawl_all_info_of_video(bv: str) -> Dict:
+def crawl_all_info_of_video(bv: str, cookie: str) -> Dict:
     """
     input:
     - bv: str
@@ -196,10 +196,9 @@ def crawl_all_info_of_video(bv: str) -> Dict:
     returns:
     - final_dict: Dict
     """
-    #cookie = get_cookie(get_config_file_path())
     video_dict = get_video_info(bv)
     video_aid = int(video_dict['video_aid'])
-    video_comments = crawl_comment(video_aid, 'cookie')
+    video_comments = crawl_comment(video_aid, cookie)
     video_data = {
         'video': video_dict,
         'comments': video_comments
@@ -212,9 +211,16 @@ def crawl_all_info_of_video(bv: str) -> Dict:
     return final_dict
 
 
+def remove_non_utf8mb3_chars(input_str):
+    encoded_str = input_str.encode('utf-8', 'ignore')
+    decoded_str = encoded_str.decode('utf-8')
+    return decoded_str
+
+
 if __name__ == '__main__':
-    info = crawl_all_info_of_video("BV1M94y1G7q5")
+    info = crawl_all_info_of_video("BV1uv411q7Mv", "")
     print(info)
+
 
 # bvid="BV1uv411q7Mv"
 # aid=243922477
@@ -229,3 +235,5 @@ if __name__ == '__main__':
 # bvid="BV1Dd4y1B7uP"
 
 # bvid=‘BV1M94y1G7q5’
+
+# bvid='BV1f4411M7QC'
