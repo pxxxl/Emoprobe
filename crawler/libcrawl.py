@@ -149,7 +149,8 @@ def crawl_comment(oid: int) -> List:
         if len(commentlist) == 0:
             break
         comments += commentlist
-    comments = [replace_emoji(comment) for comment in comments]
+    for i in range(len(comments)):
+        comments[i]['comment_text'] = replace_emoji(comments[i]['comment_text'])
     return comments
 
 
@@ -170,7 +171,7 @@ def crawl_all_info_of_video(bv: str) -> Dict:
 
 
 if __name__ == '__main__':
-    info = crawl_all_info_of_video("BV1Dd4y1B7uP")
+    info = crawl_all_info_of_video("BV1uv411q7Mv")
     print(info)
 
 # bvid="BV1uv411q7Mv"
