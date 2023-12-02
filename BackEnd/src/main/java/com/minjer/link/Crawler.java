@@ -40,7 +40,7 @@ public class Crawler {
             }
 
             // 打印输出流（测试用）
-             System.out.println(output.toString());
+            System.out.println(output.toString());
 
             // 等待子进程执行完成
             int exitCode = process.waitFor();
@@ -56,12 +56,9 @@ public class Crawler {
                 for (int i = 0; i < videoComment.getComments().size(); i++) {
                     // 设置评论的视频bv号，与视频信息的bv号一致
                     videoComment.getComments().get(i).setVideoBvid(bv);
-
-                    /////////////////////////////////
-                    // 给爬虫擦屁股的部分，后面要删除
-                    //
-                    /////////////////////////////////
                 }
+
+
                 return videoComment;
             } else {
                 return null;

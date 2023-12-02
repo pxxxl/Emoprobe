@@ -177,6 +177,7 @@ public class VideoServiceImpl implements VideoService {
 
     /**
      * 获取视频列表
+     *
      * @return 视频列表
      */
     @Override
@@ -210,6 +211,7 @@ public class VideoServiceImpl implements VideoService {
     /**
      * 获取视频总体分析数据
      * 待测试
+     *
      * @param bv 视频bv号
      * @return 分析结果
      * 结果格式为两个列表，一个是情感分析结果，一个是情感分析结果对应的评论数
@@ -254,26 +256,27 @@ public class VideoServiceImpl implements VideoService {
      * 获取视频IP的统计信息
      * 返回结果包括以下几个部分：
      * 1. 所有存在的情感
-     *      1.1 每个情感的IP集合
-     *      1.2 每个情感的IP集合对应的评论数
+     * 1.1 每个情感的IP集合
+     * 1.2 每个情感的IP集合对应的评论数
      * 2. 所有存在的IP
-     *     2.1 每个IP的情感集合
-     *     2.2 每个IP的情感集合对应的评论数
+     * 2.1 每个IP的情感集合
+     * 2.2 每个IP的情感集合对应的评论数
      * 3. 所有IP对应的人数
+     *
      * @param bv 视频bv号
-     * @return
+     * @return 分析结果
      */
     @Override
     public Result getVideoIpOverview(String bv) {
         List<Comment> comments = commentMapper.selectAllByVideoBvid(bv);
-        if(comments == null || comments.size() == 0) {
+        if (comments == null || comments.size() == 0) {
             return new DataResult(407, "", null);
         }
 
         // 情感-IP-评论数
-        Map<String,Map<String,Integer>> emotionMap = new HashMap<>();
+        Map<String, Map<String, Integer>> emotionMap = new HashMap<>();
         // IP-情感-评论数
-        Map<String,Map<String,Integer>> ipMap = new HashMap<>();
+        Map<String, Map<String, Integer>> ipMap = new HashMap<>();
 
         for (Comment comment : comments) {
             String emotion = comment.getCommentEmotion();
@@ -290,6 +293,7 @@ public class VideoServiceImpl implements VideoService {
             ipSubMap.put(emotion, num + 1);
         }
 
+        // 按照要求整合结果
         ArrayList<String> emotions = new ArrayList<>();
         ArrayList<ArrayList<String>> emotionIp = new ArrayList<>();
         ArrayList<ArrayList<Integer>> emotionIpNum = new ArrayList<>();
@@ -323,6 +327,7 @@ public class VideoServiceImpl implements VideoService {
             ipNum.add(nums.stream().mapToInt(Integer::intValue).sum());
         });
 
+        // 封装结果
         Map<String, Object> result = new HashMap<>();
         result.put("emotion", emotions);
         Map<String, Object> emotionResult = new HashMap<>();
@@ -346,6 +351,7 @@ public class VideoServiceImpl implements VideoService {
      * 存在两种使用方法
      * 1.未确定分批大小时，默认为80
      * 2.确定分批大小时，传入分批大小
+     *
      * @param comments 评论集合
      */
     private void batchInsertComments(List<Comment> comments, int batchSize) {
@@ -355,6 +361,7 @@ public class VideoServiceImpl implements VideoService {
             commentMapper.addComments(subList);
         }
     }
+
     private void batchInsertComments(List<Comment> comments) {
         batchInsertComments(comments, 80);
     }

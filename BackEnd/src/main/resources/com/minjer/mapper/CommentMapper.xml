@@ -5,7 +5,7 @@
 
 <mapper namespace="com.minjer.mapper.CommentMapper">
     <resultMap id="CommentResultMap" type="com.minjer.pojo.Comment">
-        <result column="user_uid" property="userId"/>
+        <result column="user_uid" property="userUid"/>
         <result column="user_name" property="userName"/>
         <result column="user_ip" property="userIp"/>
         <result column="user_sex" property="userSex"/>
@@ -23,7 +23,7 @@
         comment_reply, comment_emotion, video_bvid)
         VALUES
         <foreach collection="list" index="index" separator="," item="item">
-            (#{item.userId},#{item.userName},#{item.userIp},#{item.userSex},#{item.commentDate},#{item.commentText},
+            (#{item.userUid},#{item.userName},#{item.userIp},#{item.userSex},#{item.commentDate},#{item.commentText},
             #{item.commentLike},#{item.commentReply},#{item.commentEmotion},#{item.videoBvid})
         </foreach>
     </insert>
