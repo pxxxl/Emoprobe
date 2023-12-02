@@ -171,7 +171,7 @@ def crawl_all_info_of_video(bv: str) -> Dict:
 
 
 if __name__ == '__main__':
-    info = crawl_all_info_of_video("BV1uv411q7Mv")
+    info = crawl_all_info_of_video("BV1M94y1G7q5")
     print(info)
 
 # bvid="BV1uv411q7Mv"
@@ -185,3 +185,5 @@ if __name__ == '__main__':
 # https://api.bilibili.com/x/v2/reply?type=1&oid=278833997&pn=1
 
 # bvid="BV1Dd4y1B7uP"
+
+# bvid=‘BV1M94y1G7q5’
