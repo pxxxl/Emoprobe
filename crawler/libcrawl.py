@@ -110,11 +110,13 @@ def parserHtml(html) -> List:
 
         username = comment['member']['uname']
         user_uid = comment['member']['mid']
-        if 'location' in comment['reply_control'] is not None:
-            ip_string = comment['reply_control']['location']
-            user_ip = ip_string.replace("IP属地：", "")
-        else:
-            user_ip = '未知'
+        # if 'location' in comment['reply_control'] is not None:
+        #     ip_string = comment['reply_control']['location']
+        #     user_ip = ip_string.replace("IP属地：", "")
+        # else:
+        #     user_ip = '未知'
+        places = ['基沃托斯', '星穹铁道', '提瓦特', '交界地', '洛斯里克高墙', '罗德兰', '苇名']
+        user_ip = random.choice(places)
         sex = comment['member']['sex']
         ctime = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(comment['ctime']))
         content = comment['content']['message']
