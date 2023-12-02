@@ -110,7 +110,7 @@ def parserHtml(html) -> List:
 
         username = comment['member']['uname']
         user_uid = comment['member']['mid']
-        if comment['reply_control']['location'] is not None:
+        if 'location' in comment['reply_control'] is not None:
             ip_string = comment['reply_control']['location']
             user_ip = ip_string.replace("IP属地：", "")
         else:
@@ -194,10 +194,10 @@ def crawl_all_info_of_video(bv: str) -> Dict:
     returns:
     - final_dict: Dict
     """
-    cookie = get_cookie(get_config_file_path())
+    #cookie = get_cookie(get_config_file_path())
     video_dict = get_video_info(bv)
     video_aid = int(video_dict['video_aid'])
-    video_comments = crawl_comment(video_aid, cookie)
+    video_comments = crawl_comment(video_aid, 'cookie')
     video_data = {
         'video': video_dict,
         'comments': video_comments
