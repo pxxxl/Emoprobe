@@ -7,6 +7,7 @@ import time
 import json
 import emoji
 import random
+import os
 
 
 def get_video_info(bv: str) -> Dict:
@@ -64,7 +65,7 @@ def get_video_info(bv: str) -> Dict:
     return res
 
 
-def fetchURL(url: str) -> str:
+def fetchURL(url: str, cookie: str) -> str:
     """
     input:
     - url: str, like:'https://api.bilibili.com'
@@ -75,6 +76,7 @@ def fetchURL(url: str) -> str:
     headers = {
         'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36',
+        'cookie': cookie
     }
     try:
         r = requests.get(url,headers=headers)
@@ -108,10 +110,11 @@ def parserHtml(html) -> List:
 
         username = comment['member']['uname']
         user_uid = comment['member']['mid']
-        # randomly choice from {'xx', 'xxx', 'xxx'}. Pay attention！！！
-        # '广州'， '上海'，'武汉'，'洛杉矶'，'提瓦特'
-        places = ['广州', '上海', '武汉', '洛杉矶', '提瓦特']
-        user_ip = random.choice(places)
+        if comment['reply_control']['location'] is not None:
+            ip_string = comment['reply_control']['location']
+            user_ip = ip_string.replace("IP属地：", "")
+        else:
+            user_ip = '未知'
         sex = comment['member']['sex']
         ctime = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(comment['ctime']))
         content = comment['content']['message']
@@ -143,12 +146,12 @@ def replace_emoji(text: str) -> str:
     return emoji.demojize(text)
 
 
-def crawl_comment(oid: int) -> List:
+def crawl_comment(oid: int, cookie: str) -> List:
     oid_str = str(oid)
     comments: List = []
     for page in range(1,1000):
         url = 'https://api.bilibili.com/x/v2/reply?type=1&oid=' + oid_str + '&pn=' + str(page)
-        html = fetchURL(url)
+        html = fetchURL(url, cookie)
         commentlist = parserHtml(html)
         if len(commentlist) == 0:
             break
@@ -158,10 +161,43 @@ def crawl_comment(oid: int) -> List:
     return comments
 
 
+def get_cookie(config_path: str) -> str:
+    """
+    input:
+    - config_path: str
+
+    returns:
+    - cookie: str
+    """
+    with open(config_path, 'r') as f:
+        config = json.load(f)
+    cookie = config['cookie']
+    return cookie
+
+
+def get_config_file_path() -> str:
+    """
+    returns:
+    - config_file_path: str
+    """
+    script_path = os.path.realpath(__file__)
+    script_dir = os.path.dirname(script_path)
+    config_file_path = os.path.join(script_dir, 'config.json')
+    return config_file_path
+
+
 def crawl_all_info_of_video(bv: str) -> Dict:
+    """
+    input:
+    - bv: str
+
+    returns:
+    - final_dict: Dict
+    """
+    cookie = get_cookie(get_config_file_path())
     video_dict = get_video_info(bv)
     video_aid = int(video_dict['video_aid'])
-    video_comments = crawl_comment(video_aid)
+    video_comments = crawl_comment(video_aid, cookie)
     video_data = {
         'video': video_dict,
         'comments': video_comments
