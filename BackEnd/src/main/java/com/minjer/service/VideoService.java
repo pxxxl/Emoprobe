@@ -50,4 +50,18 @@ public interface VideoService {
      * @return 含有数据的结果信息
      */
     public Result getVideoList();
+
+    /**
+     * 获取视频情感分析的总体信息
+     * @param bv 视频bv号
+     * @return 含有数据的结果信息
+     */
+    public Result getVideoStatisticsOverview(String bv);
+
+    /**
+     * 获取视频评论有关IP的统计信息
+     * @param bv 视频bv号
+     * @return 含有数据的结果信息
+     */
+    public Result getVideoIpOverview(String bv);
 }
