@@ -1,6 +1,7 @@
 package com.minjer.pojo;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,7 @@ public class Comment {
     @JsonProperty("user_sex")
     private String userSex;
     @JsonProperty("comment_date")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime commentDate;
     @JsonProperty("comment_text")
     private String commentText;

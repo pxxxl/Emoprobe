@@ -18,7 +18,11 @@ public class VideoComment {
     @JsonProperty("comments")
     private List<Comment> comments;
 
-    public List<String> getCommentTexts() {
+    /**
+     * 获取评论的评论文本
+     * @return 只有评论文本内容，为字符串列表
+     */
+    public List<String> obtainCommentTexts() {
         List<String> commentTexts = new ArrayList<>();
         for (Comment comment : comments) {
             commentTexts.add(comment.getCommentText());

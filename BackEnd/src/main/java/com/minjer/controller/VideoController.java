@@ -84,4 +84,21 @@ public class VideoController {
         return result;
     }
 
+    /**
+     * 统计视频信息
+     * 获取视频评论每种情绪的人数占比信息
+     * @param bv bv号
+     * @return 统计结果
+     */
+    @RequestMapping(value = "/api/v1/videos/statistics/overview", method = RequestMethod.GET)
+    public Result getVideoStatisticsOverview(String bv) {
+        Result result = videoService.getVideoStatisticsOverview(bv);
+        return result;
+    }
+
+    @RequestMapping(value = "/api/v1/videos/statistics/ip",method = RequestMethod.GET)
+    public Result etVideoIpOverview(String bv){
+        Result result = videoService.getVideoIpOverview(bv);
+        return result;
+    }
 }

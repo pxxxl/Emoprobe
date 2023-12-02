@@ -1,5 +1,6 @@
 package com.minjer.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,5 +20,6 @@ public class Sentence {
     @JsonProperty("emotion")
     private String sentenceEmotion;
     @JsonProperty("operation_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime sentenceSavetime;
 }

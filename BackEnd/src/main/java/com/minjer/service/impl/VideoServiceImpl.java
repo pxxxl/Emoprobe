@@ -8,6 +8,7 @@ import com.minjer.mapper.CommentMapper;
 import com.minjer.mapper.VideoMapper;
 import com.minjer.pojo.*;
 import com.minjer.service.VideoService;
+import com.minjer.utils.Tool;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -59,7 +60,7 @@ public class VideoServiceImpl implements VideoService {
 
                 // 对爬虫结果解封装
                 video = videoComment.getVideo();
-                video.setVideoSavedate(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))));
+                video.setVideoSavedate(LocalDateTime.now());
                 List<Comment> comments = videoComment.getComments();
 
                 // 提取文本内容出来
@@ -72,7 +73,7 @@ public class VideoServiceImpl implements VideoService {
                 List<String> handledData = EmotionModule.handleSentence(rawData);
 
                 // 正确处理了所有消息并拿到结果
-                if (handledData != null) {
+                if (handledData != null && handledData.size() != 0) {
                     // 将结果整合起来
                     for (int i = 0; i < comments.size(); i++) {
                         comments.get(i).setCommentEmotion(handledData.get(i));
@@ -80,7 +81,7 @@ public class VideoServiceImpl implements VideoService {
 
                     // 向数据库中添加数据
                     videoMapper.addVideo(video);
-                    commentMapper.addComments(comments);
+                    batchInsertComments(comments);
 
                     code = 200;
                 }
@@ -204,5 +205,157 @@ public class VideoServiceImpl implements VideoService {
         map.put("videos", responses);
 
         return new DataResult(200, "", map);
+    }
+
+    /**
+     * 获取视频总体分析数据
+     * 待测试
+     * @param bv 视频bv号
+     * @return 分析结果
+     * 结果格式为两个列表，一个是情感分析结果，一个是情感分析结果对应的评论数
+     */
+    @Override
+    public Result getVideoStatisticsOverview(String bv) {
+        // 获取视频信息
+        List<Comment> comments = commentMapper.selectAllByVideoBvid(bv);
+
+        // 若没有评论则返回
+        if (comments == null || comments.size() == 0) {
+            return new DataResult(407, "", null);
+        }
+
+        // 提取情感分析结果
+        ArrayList<String> emotions = new ArrayList<>();
+        for (Comment comment : comments) {
+            emotions.add(comment.getCommentEmotion());
+        }
+
+        // 统计情感分析结果
+        Map<String, Integer> map = Tool.getPerItemNum(emotions);
+
+        ArrayList<String> keys = new ArrayList<>();
+        ArrayList<Integer> values = new ArrayList<>();
+
+        map.forEach((k, v) -> {
+            keys.add(k);
+            values.add(v);
+        });
+
+        // 将结果整合起来
+        Map<String, Object> result = new HashMap<>();
+        result.put("emotion", keys);
+        result.put("num_person", values);
+
+        // 返回结果
+        return new DataResult(200, "", result);
+    }
+
+    /**
+     * 获取视频IP的统计信息
+     * 返回结果包括以下几个部分：
+     * 1. 所有存在的情感
+     *      1.1 每个情感的IP集合
+     *      1.2 每个情感的IP集合对应的评论数
+     * 2. 所有存在的IP
+     *     2.1 每个IP的情感集合
+     *     2.2 每个IP的情感集合对应的评论数
+     * 3. 所有IP对应的人数
+     * @param bv 视频bv号
+     * @return
+     */
+    @Override
+    public Result getVideoIpOverview(String bv) {
+        List<Comment> comments = commentMapper.selectAllByVideoBvid(bv);
+        if(comments == null || comments.size() == 0) {
+            return new DataResult(407, "", null);
+        }
+
+        // 情感-IP-评论数
+        Map<String,Map<String,Integer>> emotionMap = new HashMap<>();
+        // IP-情感-评论数
+        Map<String,Map<String,Integer>> ipMap = new HashMap<>();
+
+        for (Comment comment : comments) {
+            String emotion = comment.getCommentEmotion();
+            String ip = comment.getUserIp();
+
+            // 情感-IP-评论数
+            Map<String, Integer> emotionSubMap = emotionMap.computeIfAbsent(emotion, k -> new HashMap<>());
+            int num = emotionSubMap.getOrDefault(ip, 0);
+            emotionSubMap.put(ip, num + 1);
+
+            // IP-情感-评论数
+            Map<String, Integer> ipSubMap = ipMap.computeIfAbsent(ip, k -> new HashMap<>());
+            num = ipSubMap.getOrDefault(emotion, 0);
+            ipSubMap.put(emotion, num + 1);
+        }
+
+        ArrayList<String> emotions = new ArrayList<>();
+        ArrayList<ArrayList<String>> emotionIp = new ArrayList<>();
+        ArrayList<ArrayList<Integer>> emotionIpNum = new ArrayList<>();
+        emotionMap.forEach((k, v) -> {
+            emotions.add(k);
+            ArrayList<String> ips = new ArrayList<>();
+            ArrayList<Integer> nums = new ArrayList<>();
+            v.forEach((k1, v1) -> {
+                ips.add(k1);
+                nums.add(v1);
+            });
+            emotionIp.add(ips);
+            emotionIpNum.add(nums);
+        });
+
+        ArrayList<String> ips = new ArrayList<>();
+        ArrayList<ArrayList<String>> ipEmotion = new ArrayList<>();
+        ArrayList<ArrayList<Integer>> ipEmotionNum = new ArrayList<>();
+        ArrayList<Integer> ipNum = new ArrayList<>();
+        ipMap.forEach((k, v) -> {
+            ips.add(k);
+            ArrayList<String> subEmotions = new ArrayList<>();
+            ArrayList<Integer> nums = new ArrayList<>();
+            v.forEach((k1, v1) -> {
+                subEmotions.add(k1);
+                nums.add(v1);
+            });
+            ipEmotion.add(subEmotions);
+            ipEmotionNum.add(nums);
+
+            ipNum.add(nums.stream().mapToInt(Integer::intValue).sum());
+        });
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("emotion", emotions);
+        Map<String, Object> emotionResult = new HashMap<>();
+        emotionResult.put("ip", emotionIp);
+        emotionResult.put("num_ip", emotionIpNum);
+        result.put("ip_ratio_per_emotion", emotionResult);
+
+        result.put("ip", ips);
+        Map<String, Object> ipResult = new HashMap<>();
+        ipResult.put("emotion", ipEmotion);
+        ipResult.put("num_emotion", ipEmotionNum);
+        result.put("emotion_ratio_per_ip", ipResult);
+
+        result.put("num_ip_person", ipNum);
+
+        return new DataResult(200, "", result);
+    }
+
+    /**
+     * 批量插入评论
+     * 存在两种使用方法
+     * 1.未确定分批大小时，默认为80
+     * 2.确定分批大小时，传入分批大小
+     * @param comments 评论集合
+     */
+    private void batchInsertComments(List<Comment> comments, int batchSize) {
+        for (int i = 0; i < comments.size(); i += batchSize) {
+            int endIndex = Math.min(i + batchSize, comments.size());
+            List<Comment> subList = comments.subList(i, endIndex);
+            commentMapper.addComments(subList);
+        }
+    }
+    private void batchInsertComments(List<Comment> comments) {
+        batchInsertComments(comments, 80);
     }
 }

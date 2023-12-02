@@ -4,7 +4,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.minjer.mapper.CommentMapper">
-
     <resultMap id="CommentResultMap" type="com.minjer.pojo.Comment">
         <result column="user_uid" property="userId"/>
         <result column="user_name" property="userName"/>
@@ -18,7 +17,8 @@
         <result column="video_bvid" property="videoBvid"/>
     </resultMap>
 
-    <insert id="addComments" parameterType="java.util.List">
+
+    <insert id="addComments" parameterType="java.util.List" useGeneratedKeys="true">
         insert into comment(user_uid, user_name, user_ip, user_sex, comment_date, comment_text, comment_like,
         comment_reply, comment_emotion, video_bvid)
         VALUES
@@ -42,5 +42,42 @@
         select *
         from comment
         where comment_id = #{id}
+    </select>
+    <select id="selectByFilter" resultMap="CommentResultMap">
+        select *
+        from comment
+        <where>
+            <if test="bv != null and bv != ''">
+                AND video_bvid = #{bv}
+            </if>
+            <if test="ip != null and ip != ''">
+                AND user_ip IN
+                <foreach item="singleIp" index="index" collection="ip.split(',')" open="(" separator="," close=")">
+                    #{singleIp}
+                </foreach>
+            </if>
+            <if test="sex != null and sex != ''">
+                AND user_sex IN
+                <foreach item="singleSex" index="index" collection="sex.split(',')" open="(" separator="," close=")">
+                    #{singleSex}
+                </foreach>
+            </if>
+            <if test="startTime != null and endTime != null">
+                AND comment_date BETWEEN #{startTime} AND #{endTime}
+            </if>
+            <if test="startLike != null and endLike != null">
+                AND comment_like BETWEEN #{startLike} AND #{endLike}
+            </if>
+            <if test="startReply != null and endReply != null">
+                AND comment_reply BETWEEN #{startReply} AND #{endReply}
+            </if>
+            <if test="emotion != null and emotion != ''">
+                AND comment_emotion IN
+                <foreach item="singleEmotion" index="index" collection="emotion.split(',')" open="(" separator=","
+                         close=")">
+                    #{singleEmotion}
+                </foreach>
+            </if>
+        </where>
     </select>
 </mapper>

@@ -1,5 +1,6 @@
 package com.minjer.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,6 +30,7 @@ public class Video {
     @JsonProperty("video_tables")
     private String videoTables;
     @JsonProperty("video_pubdate")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime videoPubdate;
     @JsonProperty("video_duration")
     private Integer videoDuration;
@@ -47,5 +49,6 @@ public class Video {
     @JsonProperty("video_cid")
     private String videoCid;
     @JsonProperty("operation_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime videoSavedate;
 }

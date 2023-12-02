@@ -24,20 +24,33 @@ public class EmotionModule {
      * 3.将分析结果中的情感信息提取出来，返回一个String集合
      *
      * @param list 消息列表（纯字符串）
-     * @return 返回一个Sentence集合，这个集合含有对应的消息信息和情感
+     * @return 返回一个集合，这个集合含有对应的情感
      */
     public static List<String> handleSentence(List<String> list) {
-        // 将传入的消息列表转换为json字符串
+
+        ////////////////////////////
+        // 仅用于测试，后期需删除
+        int length = list.size();
+        List<String> emotions = new ArrayList<>();
+        emotions.add("positive");
+        emotions.add("negative");
+        emotions.add("neutral");
+
+        ArrayList<String> result = new ArrayList<>();
+        for (int i = 0; i < length; i++) {
+            result.add(emotions.get(i % 3));
+        }
+        return result;
+        /////////////////////////////
+/*        // 将传入的消息列表转换为json字符串
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("comments", list);
         String jsonString = jsonObject.toJSONString();
 
         // 调用情感分析模块
         try {
-            String currentWorkingDirectory = System.getProperty("user.dir");
-            System.out.println("当前运行路径：" + currentWorkingDirectory);
             // 构建 crawler.py 文件的相对路径
-            String pythonScript = "python ../DeepLearning/emotion_detect.py -i " + jsonString;
+            String pythonScript = "python ../DeepLearning/emotion_detect.py -i '" + jsonString + "'";
 
             // 调用 python 爬虫
             Process process = Runtime.getRuntime().exec(pythonScript);
@@ -62,7 +75,7 @@ public class EmotionModule {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return null;*/
     }
 
     /**
