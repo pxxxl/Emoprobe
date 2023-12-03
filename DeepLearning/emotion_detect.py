@@ -3,6 +3,7 @@ import json
 from typing import *
 from snownlp import SnowNLP
 
+
 def inf(comments: str) -> List[str]:
     # 在这里实现情绪感知的逻辑
     # 返回情绪字符串列表
@@ -28,6 +29,7 @@ def parse_arguments():
     parser.add_argument('-o', metavar='<文件保存路径>', help='将结果保存到指定路径的文件')
 
     return parser.parse_args()
+
 
 def main():
     args = parse_arguments()
