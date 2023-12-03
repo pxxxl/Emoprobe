@@ -8,6 +8,11 @@ def inf(comments: str) -> List[str]:
     # 在这里实现情绪感知的逻辑
     # 返回情绪字符串列表
     emotion_list = [str(SnowNLP(comment).sentiments) for comment in comments]
+    for emotion in emotion_list:
+        if float(emotion) >= 0.5:
+            emotion_list[emotion_list.index(emotion)] = 'Positive'
+        else:
+            emotion_list[emotion_list.index(emotion)] = 'Negative'
     return emotion_list
 
 
