@@ -1,13 +1,13 @@
 package com.minjer.controller;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.minjer.pojo.DataResult;
-import com.minjer.pojo.Filter;
-import com.minjer.pojo.Result;
-import com.minjer.pojo.VideoComment;
+import com.minjer.pojo.*;
 import com.minjer.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 对评论的操作
@@ -24,12 +24,14 @@ public class CommentController {
      * 感知由用户上传的评论信息
      * 待测试
      *
-     * @param videoComment 用户上传的视频评论信息
+     * @param video    视频信息
+     * @param comments 评论信息
      * @return 进行完情感分析的结果
      */
     @RequestMapping(value = "/api/v1/comments", method = RequestMethod.POST)
-    public Result addComments(VideoComment videoComment) {
-
+//    @RequestParam("video") Video video,@RequestParam("comments") ArrayList<Comment> comments
+    public Result addComments(@RequestBody VideoComment videoComment) {
+//        VideoComment videoComment = new VideoComment(video, comments);
         Result result = commentService.handleComments(videoComment);
 
         return result;

@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Comment {
     @JsonProperty("user_uid")
-    private String userId;
+    private String userUid;
     @JsonProperty("user_name")
     private String userName;
     @JsonProperty("user_ip")
