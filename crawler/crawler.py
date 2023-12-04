@@ -12,6 +12,21 @@ def get_result_json_string(bv: str, cookie: str='', pure: bool=False) -> str:
     return result_json_string
 
 
+
+
+
+def write_comment_text_list_to_file(bv: str, cookie: str='', output_path: str='') -> None:
+    comment_text_list = libcrawl.get_comment_text_list(bv, cookie)
+    if not output_path:
+        output_path = bv + '.txt'
+    # use UTF-8 encoding
+    with open(output_path, 'w', encoding='utf-8') as file:
+        for comment_text in comment_text_list:
+            # remove '\n' in comment_text
+            comment_text = comment_text.replace('\n', '')
+            file.write(comment_text + '\n')
+
+
 def get_error_json_string(bv: str) -> str:
     result_dict = {
         "code": 1,
@@ -72,4 +87,5 @@ def main():
 
 
 if __name__ == '__main__':
+    # write_comment_text_list_to_file("BV1tN4116787", "", "D:\Personal\Program\Comprehensive\Emoprobe\crawler\cache\BV1tN4116787.txt")
     main()
