@@ -104,7 +104,7 @@ public class VideoServiceImpl implements VideoService {
         int ans = videoMapper.delByVideoBvid(bv);
         int code = 407;
         if (ans != 0) {
-            return 407;
+            code = 200;
         }
         return code;
     }

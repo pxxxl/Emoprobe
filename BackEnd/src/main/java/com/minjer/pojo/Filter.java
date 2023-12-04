@@ -42,7 +42,7 @@ public class Filter {
     }
 
     public LocalDateTime splitStartTime() {
-        if (date == null) {
+        if (date == null || "".equals(date)) {
             return null;
         }
         String[] dates = date.split(",");
@@ -50,7 +50,7 @@ public class Filter {
         return LocalDateTime.parse(dates[0]);
     }
     public LocalDateTime splitEndTime() {
-        if (date == null) {
+        if (date == null || "".equals(date)) {
             return null;
         }
         String[] dates = date.split(",");
@@ -58,7 +58,7 @@ public class Filter {
     }
 
     public Integer splitStartLike() {
-        if (like == null) {
+        if (like == null || "".equals(like)) {
             return null;
         }
         String[] likes = like.split(",");
@@ -66,7 +66,7 @@ public class Filter {
     }
 
     public Integer splitEndLike() {
-        if (like == null) {
+        if (like == null || "".equals(like)) {
             return null;
         }
         String[] likes = like.split(",");
@@ -74,7 +74,7 @@ public class Filter {
     }
 
     public Integer splitStartReply() {
-        if (reply == null) {
+        if (reply == null || "".equals(reply)) {
             return null;
         }
         String[] replies = reply.split(",");
@@ -82,7 +82,7 @@ public class Filter {
     }
 
     public Integer splitEndReply() {
-        if (reply == null) {
+        if (reply == null || "".equals(reply)) {
             return null;
         }
         String[] replies = reply.split(",");
