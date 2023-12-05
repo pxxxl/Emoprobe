@@ -10,9 +10,11 @@ import com.minjer.pojo.*;
 import com.minjer.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.rmi.MarshalledObject;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,13 +36,17 @@ public class CommenntServiceImpl implements CommentService {
      * 5.若情感分析API返回null，则返回409，说明情感分析API出错
      *
      * @param videoComment 用户上传的视频评论信息
-     * @return 含数据的结果
+     * @return 被添加的视频信息
      */
     @Override
     public Result handleComments(VideoComment videoComment) {
+        if (videoMapper.selectByBv(videoComment.getVideo().getVideoBvid()) != null ){
+            return new DataResult(405, "", null);
+        }
+
         videoComment.getVideo().setVideoSavedate(LocalDateTime.now());
         List<String> emotions = EmotionModule.handleSentence(videoComment.obtainCommentTexts());
-        if (emotions != null) {
+        if (emotions.size() != 0) {
             String bv = videoComment.getVideo().getVideoBvid();
             for (int i = 0; i < videoComment.getComments().size(); i++) {
                 videoComment.getComments().get(i).setCommentEmotion(emotions.get(i));
@@ -50,7 +56,10 @@ public class CommenntServiceImpl implements CommentService {
             videoMapper.addVideo(videoComment.getVideo());
             batchInsertComments(videoComment.getComments());
 
-            return new DataResult(200, "", videoComment);
+            Map<String, Object> result = new HashMap<>();
+            result.put("video", videoComment.getVideo());
+
+            return new DataResult(200, "", result);
         } else {
             return new DataResult(409, "", null);
         }
@@ -58,7 +67,7 @@ public class CommenntServiceImpl implements CommentService {
 
     /**
      * 筛选视频评论
-     * 未完成
+     * 待测试
      *
      * @param filter 筛选条件集合
      * @return 含数据的结果

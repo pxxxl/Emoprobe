@@ -28,7 +28,7 @@ public class Crawler {
         try {
             String currentWorkingDirectory = System.getProperty("user.dir");
             // 构建 crawler.py 文件的相对路径
-            String pythonScript = "python ../crawler/crawler.py -bv " + bv;
+            String pythonScript = "python ../crawler/crawler.py -bv " + bv + "-config " + currentWorkingDirectory + "/crawler/config.json";
 
             // 调用 python 爬虫
             Process process = Runtime.getRuntime().exec(pythonScript);
@@ -40,12 +40,12 @@ public class Crawler {
             }
 
             // 打印输出流（测试用）
-             System.out.println(output.toString());
+            System.out.println(output.toString());
 
             // 等待子进程执行完成
             int exitCode = process.waitFor();
 
-            if (exitCode == 0 ) {
+            if (exitCode == 0) {
                 // 爬虫执行成功
                 VideoComment videoComment = JSON.parseObject(String.valueOf(JSON.parseObject(output.toString()).getJSONObject("data")), VideoComment.class);
                 if (videoComment == null) {
@@ -56,12 +56,9 @@ public class Crawler {
                 for (int i = 0; i < videoComment.getComments().size(); i++) {
                     // 设置评论的视频bv号，与视频信息的bv号一致
                     videoComment.getComments().get(i).setVideoBvid(bv);
-
-                    /////////////////////////////////
-                    // 给爬虫擦屁股的部分，后面要删除
-                    //
-                    /////////////////////////////////
                 }
+
+
                 return videoComment;
             } else {
                 return null;

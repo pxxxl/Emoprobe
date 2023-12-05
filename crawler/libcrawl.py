@@ -217,8 +217,19 @@ def remove_non_utf8mb3_chars(input_str):
     return decoded_str
 
 
+def get_comment_text_list(bv: str, cookie: str='') -> list:
+    result_dict = crawl_all_info_of_video(bv, cookie)
+    result_dict = result_dict['data']
+    comments = result_dict['comments']
+    comment_text_list = []
+    for comment in comments:
+        comment_text = comment['comment_text']
+        comment_text_list.append(comment_text)
+    return comment_text_list
+
+
 if __name__ == '__main__':
-    info = crawl_all_info_of_video("BV1uv411q7Mv", "")
+    info = crawl_all_info_of_video("BV1p14y1P73X", "")
     print(info)
 
 
