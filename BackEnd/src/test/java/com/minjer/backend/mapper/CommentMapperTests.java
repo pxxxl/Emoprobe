@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @SpringBootTest
@@ -56,5 +57,13 @@ public class CommentMapperTests {
                 LocalDateTime.parse("2022-02-18 17:59:39", formatter)
                 , null, null, null, null, null);
         System.out.println(list);
+    }
+
+    @Test
+    public void selectByFilter2() {
+        String s = ",1";
+        String[] split = s.split(",");
+        System.out.println(Arrays.toString(split));
+        System.out.println("123"+split[0]+"123");
     }
 }

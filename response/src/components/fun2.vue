@@ -17,6 +17,7 @@
                 <template #trigger>
                     <el-button slot="trigger" class="select-file-elbutton border" type="default" @mouseleave="(event)=>event.target.blur()">选择文件</el-button>
                 </template>
+                
                 <div v-if="filelist.length > 0" class="fl">
                     <upload-item v-for="file in filelist" 
                                 :file="file" 

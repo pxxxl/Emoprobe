@@ -24,14 +24,11 @@ public class CommentController {
      * 感知由用户上传的评论信息
      * 待测试
      *
-     * @param video    视频信息
-     * @param comments 评论信息
+     * @param videoComment 视频评论信息
      * @return 进行完情感分析的结果
      */
     @RequestMapping(value = "/api/v1/comments", method = RequestMethod.POST)
-//    @RequestParam("video") Video video,@RequestParam("comments") ArrayList<Comment> comments
     public Result addComments(@RequestBody VideoComment videoComment) {
-//        VideoComment videoComment = new VideoComment(video, comments);
         Result result = commentService.handleComments(videoComment);
 
         return result;

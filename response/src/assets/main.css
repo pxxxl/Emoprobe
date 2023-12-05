@@ -27,8 +27,22 @@
 .border{
     border: solid black 0.5px!important;
 }
+.margin-auto{
+    margin: auto;
+}
 .select-no{
     user-select: none;
+}
+.none-decoration{
+    text-decoration: none;
+}
+.pointer{
+    cursor: pointer;
+}
+.bodybackimage{
+    background-image: url('/resource/picture/vrbg-min.jpg'); 
+    background-repeat: no-repeat; 
+    background-size: cover;
 }
 #app{
     min-height: 100vh;

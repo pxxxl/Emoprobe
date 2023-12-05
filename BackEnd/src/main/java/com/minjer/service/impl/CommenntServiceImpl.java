@@ -40,6 +40,10 @@ public class CommenntServiceImpl implements CommentService {
      */
     @Override
     public Result handleComments(VideoComment videoComment) {
+        if (videoMapper.selectByBv(videoComment.getVideo().getVideoBvid()) != null ){
+            return new DataResult(405, "", null);
+        }
+
         videoComment.getVideo().setVideoSavedate(LocalDateTime.now());
         List<String> emotions = EmotionModule.handleSentence(videoComment.obtainCommentTexts());
         if (emotions.size() != 0) {
