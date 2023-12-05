@@ -1,0 +1,145 @@
+<template>
+    <el-button id="backpart" @click="back">
+        <el-icon><ArrowLeftBold /></el-icon>
+        返回
+    </el-button>
+    <div id="information">
+        <div class="inshow left-float border">视频BV号:<b>{{ video_information.video_bid }}</b></div>
+        <div class="inshow left-float border">视频标题:<b>{{ video_information.video_title }}</b></div>
+        <div class="inshow left-float border">最后操作时间:<b>{{ video_information.operation_time }}</b></div>
+        <div class="inshow left-float border">UP主用户名:<b>{{ video_information.owner_name }}</b></div>
+        <div class="inshow left-float border">视频分区:<b>{{ video_information.video_tables }}</b></div>
+        <div class="inshow left-float border">发布时间:<b>{{ video_information.pubdate }}</b></div>
+        <div class="inshow left-float border">点赞数:<b>{{ video_information.video_like }}</b></div>
+        <div class="inshow left-float border">投币数:<b>{{ video_information.video_coin }}</b></div>
+        <div class="inshow left-float border">收藏数:<b>{{ video_information.video_favorite }}</b></div>
+        <div class="inshow left-float border">分享数:<b>{{ video_information.video_share }}</b></div>
+        <div class="inshow left-float border">评论数:<b>{{ video_information.video_reply }}</b></div>
+    </div>
+    <div id="charts">
+
+    </div>
+    <div id="table">
+        <div class="pagination-block">
+            <div class="demonstration">
+                <el-table :data="per_pageCom" style="width: 100%;">
+                    <el-table-cloumn prop="user_id" lable="用户id"></el-table-cloumn>
+                    <el-table-cloumn prop="user_name" lable="用户名称"></el-table-cloumn>
+                    <el-table-cloumn prop="user_ip" lable="用户IP"></el-table-cloumn>
+                    <el-table-cloumn prop="user_sex" lable="性别"></el-table-cloumn>
+                    <el-table-cloumn prop="comment_data" lable="日期"></el-table-cloumn>
+                    <el-table-cloumn prop="comment_text" lable="评论文本"></el-table-cloumn>
+                    <el-table-cloumn prop="comment_like" lable="点赞数"></el-table-cloumn>
+                    <el-table-cloumn prop="comment_reply" lable="回复数"></el-table-cloumn>
+                    <el-table-cloumn prop="emnotion" lable="情感"></el-table-cloumn>
+                </el-table>
+            </div>
+            <el-pagination layout="prev, pager, next" :page-size="30" v-model:page-count="all_pagenum" v-model:current-page="pn" background="blue"/>
+        </div>
+    </div>
+</template>
+
+<script lang="ts" setup>
+import { onMounted,ref,watch } from 'vue';
+import {useRoute,useRouter} from 'vue-router'
+import axios, { formToJSON } from 'axios';
+import {ShowErrorMessage} from '@/assets/g.js'
+
+const route = useRoute();
+const router = useRouter();
+const api = '/api/v1/videos/page/filter';
+
+const per_pageCom = ref([]);
+const all_pagenum = ref(1);
+const page_len = 30;
+const video_information = ref({});
+const bv = ref(route.query.bv?.toString());
+const pn=ref(1);
+
+interface Params{
+    bv:string,
+    autopost:number,
+    n_per_page:number,
+    pn:number,
+    user_ip:string,
+    user_sex:string,
+    comment_date:string,
+    comment_like:string,
+    comment_reply:string,
+    emotion:string
+}
+
+const get_page_comment = (bvString:string,autopost:number,pageLen:number,page:number,ip_sift?:string,sex_sift?:string,date_sift?:string,like_sift?:string,reply_sift?:string,emotion_sift?:string)=>{
+    let params:Params = {} as Params;
+    params.bv =bvString;
+    params.autopost = autopost;
+    params.n_per_page = pageLen;
+    params.pn = page;
+
+    if(ip_sift)params.user_ip = ip_sift;
+    if(sex_sift)params.user_sex = sex_sift;
+    if(date_sift)params.comment_date = date_sift;
+    if(like_sift)params.comment_like = like_sift;
+    if(reply_sift)params.comment_reply = reply_sift;
+    if(emotion_sift)params.emotion = emotion_sift;
+
+    axios.get(api,{
+        params:params
+    }).then((org_response:any)=>{
+        let response:any = JSON.parse(org_response.data);
+        if(response.code == 408 || response.code == 408){
+            ShowErrorMessage(response.msg + " 即将跳转");
+            setTimeout(()=>{
+                router.push({
+                path:"/"
+                });
+            },3000);
+        }
+        all_pagenum.value = response.data.total_page_num;
+        per_pageCom.value = response.data.comments;
+        video_information.value = response.data.video;
+    }).catch((error:any)=>{
+        ShowErrorMessage(error + " 服务器链接错误，即将跳转");
+        setTimeout(()=>{
+                router.push({
+                path:"/"
+                });
+        },3000);
+    });
+}
+
+const back = ()=>{
+    router.push({
+        path:"/"
+    });
+}
+
+
+onMounted(()=>{
+    get_page_comment(bv.value as string,1,page_len,0);
+})
+
+watch(pn,(New_pn)=>{
+    get_page_comment(bv.value as string,1,page_len,pn.value-1);
+});
+</script>
+
+<style scoped>
+.inshow{
+    margin: 2vh;
+    padding: 1vh;
+    border-radius: 2vh;
+    font-size: large;
+    background-color: var(--color-tag);
+    overflow: hidden;
+}
+
+#information{
+    width: 100%;
+    overflow: hidden;
+}
+
+#table{
+    /* clear: both; */
+}
+</style>

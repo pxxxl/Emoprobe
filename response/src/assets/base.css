@@ -1,7 +1,8 @@
 :root{
     --lite-black:rgba(13, 18, 15, 0.7);
     --full-whilte:rgba(255,255,255,1);
-    --greeedn-blue:rgb(19, 228, 211);
+    --green-blue:rgb(19, 228, 211);
+    --green-light: rgba(26, 211, 143, 0.5);
     --blue-deep:#337ecc;
     --blue-mid-deep:#409eff;
     --blue-light:#a0cfff;
@@ -9,17 +10,18 @@
 
 :root{
     --color-background: var(--full-whilte);
-    --color-button:var(--greeedn-blue);
+    --color-button:var(--green-blue);
     --color-head:var(--blue-mid-deep);
     --color-inputborder:var(--greeedn-blue);
     --color-Appmainpart:var(--full-whilte);
+    --color-tag:var(--green-light);
 }
 
 body{
     min-height: 100vh;
     transition:
-        color 2s  ease-in-out,
-        background-color 0.5s ease-in-out;
+        color 0.5s  ease-in-out,
+        background-image 2s ease-in-out;
     background-color:  var(--color-background);
     margin: 0;
 }

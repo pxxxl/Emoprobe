@@ -73,21 +73,16 @@ import axios from 'axios';
 import { ElMessage } from 'element-plus';
 
  export const translateBV = (url)=>{
-    const pre = "BV.*?/";
+    const pre = "BV.{10}?";
     let BV_num = url.match(pre);
-    BV_num = BV_num[0].slice(0,12);
-    return BV_num;
+    if(BV_num == null) return "error";
+    else{
+        BV_num = BV_num[0];
+        return BV_num;
+    }
 }
 
-export const  getInterFace = async (num)=>{
-    let Inter;
-    let api = await axios.get('/api.json');
-    Inter = api.data['interface' + num + '_url'];
-    console.log(Inter);
-    return Inter;
-}
-
-export function ShowErrorMessage(msg){
+export function  ShowErrorMessage(msg){
     ElMessage({
         message:msg,
         duration:3000,
