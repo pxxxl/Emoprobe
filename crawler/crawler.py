@@ -1,6 +1,7 @@
 import libcrawl
 import json
 import argparse
+import utils
 
 
 def main():
@@ -20,7 +21,7 @@ def main():
         if not config_path:
             config_path = libcrawl.get_default_config_file_path()
         
-        cookie = libcrawl.get_cookie(config_path)
+        cookie = utils.get_cookie(config_path)
 
         if pure_output:
             result_json_string = libcrawl.get_result_json_string(bv, cookie, True)
@@ -34,7 +35,7 @@ def main():
             print(result_json_string)
         
     except:
-        result_json_string = libcrawl.get_error_json_string(bv)
+        result_json_string = libcrawl.get_error_json_string()
         print(result_json_string)
 
 
