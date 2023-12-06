@@ -1,6 +1,7 @@
 import asyncio
 from typing import *
 from bilibili_api import video
+import bilibili_api
 import json
 import requests
 import time
@@ -217,6 +218,34 @@ def remove_non_utf8mb3_chars(input_str):
     return decoded_str
 
 
+def crawl_popular_bv_list(page_lower_bound: int, page_upper_bound: int) -> List:
+    """
+    page_bound: for i in range(page_lower_bound, page_upper_bound)
+    """
+    POPULAR_URL = "https://api.bilibili.com/x/web-interface/popular"
+    HEADERS = {
+        'Accept': 'application/json, text/javascript, */*; q=0.01',
+        'referer': 'https://www.bilibili.com/',
+        'x-csrf-token': '',
+        'x-requested-with': 'XMLHttpRequest',
+        'cookie': ''
+        ,
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36'
+    }
+    bvidList = []
+    for i in range(page_lower_bound, page_upper_bound):
+        query = "pn=" + str(i)
+        r = requests.get(POPULAR_URL, headers=HEADERS, params=query)
+        resultList = r.json()['data']['list']
+        for item in resultList:
+            bvidList.append(
+                bilibili_api.aid2bvid(
+                    item['aid']
+                )
+            )
+    return bvidList
+
+
 def get_comment_text_list(bv: str, cookie: str='') -> list:
     result_dict = crawl_all_info_of_video(bv, cookie)
     result_dict = result_dict['data']
@@ -228,23 +257,52 @@ def get_comment_text_list(bv: str, cookie: str='') -> list:
     return comment_text_list
 
 
+def get_result_json_string(bv: str, cookie: str='', pure: bool=False) -> str:
+    result_dict = libcrawl.crawl_all_info_of_video(bv, cookie)
+    if pure:
+        result_dict = result_dict['data']
+    result_json_string = json.dumps(result_dict)
+    result_json_string = libcrawl.remove_non_utf8mb3_chars(result_json_string)
+    return result_json_string
+
+
+def write_comment_text_list_to_file(bv: str, cookie: str='', output_path: str='') -> None:
+    comment_text_list = libcrawl.get_comment_text_list(bv, cookie)
+    if not output_path:
+        output_path = bv + '.txt'
+    # use UTF-8 encoding
+    with open(output_path, 'w', encoding='utf-8') as file:
+        for comment_text in comment_text_list:
+            # remove '\n' in comment_text
+            comment_text = comment_text.replace('\n', '')
+            file.write(comment_text + '\n')
+
+
+def get_error_json_string(bv: str) -> str:
+    result_dict = {
+        "code": 1,
+        'msg': 'An error occurred while crawling the video.',
+        'data': None
+    }
+    result_json_string = json.dumps(result_dict)
+    return result_json_string
+
+
+def get_cookie(config_path: str) -> str:
+    """
+    input:
+    - config_path: str
+
+    returns:
+    - cookie: str
+    """
+    with open(config_path, 'r') as f:
+        config = json.load(f)
+    cookie = config['cookie']
+    return cookie
+
+
+
 if __name__ == '__main__':
     info = crawl_all_info_of_video("BV1p14y1P73X", "")
     print(info)
-
-
-# bvid="BV1uv411q7Mv"
-# aid=243922477
-# cid=214334689
-# https://api.bilibili.com/x/v2/reply?type=1&oid=214334689&pn=1
-
-# bvid="BV1Dw411P7iP"
-# aid=278833997
-# cid=1343348373
-# https://api.bilibili.com/x/v2/reply?type=1&oid=278833997&pn=1
-
-# bvid="BV1Dd4y1B7uP"
-
-# bvid=‘BV1M94y1G7q5’
-
-# bvid='BV1f4411M7QC'
