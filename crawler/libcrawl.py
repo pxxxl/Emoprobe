@@ -1,6 +1,7 @@
 import asyncio
 from typing import *
 from bilibili_api import video
+import bilibili_api
 import json
 import requests
 import time
@@ -8,10 +9,13 @@ import json
 import emoji
 import random
 import os
+import utils
 
 
 def get_video_info(bv: str) -> Dict:
     """
+    Crawl video info from bilibili_api, and return a dict.
+
     input:
     - bv : string like:"BV1uv411q7Mv"
 
@@ -67,6 +71,8 @@ def get_video_info(bv: str) -> Dict:
 
 def fetchURL(url: str, cookie: str) -> str:
     """
+    Get html from url.
+
     input:
     - url: str, like:'https://api.bilibili.com'
 
@@ -82,16 +88,31 @@ def fetchURL(url: str, cookie: str) -> str:
         r = requests.get(url,headers=headers)
         r.raise_for_status()
         return r.text
-    except requests.HTTPError as e:
-        print(e)
-    except requests.RequestException as e:
-        print(e)
     except:
-        print("Unknown Error !")
-    return ''
+        return ''
 
 
 def parserHtml(html) -> List:
+    """
+    Parse html and return a list of comments.
+
+    input:
+    - html: str, json string
+
+    returns:
+    - commentlist: List
+
+        comment = {
+            'user_uid',
+            'user_name',
+            'user_ip',
+            'user_sex',
+            'comment_date',
+            'comment_text',
+            'comment_like',
+            'comment_reply'
+        }
+    """
     s = json.loads(html)
     commentlist: List[Any] = []
 
@@ -137,18 +158,28 @@ def parserHtml(html) -> List:
     return commentlist
 
 
-def replace_emoji(text: str) -> str:
+def crawl_comment(oid: int, cookie: str) -> List:
     """
+    Get comments from a video.
+
     input:
-    - text: str
+    - oid: int, video_aid
+    - cookie: str
 
     returns:
-    - text: str
+    - comments: List
+
+        comment = {
+            'user_uid',
+            'user_name',
+            'user_ip',
+            'user_sex',
+            'comment_date',
+            'comment_text',
+            'comment_like',
+            'comment_reply'
+        }
     """
-    return emoji.demojize(text)
-
-
-def crawl_comment(oid: int, cookie: str) -> List:
     oid_str = str(oid)
     comments: List = []
     for page in range(1,100):
@@ -159,37 +190,15 @@ def crawl_comment(oid: int, cookie: str) -> List:
             break
         comments += commentlist
     for i in range(len(comments)):
-        comments[i]['comment_text'] = replace_emoji(comments[i]['comment_text'])
+        comments[i]['comment_text'] = utils.replace_emoji(comments[i]['comment_text'])
+        comments[i]['comment_text'] = utils.remove_non_utf8mb3_chars(comments[i]['comment_text'])
     return comments
-
-
-def get_cookie(config_path: str) -> str:
-    """
-    input:
-    - config_path: str
-
-    returns:
-    - cookie: str
-    """
-    with open(config_path, 'r') as f:
-        config = json.load(f)
-    cookie = config['cookie']
-    return cookie
-
-
-def get_default_config_file_path() -> str:
-    """
-    returns:
-    - config_file_path: str
-    """
-    script_path = os.path.realpath(__file__)
-    script_dir = os.path.dirname(script_path)
-    config_file_path = os.path.join(script_dir, 'config.json')
-    return config_file_path
 
 
 def crawl_all_info_of_video(bv: str, cookie: str) -> Dict:
     """
+    Crawl all info of a video, including video info and comments.
+
     input:
     - bv: str
 
@@ -211,13 +220,55 @@ def crawl_all_info_of_video(bv: str, cookie: str) -> Dict:
     return final_dict
 
 
-def remove_non_utf8mb3_chars(input_str):
-    encoded_str = input_str.encode('utf-8', 'ignore')
-    decoded_str = encoded_str.decode('utf-8')
-    return decoded_str
+def crawl_popular_bv_list(page_lower_bound: int, page_upper_bound: int) -> List:
+    """
+    Crawl popular bv list from page_lower_bound to page_upper_bound.
+
+    input:
+    - page_lower_bound: int
+    - page_upper_bound: int
+        page_bound: for i in range(page_lower_bound, page_upper_bound)
+
+    returns:
+    - bvidList: List
+    """
+    POPULAR_URL = "https://api.bilibili.com/x/web-interface/popular"
+    HEADERS = {
+        'Accept': 'application/json, text/javascript, */*; q=0.01',
+        'referer': 'https://www.bilibili.com/',
+        'x-csrf-token': '',
+        'x-requested-with': 'XMLHttpRequest',
+        'cookie': ''
+        ,
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36'
+    }
+    bvidList = []
+    for i in range(page_lower_bound, page_upper_bound):
+        query = "pn=" + str(i)
+        r = requests.get(POPULAR_URL, headers=HEADERS, params=query)
+        resultList = r.json()['data']['list']
+        for item in resultList:
+            bvidList.append(
+                bilibili_api.aid2bvid(
+                    item['aid']
+                )
+            )
+    return bvidList
 
 
 def get_comment_text_list(bv: str, cookie: str='') -> list:
+    """
+    Get comment text list from a video.
+
+    input:
+    - bv: str
+    - cookie: str
+
+    returns:
+    - comment_text_list: list
+
+        comment_text: str
+    """
     result_dict = crawl_all_info_of_video(bv, cookie)
     result_dict = result_dict['data']
     comments = result_dict['comments']
@@ -228,23 +279,41 @@ def get_comment_text_list(bv: str, cookie: str='') -> list:
     return comment_text_list
 
 
+def get_result_json_string(bv: str, cookie: str='', pure: bool=False) -> str:
+    """
+    Get crawl result json string, support both standard and pure mode.
+
+    input:
+    - bv: str
+    - cookie: str
+    - pure: bool
+
+    returns:
+    - result_json_string: str
+    """
+    result_dict = crawl_all_info_of_video(bv, cookie)
+    if pure:
+        result_dict = result_dict['data']
+    result_json_string = json.dumps(result_dict)
+    return result_json_string
+
+
+def get_error_json_string() -> str:
+    """
+    Get error json string.
+
+    returns:
+    - result_json_string: str
+    """
+    result_dict = {
+        "code": 1,
+        'msg': 'An error occurred while crawling the video.',
+        'data': None
+    }
+    result_json_string = json.dumps(result_dict)
+    return result_json_string
+
+
 if __name__ == '__main__':
     info = crawl_all_info_of_video("BV1p14y1P73X", "")
     print(info)
-
-
-# bvid="BV1uv411q7Mv"
-# aid=243922477
-# cid=214334689
-# https://api.bilibili.com/x/v2/reply?type=1&oid=214334689&pn=1
-
-# bvid="BV1Dw411P7iP"
-# aid=278833997
-# cid=1343348373
-# https://api.bilibili.com/x/v2/reply?type=1&oid=278833997&pn=1
-
-# bvid="BV1Dd4y1B7uP"
-
-# bvid=‘BV1M94y1G7q5’
-
-# bvid='BV1f4411M7QC'

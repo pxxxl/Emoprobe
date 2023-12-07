@@ -2,3 +2,4 @@
 .mypy_cache/
 **/.gitignore
 crawler/__pycache__/
+crawler/cache/
