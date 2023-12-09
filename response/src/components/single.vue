@@ -2,7 +2,7 @@
 <template>
     <div id="input" class="center">
         <span class="center select-no">功能3：输入单个评论进行评论分析</span>
-        <el-input v-model="comment" placeholder="Please Input" class="center input-size"></el-input>
+        <el-input v-model="comment[0]" placeholder="Please Input" class="center input-size"></el-input>
         <el-button type="primary" @mouseleave="(event)=>{event.target.blur()}"  @click="Update" class="center">{{commitNotice}}</el-button>
     </div>
     <div id="Responseshow" v-if="result != null">
@@ -11,14 +11,13 @@
                 <th>评论内容</th>
                 <th>情感</th>
             </tr>
-            <tr>
-                <td>{{ result.content }}</td>
-                <td>{{ result.emotion }}</td>
+            <tr v-for="item in result.comments">
+                <td>{{ item.content }}</td>
+                <td>{{ item.emotion }}</td>
             </tr>
         </table>
     
     </div>
-    <NothingShow v-if="result == null"/>
 </template>
 
 <script>
@@ -29,7 +28,7 @@ import NothingShow from './NothingsShow.vue';
 export default {
     data(){
         return{
-            comment:null,
+            comment:new Array(1),
             commitNotice:"提交",
             api:"null",
             result:null
@@ -51,10 +50,9 @@ export default {
         DataProccess(org_data){
             if(org_data.code === 200) {
                 ShowErrorMessage("感知失败");
-                return false;
+                return;
             }
             this.result =org_data.data;
-            return true;
         }
     },
     mounted() {
@@ -75,5 +73,7 @@ export default {
 
 .input-size{
     width: 40%;
+    margin-top: 5vh;
+    margin-bottom: 3vh;
 }
 </style>

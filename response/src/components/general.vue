@@ -44,8 +44,7 @@
     
     <style scoped>
     #mainpart{
-        flex: 8;
-        background-color: var(--color-Appmainpart);
+        flex: 9;
     }
 
     #navigate{

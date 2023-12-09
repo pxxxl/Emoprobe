@@ -17,7 +17,7 @@
         <div class="inshow left-float border">评论数:<b>{{ video_information.video_reply }}</b></div>
     </div>
     <div id="charts">
-
+        <chart :overview="chartdata[0]" :ipAnalys="chartdata[1]"/>
     </div>
     <div id="table">
         <div class="pagination-block">
@@ -43,16 +43,17 @@
 
 <script lang="ts" setup>
 import { nextTick, onMounted,ref,watch } from 'vue';
-import { ElInput } from 'element-plus'
 import {useRoute,useRouter} from 'vue-router'
 import axios, { formToJSON } from 'axios';
-import {ShowErrorMessage} from '@/assets/g.js'
-import echart from 'echarts'
-import sift from './sift.vue'
+import {ShowErrorMessage} from '@/assets/g.js';
+import sift from './sift.vue';
+import chart from './chart.vue';
 
 const route = useRoute();
 const router = useRouter();
 const api = '/api/v1/videos/page/filter';
+const overviewurl = '/api/v1/videos/statistics/overview';
+const ipAnalysurl = '/api/v1/videos/statistics/ip';
 
 const per_pageCom = ref([]);
 const all_pagenum = ref(1);
@@ -67,6 +68,8 @@ const date = ref("");
 const like = ref("");
 const reply = ref("");
 const emotion = ref("");
+
+const chartdata=ref(new Array(2));
 
 interface Params{
     bv:string,
@@ -146,8 +149,23 @@ const SiftUpdate = (ip_rq:string,gender_rq:string,date_rq:string,like_rq:string,
     );
 }
 
+const GetChartData = (url:string,x:number)=>{
+    axios.get('/api/v1/videos/statistics/overview',{
+        params:{
+            bv:bv.value
+        }
+    }).then((org_response)=>{
+        let response =JSON.parse(org_response.data);
+        chartdata.value[0] = response.data;
+    }).catch((error)=>{
+        ShowErrorMessage(error + " 获取统计图数据出错")
+    })
+}
+
 onMounted(()=>{
     get_page_comment(bv.value,1,page_len,pn.value-1);//get the first page and total page
+    GetChartData(overviewurl,0);//get the overview data from backside
+    GetChartData(ipAnalysurl,1);//get all the ip analys data from backside
 });
 
 watch(pn,(New_pn)=>{
@@ -163,6 +181,7 @@ watch(pn,(New_pn)=>{
         emotion.value
     );//get the first page and total page
 });
+
 </script>
 
 <style scoped>
