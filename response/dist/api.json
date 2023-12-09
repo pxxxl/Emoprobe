@@ -1,6 +1,0 @@
-{
-    "interface1_url":"/api/v1/videos",
-    "interface2_url":"/api/v1/comments",
-    "interface3_url":"/api/v1/sentence",
-    "注释":"这时储存调用后台api的json文件，写完了对应的API后直接用url粘贴替换掉省略号"
-}
