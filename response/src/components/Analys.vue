@@ -21,6 +21,8 @@
     </div>
     <div id="table">
         <div class="pagination-block">
+            <h1 class="dis-flex center-flex">结果</h1>
+            <sift @sift="SiftUpdate"/>
             <div class="demonstration">
                 <el-table :data="per_pageCom" style="width: 100%;">
                     <el-table-cloumn prop="user_id" lable="用户id"></el-table-cloumn>
@@ -34,16 +36,19 @@
                     <el-table-cloumn prop="emnotion" lable="情感"></el-table-cloumn>
                 </el-table>
             </div>
-            <el-pagination layout="prev, pager, next" :page-size="30" v-model:page-count="all_pagenum" v-model:current-page="pn" background="blue"/>
+            <el-pagination layout="prev, pager, next" :hide-on-single-page="true" :page-size="30" v-model:page-count="all_pagenum" v-model:current-page="pn" background="blue"/>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted,ref,watch } from 'vue';
+import { nextTick, onMounted,ref,watch } from 'vue';
+import { ElInput } from 'element-plus'
 import {useRoute,useRouter} from 'vue-router'
 import axios, { formToJSON } from 'axios';
 import {ShowErrorMessage} from '@/assets/g.js'
+import echart from 'echarts'
+import sift from './sift.vue'
 
 const route = useRoute();
 const router = useRouter();
@@ -53,8 +58,15 @@ const per_pageCom = ref([]);
 const all_pagenum = ref(1);
 const page_len = 30;
 const video_information = ref({});
-const bv = ref(route.query.bv?.toString());
+const bv = ref(route.query.bv.toString());
 const pn=ref(1);
+
+const ip = ref("");
+const gender = ref("");
+const date = ref("");
+const like = ref("");
+const reply = ref("");
+const emotion = ref("");
 
 interface Params{
     bv:string,
@@ -69,6 +81,12 @@ interface Params{
     emotion:string
 }
 
+const back = ()=>{
+    router.push({
+        path:"/"
+    });
+}
+
 const get_page_comment = (bvString:string,autopost:number,pageLen:number,page:number,ip_sift?:string,sex_sift?:string,date_sift?:string,like_sift?:string,reply_sift?:string,emotion_sift?:string)=>{
     let params:Params = {} as Params;
     params.bv =bvString;
@@ -76,12 +94,12 @@ const get_page_comment = (bvString:string,autopost:number,pageLen:number,page:nu
     params.n_per_page = pageLen;
     params.pn = page;
 
-    if(ip_sift)params.user_ip = ip_sift;
-    if(sex_sift)params.user_sex = sex_sift;
-    if(date_sift)params.comment_date = date_sift;
-    if(like_sift)params.comment_like = like_sift;
-    if(reply_sift)params.comment_reply = reply_sift;
-    if(emotion_sift)params.emotion = emotion_sift;
+    if(ip_sift && ip_sift != "")params.user_ip = ip_sift;
+    if(sex_sift && sex_sift != "")params.user_sex = sex_sift;
+    if(date_sift && date_sift != "")params.comment_date = date_sift;
+    if(like_sift && like_sift != "")params.comment_like = like_sift;
+    if(reply_sift && reply_sift != "")params.comment_reply = reply_sift;
+    if(emotion_sift && emotion_sift != "")params.emotion = emotion_sift;
 
     axios.get(api,{
         params:params
@@ -89,38 +107,61 @@ const get_page_comment = (bvString:string,autopost:number,pageLen:number,page:nu
         let response:any = JSON.parse(org_response.data);
         if(response.code == 408 || response.code == 408){
             ShowErrorMessage(response.msg + " 即将跳转");
-            setTimeout(()=>{
-                router.push({
-                path:"/"
-                });
-            },3000);
+            // setTimeout(back,3000);
         }
         all_pagenum.value = response.data.total_page_num;
         per_pageCom.value = response.data.comments;
         video_information.value = response.data.video;
     }).catch((error:any)=>{
         ShowErrorMessage(error + " 服务器链接错误，即将跳转");
-        setTimeout(()=>{
-                router.push({
-                path:"/"
-                });
-        },3000);
+        // setTimeout(back,3000);
     });
 }
 
-const back = ()=>{
-    router.push({
-        path:"/"
-    });
-}
+const SiftUpdate = (ip_rq:string,gender_rq:string,date_rq:string,like_rq:string,reply_rq:string,emotion_rq:string)=>{
+    console.log(ip_rq);
+    console.log(gender_rq);
+    console.log(date_rq);
+    console.log(like_rq);
+    console.log(reply_rq);
+    console.log(emotion_rq);
 
+    pn.value = 1;
+    ip.value = ip_rq;
+    gender.value = date_rq;
+    date.value = date_rq;
+    like.value = like_rq;
+    reply.value = reply_rq;
+    emotion.value = emotion_rq;
+
+    get_page_comment(bv.value,1,
+        page_len,
+        pn.value  - 1,
+        ip.value,
+        gender.value,
+        date.value,
+        like.value,
+        reply.value,
+        emotion.value
+    );
+}
 
 onMounted(()=>{
-    get_page_comment(bv.value as string,1,page_len,0);
-})
+    get_page_comment(bv.value,1,page_len,pn.value-1);//get the first page and total page
+});
 
 watch(pn,(New_pn)=>{
-    get_page_comment(bv.value as string,1,page_len,pn.value-1);
+    get_page_comment(bv.value,
+        1,
+        page_len,
+        pn.value-1,
+        ip.value,
+        gender.value,
+        date.value,
+        like.value,
+        reply.value,
+        emotion.value
+    );//get the first page and total page
 });
 </script>
 
@@ -141,5 +182,6 @@ watch(pn,(New_pn)=>{
 
 #table{
     /* clear: both; */
+    width: 100%;
 }
 </style>
