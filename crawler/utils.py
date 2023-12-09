@@ -12,6 +12,9 @@ import os
 import libcrawl
 
 
+logging = True
+
+
 def replace_emoji(text: str) -> str:
     """
     Replace emoji in text.
@@ -67,6 +70,42 @@ def get_default_config_file_path() -> str:
     script_dir = os.path.dirname(script_path)
     config_file_path = os.path.join(script_dir, 'config.json')
     return config_file_path
+
+
+def get_default_log_file_path() -> str:
+    """
+    Get default log file path.
+
+    returns:
+    - log_file_path: str
+    """
+    script_path = os.path.realpath(__file__)
+    script_dir = os.path.dirname(script_path)
+    cache_folder_path = os.path.join(script_dir, 'cache')
+    if not os.path.exists(cache_folder_path):
+        os.mkdir(cache_folder_path)
+    log_file_path = os.path.join(cache_folder_path, 'log.txt')
+    if not os.path.exists(log_file_path):
+        with open(log_file_path, 'w') as f:
+            f.write('')
+    return log_file_path
+
+
+def log(log_str: str, log_file_path: Any=None) -> None:
+    """
+    Log log_str to log_file_path.
+
+    input:
+    - log_str: str
+    - log_file_path: str
+
+    returns:
+    - None
+    """
+    if not log_file_path:
+        log_file_path = get_default_log_file_path()
+    with open(log_file_path, 'a') as f:
+        f.write(log_str + '\n')
 
 
 def output_comment_mode_txt_w(comment_text_list: list[str], output_path: str) -> None:
