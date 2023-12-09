@@ -61,14 +61,14 @@
                 <div class="like-select">
                     <h3>点赞数</h3>
                     <div class="dis-flex direction-row-flex align-items-center">
-                        <el-input-number v-model.lazy="like[0]" class="num-input" :controls="false" :precision="0" :max="like[1]"/><el-icon size="3vh"><Minus /></el-icon>
+                        <el-input-number v-model.lazy="like[0]" class="num-input" :controls="false" :precision="0" :max="like[1]" :min="0"/><el-icon size="3vh"><Minus /></el-icon>
                         <el-input-number v-model.lazy="like[1]" class="num-input" :controls="false" :precision="0" :min="like[0]"/>
                     </div>
                 </div>
                 <div class="reply-select">
                     <h3>回复数</h3>
                     <div class="dis-flex direction-row-flex align-items-center">
-                        <el-input-number v-model.lazy="reply[0]" class="num-input" :controls="false" :precision="0" :max="reply[1]"/><el-icon size="3vh"><Minus /></el-icon>
+                        <el-input-number v-model.lazy="reply[0]" class="num-input" :controls="false" :precision="0" :max="reply[1]" :min="0"/><el-icon size="3vh"><Minus /></el-icon>
                         <el-input-number v-model.lazy="reply[1]" class="num-input" :controls="false" :precision="0" :min="reply[0]"/>
                     </div>
                 </div>
@@ -109,7 +109,7 @@ const reply_string = ref("");
 
 const handleInputConfirm=()=>{
     if(inputValue.value){
-        dynamicTags.value.push(inputValue.value);
+        if(dynamicTags.value.indexOf(inputValue.value) == -1)dynamicTags.value.push(inputValue.value);
     }
     inputVisible.value = false;
     inputValue.value = '';
@@ -165,6 +165,7 @@ const AddSift = ()=>{
         ,emotion.value.toString()
     );
 }
+
 </script>
 
 <style scoped>
