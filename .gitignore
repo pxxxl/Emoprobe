@@ -3,3 +3,6 @@
 **/.gitignore
 crawler/__pycache__/
 crawler/cache/
+manager/
+deploy/password.json
+deploy/zip/
