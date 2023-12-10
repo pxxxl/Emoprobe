@@ -36,7 +36,7 @@
                     <el-table-cloumn prop="emnotion" lable="情感"></el-table-cloumn>
                 </el-table>
             </div>
-            <el-pagination layout="prev, pager, next" :hide-on-single-page="true" :page-size="30" v-model:page-count="all_pagenum" v-model:current-page="pn" background="blue"/>
+            <el-pagination layout="prev, pager, next" :hide-on-single-page="false" :page-size="30" v-model:page-count="all_pagenum" v-model:current-page="pn" background="blue"/>
         </div>
     </div>
 </template>
@@ -189,7 +189,7 @@ watch(pn,(New_pn)=>{
     margin: 2vh;
     padding: 1vh;
     border-radius: 2vh;
-    font-size: large;
+    font-size: 2vh;
     background-color: var(--color-tag);
     overflow: hidden;
 }

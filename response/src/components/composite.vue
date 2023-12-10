@@ -75,7 +75,6 @@ export default{
             com:null,
             show:null,
             success:false,
-            api:"null",
             filelist:[],
             uploadRef:null,
         }
