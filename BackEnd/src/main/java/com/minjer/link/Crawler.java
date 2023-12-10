@@ -28,7 +28,7 @@ public class Crawler {
         try {
             String currentWorkingDirectory = System.getProperty("user.dir");
             // 构建 crawler.py 文件的相对路径
-            String pythonScript = "python ../crawler/crawler.py -bv " + bv + "-config " + currentWorkingDirectory + "/crawler/config.json";
+            String pythonScript = "python ../crawler/crawler.py -bv " + bv + " -config " +"D:\\Java\\code\\Emoprobe\\BackEnd\\src\\main\\resources\\config.json";
 
             // 调用 python 爬虫
             Process process = Runtime.getRuntime().exec(pythonScript);

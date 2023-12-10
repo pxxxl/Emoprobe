@@ -28,29 +28,34 @@ public class EmotionModule {
      */
     public static List<String> handleSentence(List<String> list) {
 
-        ////////////////////////////
+/*        ////////////////////////////
         // 仅用于测试，后期需删除
         int length = list.size();
         List<String> emotions = new ArrayList<>();
-        emotions.add("positive");
-        emotions.add("negative");
-        emotions.add("neutral");
+        emotions.add("快乐");
+        emotions.add("愤怒");
+        emotions.add("厌恶");
+        emotions.add("恐惧");
+        emotions.add("悲伤");
+        emotions.add("惊讶");
+
 
         ArrayList<String> result = new ArrayList<>();
         for (int i = 0; i < length; i++) {
-            result.add(emotions.get(i % 3));
+            result.add(emotions.get(i % 6));
         }
         return result;
-        /////////////////////////////
-/*        // 将传入的消息列表转换为json字符串
+        /////////////////////////////*/
+
+        // 将传入的消息列表转换为json字符串
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("comments", list);
         String jsonString = jsonObject.toJSONString();
-
+        jsonString = jsonString.replace("\"","\"\"");
         // 调用情感分析模块
         try {
             // 构建 crawler.py 文件的相对路径
-            String pythonScript = "python ../DeepLearning/emotion_detect.py -i '" + jsonString + "'";
+            String pythonScript = "python ../DeepLearning/emotion_detect.py -i \"" + jsonString + "\"";
 
             // 调用 python 爬虫
             Process process = Runtime.getRuntime().exec(pythonScript);
@@ -75,7 +80,7 @@ public class EmotionModule {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;*/
+        return null;
     }
 
     /**
