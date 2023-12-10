@@ -2,6 +2,8 @@
     "backend_dir": "/www/wwwroot/default/",
     "backend_jar_name": "emoprobe.jar",
     "frontend_dir": "/www/wwwroot/default/emoprobe",
+    "crawler_dir": "/www/wwwroot/crawler",
     "local_backend_jar_relative_dir": "../BackEnd/src/main/resources",
-    "local_relative_frontend_dir": "../response"
+    "local_relative_frontend_dir": "../response",
+    "local_relative_crawler_dir": "../crawler"
 }

@@ -47,7 +47,9 @@ def get_video_info(bv: str) -> Dict:
         info = await v.get_info()
         return info
 
-    info = asyncio.run(async_get_video_info(v))
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    info = loop.run_until_complete(async_get_video_info(v))
 
     pubdate = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(info['pubdate']))
 
