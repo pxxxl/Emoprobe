@@ -32,7 +32,7 @@ public class Crawler {
             String headDirectory = Tool.traverseUp(currentWorkingDirectory, 1);
             // 构建 crawler.py 文件的相对路径
             String pythonScript = "python " + headDirectory + File.separator + "crawler" + File.separator + "crawler.py -bv " + bv + " -config " + headDirectory + File.separator + "crawler" + File.separator + "config.json";
-
+//            System.out.println(pythonScript);
             // 调用 python 爬虫
             Process process = Runtime.getRuntime().exec(pythonScript);
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -43,7 +43,7 @@ public class Crawler {
             }
 
             // 打印输出流（测试用）
-            System.out.println(output.toString());
+//            System.out.println(output.toString());
 
             // 等待子进程执行完成
             int exitCode = process.waitFor();

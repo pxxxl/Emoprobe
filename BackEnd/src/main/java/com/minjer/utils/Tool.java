@@ -1,5 +1,7 @@
 package com.minjer.utils;
 
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -38,5 +40,21 @@ public class Tool {
         }
 
         return filePath.toString();
+    }
+
+    /**
+     * 将json字符串保存到文件
+     * @param json json字符串
+     * @param path 保存路径
+     */
+    public static void saveJsonToFile(String json, String path) {
+        String fileName = path + "/emotion_temp.json";
+
+        try (BufferedWriter writer = new BufferedWriter(
+                new OutputStreamWriter(new FileOutputStream(fileName), StandardCharsets.UTF_8))) {
+            writer.write(json);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

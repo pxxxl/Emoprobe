@@ -30,37 +30,18 @@ public class EmotionModule {
      * @return 返回一个集合，这个集合含有对应的情感
      */
     public static List<String> handleSentence(List<String> list) {
-
-/*        ////////////////////////////
-        // 仅用于测试，后期需删除
-        int length = list.size();
-        List<String> emotions = new ArrayList<>();
-        emotions.add("快乐");
-        emotions.add("愤怒");
-        emotions.add("厌恶");
-        emotions.add("恐惧");
-        emotions.add("悲伤");
-        emotions.add("惊讶");
-
-
-        ArrayList<String> result = new ArrayList<>();
-        for (int i = 0; i < length; i++) {
-            result.add(emotions.get(i % 6));
-        }
-        return result;
-        /////////////////////////////*/
-
         // 将传入的消息列表转换为json字符串
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("comments", list);
         String jsonString = jsonObject.toJSONString();
-        jsonString = jsonString.replace("\"", "\"\"");
+
         // 调用情感分析模块
         try {
             // 构建 crawler.py 文件的相对路径
             String headDir = Tool.traverseUp(System.getProperty("user.dir"), 1);
-//            String pythonScript = "python ../DeepLearning/emotion_detect.py -i \"" + jsonString + "\"";
-            String pythonScript = "python " + headDir + File.separator + "DeepLearning" + File.separator + "emotion_detect.py -i \"" + jsonString + "\"";
+            Tool.saveJsonToFile(jsonString, headDir + File.separator + "DeepLearning");
+            String pythonScript = "python " + headDir + File.separator + "DeepLearning" + File.separator + "emotion_detect.py -fi " + headDir + File.separator + "DeepLearning" + File.separator + "emotion_temp.json";
+//            System.out.println(pythonScript);
             // 调用 python 爬虫
             Process process = Runtime.getRuntime().exec(pythonScript);
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -69,9 +50,10 @@ public class EmotionModule {
             while ((line = reader.readLine()) != null) {
                 output.append(line).append("\n");
             }
+//            System.out.println("接到的情感分析结果：" + output);
             // 等待子进程执行完成
             int exitCode = process.waitFor();
-
+//            System.out.println("退出码" + exitCode);
             if (exitCode == 0) {
                 // 解析 JSON 字符串为 JSON 对象
                 JSONArray jsonArray = JSON.parseObject(output.toString()).getJSONArray("emotions");
@@ -88,6 +70,7 @@ public class EmotionModule {
     }
 
     /**
+     * 已废弃
      * 调用情感分析模块处理文件
      * 执行逻辑：
      * 1.获取python执行指令
