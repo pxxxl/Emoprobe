@@ -6,6 +6,12 @@ import pickle
 from torch.autograd import Variable
 from typing import *
 
+def try_gpu(i=0):  #@save
+    """如果存在，则返回gpu(i)，否则返回cpu()"""
+    if torch.cuda.device_count() >= i + 1:
+        return torch.device(f'cuda:{i}')
+    return torch.device('cpu')
+
 
 def inf(comments: str) -> List[str]:
     mood_dict = {
@@ -51,7 +57,7 @@ def inf(comments: str) -> List[str]:
 
     w2v_model = pickle.load(open('model/sgns.weibo.pickle', 'rb'))
     net = torch.load('model/model.pkl')
-    net = net.cuda()
+    net = net.to(device=try_gpu())
 
     # 读取词袋
 
@@ -67,7 +73,6 @@ def inf(comments: str) -> List[str]:
             for word in words:
                 if word in vocab:
                     np_vocab = np.array(list(vocab))
-                    print(np.where(np_vocab == word))
                     index = np.where(np_vocab == word)[0][0]  # 获取词汇在词汇表中的索引
                     new_word_bag[i][index] = 1  # 将词汇在词袋中的对应位置设为1
 
@@ -80,12 +85,14 @@ def inf(comments: str) -> List[str]:
 
     with torch.no_grad():
         batch_x = get_batch(comments, w2v_model, index)
-        batch_x = Variable(torch.from_numpy(batch_x).float()).cuda()
+        batch_x = Variable(torch.from_numpy(batch_x).float())
+        batch_x = batch_x.to(device=try_gpu())
         batch_mask = make_mask(comments, index, batch_x.shape[1])
-        batch_mask = Variable(torch.from_numpy(batch_mask).float()).cuda()
+        batch_mask = Variable(torch.from_numpy(batch_mask).float())
+        batch_mask = batch_mask.to(device=try_gpu())
 
         new_word_bag = torch.from_numpy(new_word_bag).float()
-        new_word_bag = new_word_bag.cuda()
+        new_word_bag = new_word_bag.to(device=try_gpu())
 
     net.eval()
     _, out = net(new_word_bag, batch_x, batch_mask, compute_loss=False)
@@ -93,7 +100,7 @@ def inf(comments: str) -> List[str]:
     _, mood = torch.max(out, dim=1)
     mood_list = mood.tolist()
     mood_list = [mood_dict[mood] for mood in mood_list]
-    print(mood_list)
+    return mood_list
 
 
 def get_error_json_string() -> str:
