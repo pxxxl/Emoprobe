@@ -6,3 +6,4 @@ crawler/cache/
 manager/
 deploy/password.json
 deploy/zip/
+deploy/.mypy_cache/

@@ -18,35 +18,20 @@ def get_ssh_path():
     return config_path
 
 
-def get_jar_path(relative_jar_dir: str) -> str: 
+def get_frontend_dir_path(relative_path: str) -> str:
     script_path = os.path.realpath(__file__)
     script_dir = os.path.dirname(script_path)
-    jar_dir = os.path.join(script_dir, relative_jar_dir)
-    jar_name = None
-    for file in os.listdir(jar_dir):
-        if file.endswith('.jar'):
-            jar_name = file
-            break
-    if jar_name is None:
-        raise FileNotFoundError('No .jar file found in the directory.')
-    return os.path.join(jar_dir, jar_name)
-
-
-def get_crawler_dir_path(relative_path: str) -> str:
-    script_path = os.path.realpath(__file__)
-    script_dir = os.path.dirname(script_path)
-    crawler_dir_path = os.path.join(script_dir, relative_path)
-    return crawler_dir_path
+    frontend_dir_path = os.path.join(script_dir, relative_path)
+    return frontend_dir_path
 
 
 def print_progress(transferred, total):
-    percentage = transferred / total * 100
-    print(f"Uploaded: {transferred}/{total} bytes ({percentage:.2f}%)")
+    print(f"Progress: {transferred}/{total}")
 
 
 def upload_directory(ssh, sftp, local_dir_path, remote_dir_path):
     # first compress, use zip folder in the deployment directory
-    local_zip_path = os.path.join(os.path.dirname(local_dir_path), 'frontend.zip')
+    local_zip_path = os.path.join(os.path.dirname(local_dir_path), 'crawler.zip')
     # use python zip library to zip the folder
     with zipfile.ZipFile(local_zip_path, 'w', zipfile.ZIP_DEFLATED) as zip_file:
         for root, dirs, files in os.walk(local_dir_path):
@@ -63,7 +48,11 @@ def upload_directory(ssh, sftp, local_dir_path, remote_dir_path):
     os.remove(local_zip_path)
 
 
-  
+def print_progress(transferred, total):
+    percentage = transferred / total * 100
+    print(f"Uploaded: {transferred}/{total} bytes ({percentage:.2f}%)")
+    
+
 if __name__ == '__main__':
     with open(get_config_path(), 'r', encoding='utf-8') as file:
         config = json.load(file)
@@ -71,13 +60,9 @@ if __name__ == '__main__':
     with open(get_ssh_path(), 'r', encoding='utf-8') as file:
         ssh_config = json.load(file)
 
-    backend_dir = config['backend_dir']
-    backend_jar_name = config['backend_jar_name']
-    local_backend_dir = config['local_backend_jar_relative_dir']
-    local_backend_path = get_jar_path(local_backend_dir)
-    local_crawler_path = get_crawler_dir_path(config['local_relative_crawler_dir'])
-    remote_backend_path = os.path.join(backend_dir, backend_jar_name)
-    remote_crawler_path = config['crawler_dir']
+    crawler_dir = config['crawler_dir']
+    local_relative_crawler_dir = config['local_relative_crawler_dir']
+    local_crawler_dir = get_frontend_dir_path(local_relative_crawler_dir)
 
     ip = ssh_config['ip']
     port = ssh_config['port']
@@ -90,16 +75,17 @@ if __name__ == '__main__':
     ssh.connect(ip, port, username, password)
 
     sftp = ssh.open_sftp()
-
+    # first, if old frontend dir exists, delete the old frontend dir
     try:
-        sftp.stat(remote_backend_path)
-        sftp.rmdir(remote_backend_path)
-        print(f"Deleted old frontend directory: {remote_backend_path}")
+        sftp.stat(crawler_dir)
+        sftp.rmdir(crawler_dir)
+        print(f"Deleted old frontend directory: {crawler_dir}")
     except FileNotFoundError:
         pass
+    # then recursively upload the new frontend dir
+    upload_directory(ssh, sftp, local_crawler_dir, crawler_dir)
 
-    sftp.put(local_backend_path, remote_backend_path, callback=print_progress)
     sftp.close()
     ssh.close()
 
-    print('Deployed backend to remote server.')
+    print('Deployed crawler to remote server.')
