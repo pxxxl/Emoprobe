@@ -6,12 +6,11 @@
         <el-select v-model="ip_select" @change="emo_in_ip_chartChange">
             <el-option v-for="(item,key) in ip"
                 :value="key"
-                :lable="item"
-                :key="item"
+                :label="item"
             >
         </el-option>
         </el-select>
-        <div id="chart4"></div>
+        <div id="chart4" class="border"></div>
     </div>
 </template>
 
@@ -20,7 +19,7 @@ import * as echarts from 'echarts';
 import {onMounted, ref} from 'vue';
 
 const props = defineProps(['overview',"ipAnalys"]);
-const pie_size = 200;
+const pie_size = 500;
 const ip_select = ref(0);
 
 const ip = ref();//ip arrary
@@ -44,23 +43,28 @@ ip_people_num.value = props.ipAnalys.num_ip_person;
 ip_in_emotion_rate.value = props.ipAnalys.ip_ratio_per_emotion;
 emo_in_ip_rate.value = props.ipAnalys.emotion_ratio_per_ip;
 
-const ip_in_emotion_data = (all_data:any[]):any=>{
+const ip_in_emotion_data = (all_data:any):any=>{
+    console.log(all_data.ip);
     let out_put = new Array<object>();
     let x:number = 0;
     let y:number = 0;
-    let len:number = all_data.length;
-    for(x = 0;x < len; x++){
+    for(x = 0;x < emotionLen; x++){
         let contamp = {
             type:'pie',
-            center:[(x % 5) * pie_size + (pie_size/2), pie_size *Math.floor(x / 5.0) + pie_size/2],
-            radius:100,
-            data:new Array()
+            center:[(x % 3.0) * pie_size + (pie_size/2), pie_size *Math.floor(x / 3.0) + pie_size/2],
+            radius:[0,100],
+            data:new Array(),
+            label:{
+                show:true,
+                formatter:"{b}: {d}%",
+                alignTo:"labelLine"
+            }
         }
-        let len = all_data[x].ip.length;
+        let len = all_data.ip[x].length;
         for(y=0; y<len; y++){
             contamp.data.push({
-                name:all_data[x].ip[y],//add name
-                value:all_data[x].num_ip[y]//add value
+                name:all_data.ip[x][y],//add name
+                value:all_data.num_ip[x][y]//add value
             })
         }
         out_put.push(contamp);//put a chart data in series list
@@ -72,17 +76,26 @@ const emo_in_ip_chartChange = ()=>{
     emo_in_ip_chart.value.setOption({
         dataset:{
             source:[
-                emo_in_ip_rate.value[ip.value].emotion,
-                emo_in_ip_rate.value[ip.value].emotion
+                emo_in_ip_rate.value.emotion[ip_select.value],
+                emo_in_ip_rate.value.num_emotion[ip_select.value]
             ]
+        },
+        title:{
+                text:"每个ip里的情感比例"
         },
         series:{
             type:'pie',
             seriesLayoutBy:'row',
             center:["50%","50%"],
+            radius:[0,"50%"],
             encode:{
                 itemName:[0],
                 value:[1]
+            },
+            label:{
+                show:true,
+                formatter:"{b}: {d}%",
+                alignTo:"labelLine"
             },
         },
     })
@@ -90,8 +103,8 @@ const emo_in_ip_chartChange = ()=>{
 
 onMounted(() => {
     mychart1.value = echarts.init(document.getElementById('chart1'),null,{
-        width:emotionLen * 100,
-        height:100
+        width:emotionLen * 200,
+        height:300
     });
     mychart1.value.setOption({
         title: {
@@ -109,33 +122,43 @@ onMounted(() => {
     });
 
     mychart2.value = echarts.init(document.getElementById('chart2'),null,{
-        width:200,
-        height:200
+        width:1000,
+        height:600
     });
     mychart2.value.setOption({
+        title:{
+            text:"视频评论的Ip占比"
+        },
         dataset:{
-            source:[ip,ip_people_num]
+            source:[ip.value,ip_people_num.value]
         },
         series:{
             type:'pie',
+            center:["50%","50%"],
+            radius:[0,"50%"],
             seriesLayoutBy:'row',
             encode:{
-                x:[0],
-                y:[1]
+                itemName:[0],
+                value:[1]
+            },
+            label:{
+                show:true,
+                formatter:"{b}: {d}%",
+                alignTo:"labelLine"
             }
         }
     });
 
     ip_in_emo_chart.value = echarts.init(document.getElementById("chart3"),null,{
-        width:pie_size * ( (emotionLen >= 5) ? 5 : emotionLen ),
-        height:pie_size * ((emotionLen >= 5) ? 2 : 1)
+        width:pie_size * ( (emotionLen >= 3) ? 3 : emotionLen ),
+        height:pie_size * ((emotionLen > 3) ? 2 : 1)
     });
     ip_in_emo_chart.value.setOption({
         series:ip_in_emotion_data(ip_in_emotion_rate.value)
     });
 
     emo_in_ip_chart.value = echarts.init(document.getElementById("chart4"),null,{
-        width:300,
+        width:500,
         height:300
     });
     emo_in_ip_chartChange();
