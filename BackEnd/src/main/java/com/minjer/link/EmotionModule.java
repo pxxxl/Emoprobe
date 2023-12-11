@@ -4,14 +4,17 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.minjer.pojo.Sentence;
+import com.minjer.utils.Tool;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 情感分析模块
+ *
  * @author Minjer
  */
 public class EmotionModule {
@@ -51,12 +54,13 @@ public class EmotionModule {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("comments", list);
         String jsonString = jsonObject.toJSONString();
-        jsonString = jsonString.replace("\"","\"\"");
+        jsonString = jsonString.replace("\"", "\"\"");
         // 调用情感分析模块
         try {
             // 构建 crawler.py 文件的相对路径
-            String pythonScript = "python ../DeepLearning/emotion_detect.py -i \"" + jsonString + "\"";
-
+            String headDir = Tool.traverseUp(System.getProperty("user.dir"), 1);
+//            String pythonScript = "python ../DeepLearning/emotion_detect.py -i \"" + jsonString + "\"";
+            String pythonScript = "python " + headDir + File.separator + "DeepLearning" + File.separator + "emotion_detect.py -i \"" + jsonString + "\"";
             // 调用 python 爬虫
             Process process = Runtime.getRuntime().exec(pythonScript);
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -89,6 +93,7 @@ public class EmotionModule {
      * 1.获取python执行指令
      * 2.执行python脚本，按照传入文件的路径读取并分析
      * 3.将分析结果中的情感信息提取出来，返回一个String集合
+     *
      * @param path
      * @return
      */
