@@ -3,8 +3,10 @@ package com.minjer.link;
 import com.alibaba.fastjson.JSON;
 import com.minjer.pojo.Comment;
 import com.minjer.pojo.VideoComment;
+import com.minjer.utils.Tool;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 
@@ -27,9 +29,10 @@ public class Crawler {
     public static VideoComment getVideoWithComments(String bv) {
         try {
             String currentWorkingDirectory = System.getProperty("user.dir");
+            String headDirectory = Tool.traverseUp(currentWorkingDirectory, 1);
             // 构建 crawler.py 文件的相对路径
-            String pythonScript = "python ../crawler/crawler.py -bv " + bv + " -config " +"D:\\Java\\code\\Emoprobe\\BackEnd\\src\\main\\resources\\config.json";
-
+            String pythonScript = "python " + headDirectory + File.separator + "crawler" + File.separator + "crawler.py -bv " + bv + " -config " + headDirectory + File.separator + "crawler" + File.separator + "config.json";
+//            System.out.println(pythonScript);
             // 调用 python 爬虫
             Process process = Runtime.getRuntime().exec(pythonScript);
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -40,7 +43,7 @@ public class Crawler {
             }
 
             // 打印输出流（测试用）
-            System.out.println(output.toString());
+//            System.out.println(output.toString());
 
             // 等待子进程执行完成
             int exitCode = process.waitFor();
