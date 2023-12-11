@@ -1,5 +1,6 @@
 package com.minjer.service.impl;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.minjer.link.Crawler;
@@ -194,6 +195,7 @@ public class VideoServiceImpl implements VideoService {
             @JsonProperty("video_title")
             private String videoTitle;
             @JsonProperty("operation_time")
+            @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
             private LocalDateTime videoSavedate;
         }
 
