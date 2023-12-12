@@ -1,15 +1,20 @@
 package com.minjer.controller;
 
 import com.minjer.pojo.Result;
-import com.minjer.pojo.Sentence;
 import com.minjer.service.SentenceService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Minjer
+ */
 @RestController
 public class SentenceController {
 
@@ -18,7 +23,6 @@ public class SentenceController {
 
     /**
      * 快速感知评论信息
-     * 待接入测试
      *
      * @param comments 评论信息
      *                 {

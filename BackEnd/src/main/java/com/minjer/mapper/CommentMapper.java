@@ -2,14 +2,13 @@ package com.minjer.mapper;
 
 import com.minjer.pojo.Comment;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.logging.log4j.util.Strings;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 /**
  * 评论的数据库操作
+ * @author Minjer
  */
 @Mapper
 public interface CommentMapper {
