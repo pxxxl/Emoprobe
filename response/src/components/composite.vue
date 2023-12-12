@@ -9,7 +9,9 @@
                     :clearable="true" 
                     class="input-size center" 
                     placeholder="Please Input" 
-                    :style="{boxShadow:`var(--el-box-shadow-dark)`}"/>
+                    :style="{boxShadow:`var(--el-box-shadow-dark)`}"
+                    @keyup.enter = "Postdata"
+                    />
 
                 <el-button 
                     type="primary" 
@@ -90,10 +92,10 @@ export default{
             }
             else{//bv number post
                 bv_number = translateBV(this.video);
-            //    if(bv_number === "error"){
-            //         ShowErrorMessage("提取bv号出现错误");
-            //         return;
-            //    }
+               if(bv_number === "error"){
+                    ShowErrorMessage("提取bv号出现错误");
+                    return;
+               }
                this.$router.push({
                     path:"/datashow",
                     query:{bv:bv_number}

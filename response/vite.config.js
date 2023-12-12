@@ -16,7 +16,11 @@ export default defineConfig({
   server:{
     proxy:{
        // 字符串简写写法：http://localhost:5173/foo -> http://localhost:4567/foo
-      '/api': 'http://localhost:12321',
+       '/api': {
+        target: 'http://116.204.9.108:12321/api',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
     }
   }
 })
