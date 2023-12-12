@@ -1,6 +1,5 @@
-from snownlp import SnowNLP
+import emotion_detect
 
-text = '我爱你了'
-s1 = SnowNLP(text)
-print(s1.sentiments)
+comments = ['我爱你', '气死我了', '感觉挺一般的', '让人背后一凉...', '一路走好', '不会吧！']
 
+print(emotion_detect.inf(comments))
