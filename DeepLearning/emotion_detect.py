@@ -1,19 +1,106 @@
 import argparse
 import json
+import torch
+import numpy as np
+import pickle
+from torch.autograd import Variable
 from typing import *
-from snownlp import SnowNLP
+
+def try_gpu(i=0):  #@save
+    """如果存在，则返回gpu(i)，否则返回cpu()"""
+    if torch.cuda.device_count() >= i + 1:
+        return torch.device(f'cuda:{i}')
+    return torch.device('cpu')
 
 
 def inf(comments: str) -> List[str]:
-    # 在这里实现情绪感知的逻辑
-    # 返回情绪字符串列表
-    emotion_list = [str(SnowNLP(comment).sentiments) for comment in comments]
-    for emotion in emotion_list:
-        if float(emotion) >= 0.5:
-            emotion_list[emotion_list.index(emotion)] = 'Positive'
-        else:
-            emotion_list[emotion_list.index(emotion)] = 'Negative'
-    return emotion_list
+    mood_dict = {
+        0: '快乐',
+        1: '愤怒',
+        2: '厌恶',
+        3: '恐惧',
+        4: '悲伤',
+        5: '惊讶'
+    }
+
+    def get_batch(text_data, w2v_model, indices):
+        batch_size = len(indices)
+        # 一个 list 用来存储每句话的长度
+        text_length = []
+        for idx in indices:
+            text_length.append(len(text_data[idx]))
+        # 一个二维数组，存储了一个 batch 的文字信息，长为 batch_size，即 indice 的长度，宽为最长那句话的长度
+        batch_x = np.zeros((batch_size, max(text_length), 300), dtype=np.float32)
+
+        # 将第 i 句话的第 j 个词的词向量存储在 batch_x 中
+        for i, idx in enumerate(indices, 0):
+            for j, word in enumerate(text_data[idx], 0):
+                try:
+                    batch_x[i][j] = w2v_model[word]
+                except KeyError:
+                    batch_x[i][j] = w2v_model['。']
+        # 返回的是 numpy 数组
+        return batch_x
+
+    def make_mask(text_data, indices, sent_length):
+        batch_size = len(indices)
+        text_length = [len(text_data[idx]) for idx in indices]
+        # 上面两行和之前的写法其实等效的
+
+        # 填充负无穷
+        mask = np.full((batch_size, sent_length, 1), float('-inf'), dtype=np.float32)
+
+        # 创建了掩码，将没有文字的部分掩掉
+        for i in range(batch_size):
+            mask[i][0:text_length[i]] = 0.0
+        return mask
+
+    w2v_model = pickle.load(open('model/sgns.weibo.pickle', 'rb'))
+    net = torch.load('model/model.pkl')
+    net = net.to(device=try_gpu())
+
+    # 读取词袋
+
+    vocab = np.load('model/vocab.npy', allow_pickle=True)
+    vocab = vocab.tolist()
+
+    def create_word_bag(sentences, vocab):
+        new_word_bag = np.zeros((len(sentences), len(vocab)), dtype=int)
+        for i in range(len(sentences)):
+            # 对单个语句进行分词
+            words = sentences[i].strip().split()
+            # 遍历新语句的每个词汇
+            for word in words:
+                if word in vocab:
+                    np_vocab = np.array(list(vocab))
+                    index = np.where(np_vocab == word)[0][0]  # 获取词汇在词汇表中的索引
+                    new_word_bag[i][index] = 1  # 将词汇在词袋中的对应位置设为1
+
+        return new_word_bag
+    index = []
+    for i in range(len(comments)):
+        index.append(i)
+
+    new_word_bag = create_word_bag(comments, vocab)
+
+    with torch.no_grad():
+        batch_x = get_batch(comments, w2v_model, index)
+        batch_x = Variable(torch.from_numpy(batch_x).float())
+        batch_x = batch_x.to(device=try_gpu())
+        batch_mask = make_mask(comments, index, batch_x.shape[1])
+        batch_mask = Variable(torch.from_numpy(batch_mask).float())
+        batch_mask = batch_mask.to(device=try_gpu())
+
+        new_word_bag = torch.from_numpy(new_word_bag).float()
+        new_word_bag = new_word_bag.to(device=try_gpu())
+
+    net.eval()
+    _, out = net(new_word_bag, batch_x, batch_mask, compute_loss=False)
+
+    _, mood = torch.max(out, dim=1)
+    mood_list = mood.tolist()
+    mood_list = [mood_dict[mood] for mood in mood_list]
+    return mood_list
 
 
 def get_error_json_string() -> str:
