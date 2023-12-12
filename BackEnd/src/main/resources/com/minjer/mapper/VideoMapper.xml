@@ -48,5 +48,6 @@
     <select id="selectAll" resultMap="VideoResultMap">
         select *
         from video
+        ORDER BY video_savedate DESC
     </select>
 </mapper>

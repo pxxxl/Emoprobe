@@ -15,6 +15,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -27,8 +28,10 @@ import java.util.Map;
 public class VideoServiceImpl implements VideoService {
     @Autowired
     private VideoMapper videoMapper;
+
     @Autowired
     private CommentMapper commentMapper;
+
 
     /**
      * 添加视频信息进入数据库
@@ -44,6 +47,7 @@ public class VideoServiceImpl implements VideoService {
      * 405 数据库中已存在该视频
      * 406 出现错误
      */
+    @Transactional
     @Override
     public int addVideo(String bv) {
         int code = 406;
@@ -124,6 +128,7 @@ public class VideoServiceImpl implements VideoService {
      * 200 成功
      * 407 数据库中不存在该视频
      */
+    @Transactional
     @Override
     public int updateVideo(String bv) {
         int code = 407;

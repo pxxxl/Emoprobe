@@ -50,10 +50,10 @@ public class EmotionModule {
             while ((line = reader.readLine()) != null) {
                 output.append(line).append("\n");
             }
-//            System.out.println("接到的情感分析结果：" + output);
+            System.out.println("接到的情感分析结果：" + output);
             // 等待子进程执行完成
             int exitCode = process.waitFor();
-//            System.out.println("退出码" + exitCode);
+            System.out.println("退出码" + exitCode);
             if (exitCode == 0) {
                 // 解析 JSON 字符串为 JSON 对象
                 JSONArray jsonArray = JSON.parseObject(output.toString()).getJSONArray("emotions");
