@@ -10,6 +10,7 @@ import com.minjer.pojo.*;
 import com.minjer.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.rmi.MarshalledObject;
@@ -38,9 +39,10 @@ public class CommenntServiceImpl implements CommentService {
      * @param videoComment 用户上传的视频评论信息
      * @return 被添加的视频信息
      */
+    @Transactional
     @Override
     public Result handleComments(VideoComment videoComment) {
-        if (videoMapper.selectByBv(videoComment.getVideo().getVideoBvid()) != null ){
+        if (videoMapper.selectByBv(videoComment.getVideo().getVideoBvid()) != null) {
             return new DataResult(405, "", null);
         }
 
@@ -72,6 +74,7 @@ public class CommenntServiceImpl implements CommentService {
      * @param filter 筛选条件集合
      * @return 含数据的结果
      */
+    @Transactional
     @Override
     public Result filterComments(Filter filter) {
         // 判断是否存在该视频
@@ -149,6 +152,7 @@ public class CommenntServiceImpl implements CommentService {
             commentMapper.addComments(subList);
         }
     }
+
     private void batchInsertComments(List<Comment> comments) {
         batchInsertComments(comments, 80);
     }

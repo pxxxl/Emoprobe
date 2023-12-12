@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * 视频控制器
+ *
  * @author Minjer
  */
 @RestController
@@ -19,9 +21,8 @@ public class VideoController {
 
     /**
      * 添加视频信息进入数据库
-     * 待测试
      *
-     * @param bv
+     * @param bv 视频bv号
      * @return 不含数据的结果信息
      */
     @RequestMapping(value = "/api/v1/videos", method = RequestMethod.POST)
@@ -32,9 +33,8 @@ public class VideoController {
 
     /**
      * 从数据库删除视频
-     * 待测试
      *
-     * @param bv
+     * @param bv 视频bv号
      * @return 不含数据的结果信息
      */
     @RequestMapping(value = "/api/v1/videos", method = RequestMethod.DELETE)
@@ -45,9 +45,8 @@ public class VideoController {
 
     /**
      * 更新视频信息
-     * 待测试
      *
-     * @param bv
+     * @param bv 视频bv号
      * @return 不含数据的结果信息
      */
     @RequestMapping(value = "/api/v1/videos", method = RequestMethod.PUT)
@@ -59,7 +58,6 @@ public class VideoController {
 
     /**
      * 获取指定视频信息
-     * 待测试
      *
      * @param bv       视频bv号
      * @param autopost 是否会爬取信息
@@ -74,7 +72,6 @@ public class VideoController {
 
     /**
      * 获取视频列表
-     * 待测试
      *
      * @return 含有数据的结果信息
      */
@@ -87,6 +84,7 @@ public class VideoController {
     /**
      * 统计视频信息
      * 获取视频评论每种情绪的人数占比信息
+     *
      * @param bv bv号
      * @return 统计结果
      */
@@ -96,8 +94,15 @@ public class VideoController {
         return result;
     }
 
-    @RequestMapping(value = "/api/v1/videos/statistics/ip",method = RequestMethod.GET)
-    public Result etVideoIpOverview(String bv){
+    /**
+     * 统计视频信息
+     * 获取视频评论IP的信息
+     *
+     * @param bv bv号
+     * @return 统计结果
+     */
+    @RequestMapping(value = "/api/v1/videos/statistics/ip", method = RequestMethod.GET)
+    public Result etVideoIpOverview(String bv) {
         Result result = videoService.getVideoIpOverview(bv);
         return result;
     }

@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * 视频信息的数据库操作
+ * @author Minjer
  */
 @Mapper
 public interface VideoMapper {
@@ -25,7 +26,7 @@ public interface VideoMapper {
 
     /**
      * 根据bv号删除视频，同时会删除comment表中关联的评论
-     * @param bv
+     * @param bv bv号
      * @return 删除的行数
      */
     public int delByVideoBvid(String bv);

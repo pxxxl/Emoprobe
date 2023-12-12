@@ -8,6 +8,10 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 视频评论的实体类，包含视频信息和评论列表
+ * @author Minjer
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
