@@ -52,6 +52,6 @@ export default{
 .link{
     margin-top: 1vh;
     margin-bottom: 1vh;
-    font-size: 12px;
+    font-size: 1.8vh;
 }
 </style>

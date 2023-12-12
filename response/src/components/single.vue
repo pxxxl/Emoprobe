@@ -1,9 +1,14 @@
 
 <template>
     <div id="input" class="center">
-        <span class="center select-no">功能3：输入单个评论进行评论分析</span>
-        <el-input v-model="comment[0]" placeholder="Please Input" class="center input-size"></el-input>
+        <span class="center select-no" style="margin-top: 5vh; font-size: 4;">请输入单个评论进行评论分析</span>
+        <el-input id="input" v-model="comment[0]" placeholder="Please Input" class="center input-size" @keyup.enter="Update"></el-input>
         <el-button type="primary" @mouseleave="(event)=>{event.target.blur()}"  @click="Update" class="center">{{commitNotice}}</el-button>
+        <Transition name="fade" mode="in-out">
+            <div class="dis-flex center-flex notice" v-if="noticevisible">
+                内容不能为空
+            </div>
+        </Transition>
     </div>
     <div id="Responseshow" v-if="result != null">
         <table>
@@ -30,8 +35,10 @@ export default {
         return{
             comment:new Array(1),
             commitNotice:"提交",
-            api:"null",
-            result:null
+            api:"/api/v1/sentence",
+            result:null,
+            noticevisible:false,
+            input:null
         }
     },
     components:{
@@ -39,11 +46,18 @@ export default {
     },
     methods: {
         Update(){
-            this.api = getInterFace();
+            if(this.comment[0] == null){
+                this.noticevisible = true;
+                setTimeout(()=>{
+                    this.noticevisible = false;
+                },1000);
+                return;
+            }
             axios.post(this.api,this.comment).then((response)=>{
                     let org =  response.data;
                     this.DataProccess(org);
             }).catch((error_msg)=>{
+                ShowErrorMessage(error_msg);
             })
         },
         DataProccess(org_data){
@@ -55,6 +69,7 @@ export default {
         }
     },
     mounted() {
+        this.input = document.getElementById('input');
     },
 }
 </script>
@@ -74,5 +89,27 @@ export default {
     width: 40%;
     margin-top: 5vh;
     margin-bottom: 3vh;
+}
+
+.notice{
+    background-color: black;
+    color: white;
+    margin-top: 3vh;
+    width: 100px;
+    height: 40px;
+    margin-left: 50%;
+    border-radius: 10px;
+    transform: translateX(-50%);
+    transition: all 1s;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.8s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
