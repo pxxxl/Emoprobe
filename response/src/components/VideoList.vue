@@ -40,7 +40,7 @@ export default{
         titleProccess(video){
             if(video.video_title.length > 22)
             {
-                return video.video_title.slice(1,22) + "...";
+                return video.video_title.slice(0,22) + "...";
             }
             else return video.video_title;
         }
@@ -52,5 +52,6 @@ export default{
 .link{
     margin-top: 1vh;
     margin-bottom: 1vh;
+    font-size: 12px;
 }
 </style>
