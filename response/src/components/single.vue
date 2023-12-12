@@ -41,10 +41,9 @@ export default {
         Update(){
             this.api = getInterFace();
             axios.post(this.api,this.comment).then((response)=>{
-                    let org =  JSON.parse(response);
+                    let org =  response.data;
                     this.DataProccess(org);
             }).catch((error_msg)=>{
-
             })
         },
         DataProccess(org_data){
