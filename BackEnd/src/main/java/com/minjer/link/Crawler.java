@@ -1,7 +1,6 @@
 package com.minjer.link;
 
 import com.alibaba.fastjson.JSON;
-import com.minjer.pojo.Comment;
 import com.minjer.pojo.VideoComment;
 import com.minjer.utils.Tool;
 
@@ -10,6 +9,11 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 
+/**
+ * 爬虫类
+ *
+ * @author Minjer
+ */
 public class Crawler {
     /**
      * 调用爬虫爬取对应bv号视频
@@ -23,27 +27,31 @@ public class Crawler {
      * 6. 将JSON对象转换为VideoComment对象
      * 7. 返回VideoComment对象
      *
-     * @param bv
+     * @param bv 视频bv号
      * @return 返回一个包含视频和评论信息的结果，如果爬取失败则返回null
      */
     public static VideoComment getVideoWithComments(String bv) {
         try {
+            // 由于不同操作系统下路径很容易出现问题，所以这里使用绝对路径
+            // 获取当前工作目录
             String currentWorkingDirectory = System.getProperty("user.dir");
+
+            // 获取爬虫文件所在目录
             String headDirectory = Tool.traverseUp(currentWorkingDirectory, 1);
-            // 构建 crawler.py 文件的相对路径
+
+            // 获取执行python爬虫的语句
             String pythonScript = "python " + headDirectory + File.separator + "crawler" + File.separator + "crawler.py -bv " + bv + " -config " + headDirectory + File.separator + "crawler" + File.separator + "config.json";
-//            System.out.println(pythonScript);
+
             // 调用 python 爬虫
             Process process = Runtime.getRuntime().exec(pythonScript);
+
+            // 读取子进程的输出流
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
             StringBuilder output = new StringBuilder();
             while ((line = reader.readLine()) != null) {
                 output.append(line).append("\n");
             }
-
-            // 打印输出流（测试用）
-//            System.out.println(output.toString());
 
             // 等待子进程执行完成
             int exitCode = process.waitFor();
@@ -52,15 +60,17 @@ public class Crawler {
                 // 爬虫执行成功
                 VideoComment videoComment = JSON.parseObject(String.valueOf(JSON.parseObject(output.toString()).getJSONObject("data")), VideoComment.class);
                 if (videoComment == null) {
+                    // 爬虫执行成功，但是返回的数据为空
                     return null;
                 }
+                // 设置视频的bv号，与传入的bv号一致，同时设置视频的保存时间
                 videoComment.getVideo().setVideoSavedate(LocalDateTime.now());
                 videoComment.getVideo().setVideoBvid(bv);
+
+                // 设置评论的视频bv号，与视频信息的bv号一致
                 for (int i = 0; i < videoComment.getComments().size(); i++) {
-                    // 设置评论的视频bv号，与视频信息的bv号一致
                     videoComment.getComments().get(i).setVideoBvid(bv);
                 }
-
 
                 return videoComment;
             } else {

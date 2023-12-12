@@ -48,6 +48,17 @@ def upload_directory(ssh, sftp, local_dir_path, remote_dir_path):
     os.remove(local_zip_path)
 
 
+def remove_remote_directory(sftp, remote_dir):
+    files = sftp.listdir(remote_dir)
+    for file in files:
+        file_path = remote_dir + '/' + file
+        try:
+            sftp.remove(file_path)  # 删除文件
+        except:
+            remove_remote_directory(sftp, file_path)  # 递归删除子文件夹
+    sftp.rmdir(remote_dir)  # 删除空文件夹
+
+
 def print_progress(transferred, total):
     percentage = transferred / total * 100
     print(f"Uploaded: {transferred}/{total} bytes ({percentage:.2f}%)")
@@ -78,10 +89,10 @@ if __name__ == '__main__':
     # first, if old frontend dir exists, delete the old frontend dir
     try:
         sftp.stat(crawler_dir)
-        sftp.rmdir(crawler_dir)
+        remove_remote_directory(sftp, crawler_dir)
         print(f"Deleted old frontend directory: {crawler_dir}")
-    except FileNotFoundError:
-        pass
+    except Exception as e:
+        print(f"Old frontend directory does not exist: {crawler_dir}")
     # then recursively upload the new frontend dir
     upload_directory(ssh, sftp, local_crawler_dir, crawler_dir)
 

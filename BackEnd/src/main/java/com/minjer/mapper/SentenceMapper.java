@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * 评论句子的数据库操作
+ * @author Minjer
  */
 @Mapper
 public interface SentenceMapper {
