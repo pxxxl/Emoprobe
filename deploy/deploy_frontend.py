@@ -50,6 +50,17 @@ def upload_directory(ssh, sftp, local_dir_path, remote_dir_path):
 def print_progress(transferred, total):
     percentage = transferred / total * 100
     print(f"Uploaded: {transferred}/{total} bytes ({percentage:.2f}%)")
+
+
+def remove_remote_directory(sftp, remote_dir):
+    files = sftp.listdir(remote_dir)
+    for file in files:
+        file_path = remote_dir + '/' + file
+        try:
+            sftp.remove(file_path)  # 删除文件
+        except:
+            remove_remote_directory(sftp, file_path)  # 递归删除子文件夹
+    sftp.rmdir(remote_dir)  # 删除空文件夹
     
 
 if __name__ == '__main__':
@@ -77,7 +88,7 @@ if __name__ == '__main__':
     # first, if old frontend dir exists, delete the old frontend dir
     try:
         sftp.stat(frontend_dir)
-        sftp.rmdir(frontend_dir)
+        remove_remote_directory(sftp, frontend_dir)
         print(f"Deleted old frontend directory: {frontend_dir}")
     except FileNotFoundError:
         pass

@@ -31,7 +31,7 @@ def print_progress(transferred, total):
 
 def upload_directory(ssh, sftp, local_dir_path, remote_dir_path):
     # first compress, use zip folder in the deployment directory
-    local_zip_path = os.path.join(os.path.dirname(local_dir_path), 'crawler.zip')
+    local_zip_path = os.path.join(os.path.dirname(local_dir_path), 'DeepLearing.zip')
     # use python zip library to zip the folder
     with zipfile.ZipFile(local_zip_path, 'w', zipfile.ZIP_DEFLATED) as zip_file:
         for root, dirs, files in os.walk(local_dir_path):
@@ -48,6 +48,11 @@ def upload_directory(ssh, sftp, local_dir_path, remote_dir_path):
     os.remove(local_zip_path)
 
 
+def print_progress(transferred, total):
+    percentage = transferred / total * 100
+    print(f"Uploaded: {transferred}/{total} bytes ({percentage:.2f}%)")
+
+
 def remove_remote_directory(sftp, remote_dir):
     files = sftp.listdir(remote_dir)
     for file in files:
@@ -57,11 +62,6 @@ def remove_remote_directory(sftp, remote_dir):
         except:
             remove_remote_directory(sftp, file_path)  # 递归删除子文件夹
     sftp.rmdir(remote_dir)  # 删除空文件夹
-
-
-def print_progress(transferred, total):
-    percentage = transferred / total * 100
-    print(f"Uploaded: {transferred}/{total} bytes ({percentage:.2f}%)")
     
 
 if __name__ == '__main__':
@@ -71,8 +71,8 @@ if __name__ == '__main__':
     with open(get_ssh_path(), 'r', encoding='utf-8') as file:
         ssh_config = json.load(file)
 
-    crawler_dir = config['crawler_dir']
-    local_relative_crawler_dir = config['local_relative_crawler_dir']
+    crawler_dir = config['ai_dir']
+    local_relative_crawler_dir = config['local_relative_ai_dir']
     local_crawler_dir = get_frontend_dir_path(local_relative_crawler_dir)
 
     ip = ssh_config['ip']
@@ -91,12 +91,12 @@ if __name__ == '__main__':
         sftp.stat(crawler_dir)
         remove_remote_directory(sftp, crawler_dir)
         print(f"Deleted old frontend directory: {crawler_dir}")
-    except Exception as e:
-        print(f"Old frontend directory does not exist: {crawler_dir}")
+    except FileNotFoundError:
+        pass
     # then recursively upload the new frontend dir
     upload_directory(ssh, sftp, local_crawler_dir, crawler_dir)
 
     sftp.close()
     ssh.close()
 
-    print('Deployed crawler to remote server.')
+    print('Deployed ai to remote server.')
