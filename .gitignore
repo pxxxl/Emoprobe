@@ -7,4 +7,3 @@ manager/
 deploy/password.json
 deploy/zip/
 deploy/.mypy_cache/
-response/dist/index.html
