@@ -66,9 +66,9 @@ public class CommentController {
             @RequestParam(value = "emotion", required = false) String emotion
     ) {
         Filter filter = new Filter(bv, autopost, commentNum, pageIndex, ip, sex, date, like, reply, emotion);
-        log.info("getFilteredComments: " + filter.toString());
+        log.info("getFilteredComments: " + filter);
         Result result = commentService.filterComments(filter);
-        log.info("getFilteredComments result : " + ((Data) result).toString());
+        log.info("getFilteredComments result : " + result.toString());
         return result;
     }
 }
