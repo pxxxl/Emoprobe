@@ -4,6 +4,8 @@ import com.minjer.pojo.Filter;
 import com.minjer.pojo.Result;
 import com.minjer.pojo.VideoComment;
 import com.minjer.service.CommentService;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
  * @author Minjer
  * @version 1.0
  */
+@Slf4j
 @RestController
 public class CommentController {
 
@@ -27,9 +30,9 @@ public class CommentController {
      */
     @RequestMapping(value = "/api/v1/comments", method = RequestMethod.POST)
     public Result addComments(@RequestBody VideoComment videoComment) {
-
+        log.info("addComments: " + videoComment.toString());
         Result result = commentService.handleComments(videoComment);
-
+        log.info("addComments result: " + result.toString());
         return result;
     }
 
@@ -63,7 +66,9 @@ public class CommentController {
             @RequestParam(value = "emotion", required = false) String emotion
     ) {
         Filter filter = new Filter(bv, autopost, commentNum, pageIndex, ip, sex, date, like, reply, emotion);
+        log.info("getFilteredComments: " + filter.toString());
         Result result = commentService.filterComments(filter);
+        log.info("getFilteredComments result : " + ((Data) result).toString());
         return result;
     }
 }

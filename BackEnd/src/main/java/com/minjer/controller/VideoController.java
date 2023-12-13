@@ -2,6 +2,7 @@ package com.minjer.controller;
 
 import com.minjer.pojo.Result;
 import com.minjer.service.VideoService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author Minjer
  */
+@Slf4j
 @RestController
 public class VideoController {
 
@@ -27,8 +29,11 @@ public class VideoController {
      */
     @RequestMapping(value = "/api/v1/videos", method = RequestMethod.POST)
     public Result addVideo(String bv) {
+        log.info("addVideo: bv={}", bv);
         int code = videoService.addVideo(bv);
-        return Result.code(code);
+        Result result = Result.code(code);
+        log.info("addVideo result: " + result.toString());
+        return result;
     }
 
     /**
@@ -39,8 +44,11 @@ public class VideoController {
      */
     @RequestMapping(value = "/api/v1/videos", method = RequestMethod.DELETE)
     public Result deleteVideo(String bv) {
+        log.info("deleteVideo: bv={}", bv);
         int code = videoService.deleteVideo(bv);
-        return Result.code(code);
+        Result result = Result.code(code);
+        log.info("deleteVideo result: " + result.toString());
+        return result;
     }
 
     /**
@@ -51,8 +59,11 @@ public class VideoController {
      */
     @RequestMapping(value = "/api/v1/videos", method = RequestMethod.PUT)
     public Result updateVideo(String bv) {
+        log.info("updateVideo: bv={}", bv);
         int code = videoService.updateVideo(bv);
-        return Result.code(code);
+        Result result = Result.code(code);
+        log.info("updateVideo result: " + result.toString());
+        return result;
     }
 
 
@@ -63,10 +74,12 @@ public class VideoController {
      * @param autopost 是否会爬取信息
      * @return 含有数据的结果信息
      */
+    @Deprecated
     @RequestMapping(value = "/api/v1/videos", method = RequestMethod.GET)
     public Result getVideoInfo(String bv, int autopost) {
-
+        log.info("getVideoInfo: bv={}, autopost={}", bv, autopost);
         Result result = videoService.getVideoInfo(bv, autopost);
+        log.info("getVideoInfo result: " + result.toString());
         return result;
     }
 
@@ -77,7 +90,9 @@ public class VideoController {
      */
     @RequestMapping(value = "/api/v1/videos/list", method = RequestMethod.GET)
     public Result getVideos() {
+        log.info("getVideos");
         Result result = videoService.getVideoList();
+        log.info("getVideos result: " + result.toString());
         return result;
     }
 
@@ -90,7 +105,9 @@ public class VideoController {
      */
     @RequestMapping(value = "/api/v1/videos/statistics/overview", method = RequestMethod.GET)
     public Result getVideoStatisticsOverview(String bv) {
+        log.info("getVideoStatisticsOverview: bv={}", bv);
         Result result = videoService.getVideoStatisticsOverview(bv);
+        log.info("getVideoStatisticsOverview: result={}", result);
         return result;
     }
 
@@ -103,7 +120,9 @@ public class VideoController {
      */
     @RequestMapping(value = "/api/v1/videos/statistics/ip", method = RequestMethod.GET)
     public Result etVideoIpOverview(String bv) {
+        log.info("getVideoIpOverview: bv={}", bv);
         Result result = videoService.getVideoIpOverview(bv);
+        log.info("getVideoIpOverview: result={}", result);
         return result;
     }
 }

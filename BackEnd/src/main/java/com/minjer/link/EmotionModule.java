@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.minjer.utils.Tool;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,6 +16,7 @@ import java.util.List;
  *
  * @author Minjer
  */
+@Slf4j
 public class EmotionModule {
     /**
      * 调用情感分析模块处理消息列表
@@ -33,6 +35,7 @@ public class EmotionModule {
      * @return 返回一个集合，这个集合含有对应的情感
      */
     public static List<String> handleSentence(List<String> list) {
+        log.info("EmotionModule is called");
         // 将传入的消息列表转换为json字符串
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("comments", list);
@@ -62,13 +65,15 @@ public class EmotionModule {
             if (exitCode == 0) {
                 // 解析 JSON 字符串为 JSON 对象
                 JSONArray jsonArray = JSON.parseObject(output.toString()).getJSONArray("emotions");
-
+                log.info("EmotionModule is finished");
                 // 将 JSON 数组转换为 ArrayList
                 return jsonArray.toJavaList(String.class);
             } else {
+                log.info("The return of EmotionModule is null");
                 return null;
             }
         } catch (Exception e) {
+            log.error("EmotionModule error");
             e.printStackTrace();
         }
         return null;
