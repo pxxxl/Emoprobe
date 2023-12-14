@@ -23,15 +23,16 @@
         <result column="video_dislike" property="videoDislike"/>
         <result column="video_cid" property="videoCid"/>
         <result column="video_savedate" property="videoSavedate"/>
+        <result column="video_desc" property="videoDescription"/>
     </resultMap>
 
     <insert id="addVideo">
         insert into video (video_bvid, video_aid, owner_uid, owner_name, video_title, video_partition, video_tables,
                            video_pubdate, video_duration, video_like, video_coin, video_favorite, video_share,
-                           video_reply, video_dislike, video_cid, video_savedate)
+                           video_reply, video_dislike, video_cid, video_savedate, video_desc)
         values (#{videoBvid}, #{videoAid}, #{ownerUid}, #{ownerName}, #{videoTitle}, #{videoPartition}, #{videoTables},
                 #{videoPubdate}, #{videoDuration}, #{videoLike}, #{videoCoin}, #{videoFavorite}, #{videoShare},
-                #{videoReply}, #{videoDislike}, #{videoCid}, #{videoSavedate});
+                #{videoReply}, #{videoDislike}, #{videoCid}, #{videoSavedate}, #{videoDescription});
     </insert>
 
     <delete id="delByVideoBvid">

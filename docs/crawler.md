@@ -59,6 +59,7 @@ video对象：
 | video_reply     | num  | 评论数       |                        |
 | video_dislike   | num  | 点踩数       |                        |
 | video_cid       | str  | 视频cid号    | 字符串，但是是数字       |
+| video_disc      | str  | 视频简介     |        |
 
 comments对象为一列表，其中所有列表项均为以下对象：
 

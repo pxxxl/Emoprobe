@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 
 /**
  * 视频的实体类
+ *
  * @author Minjer
  */
 @Data
@@ -52,4 +53,6 @@ public class Video {
     @JsonProperty("operation_time")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime videoSavedate;
+    @JsonProperty("video_desc")
+    private String videoDescription;
 }
