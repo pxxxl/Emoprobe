@@ -123,6 +123,7 @@ video对象：
 | video_reply     | num  | 评论数       |                        |
 | video_dislike   | num  | 点踩数       |                        |
 | video_cid       | str  | 视频cid号    | 字符串，但是是数字       |
+| video_desc      | str  | 视频简介     |                        |
 
 
 comments列表，其中所有对象都以以下格式组织：
@@ -178,6 +179,7 @@ video对象：
 | video_reply     | num  | 评论数       |                        |
 | video_dislike   | num  | 点踩数       |                        |
 | video_cid       | str  | 视频cid号    | 字符串，但是是数字       |
+| video_desc      | str  | 视频简介     |                        |
 
 
 comments列表，其中所有对象都以以下格式组织：
@@ -237,6 +239,7 @@ video对象：
 | video_reply     | num  | 评论数       |                        |
 | video_dislike   | num  | 点踩数       |                        |
 | video_cid       | str  | 视频cid号    | 字符串，但是是数字       |
+| video_desc      | str  | 视频简介     |                        |
 
 
 ## 获取视频列表
@@ -393,6 +396,7 @@ video对象：
 | video_reply     | num  | 评论数       | 是视频的总评论数，包含所有评论（但是评论的子评论不会包含进comments列表）      |
 | video_dislike   | num  | 点踩数       |                        |
 | video_cid       | str  | 视频cid号    | 字符串，但是是数字       |
+| video_desc      | str  | 视频简介     |                        |
 
 
 comments列表，其中所有对象都以以下格式组织：

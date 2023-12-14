@@ -50,6 +50,7 @@ const ip_in_emotion_data = (all_data:any):any=>{
     let y:number = 0;
     for(x = 0;x < emotionLen; x++){
         let contamp = {
+            name:emotion.value[x],
             type:'pie',
             center:[(x % 3.0) * pie_size + (pie_size/2), pie_size *Math.floor(x / 3.0) + pie_size/2],
             radius:[0,100],
@@ -58,7 +59,9 @@ const ip_in_emotion_data = (all_data:any):any=>{
                 show:true,
                 formatter:"{b}: {d}%",
                 alignTo:"labelLine"
-            }
+            },
+            tooltip:{
+            },
         }
         let len = all_data.ip[x].length;
         for(y=0; y<len; y++){
@@ -69,6 +72,19 @@ const ip_in_emotion_data = (all_data:any):any=>{
         }
         out_put.push(contamp);//put a chart data in series list
     }
+    return out_put;
+}
+
+const ip_in_emotion_title = ()=>{
+    let out_put = new Array<object>();
+    emotion.value.forEach((element,index) => {
+        out_put.push({
+            text:element,
+            left: (index % 3)*pie_size + (pie_size/2),
+            top: pie_size *Math.floor(index / 3.0) + 100,
+            textAlign:'center'
+        })
+    });
     return out_put;
 }
 
@@ -97,6 +113,9 @@ const emo_in_ip_chartChange = ()=>{
                 formatter:"{b}: {d}%",
                 alignTo:"labelLine"
             },
+            tooltip:{
+                formatter:"{c}"
+            }
         },
     })
 }
@@ -126,6 +145,9 @@ onMounted(() => {
         height:600
     });
     mychart2.value.setOption({
+        tooltip:{
+            trigger:'item'
+        },
         title:{
             text:"视频评论的Ip占比"
         },
@@ -154,7 +176,11 @@ onMounted(() => {
         height:pie_size * ((emotionLen > 3) ? 2 : 1)
     });
     ip_in_emo_chart.value.setOption({
-        series:ip_in_emotion_data(ip_in_emotion_rate.value)
+        tooltip:{
+            trigger:'item'
+        },
+        title:ip_in_emotion_title(),
+        series:ip_in_emotion_data(ip_in_emotion_rate.value),
     });
 
     emo_in_ip_chart.value = echarts.init(document.getElementById("chart4"),null,{

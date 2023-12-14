@@ -69,6 +69,7 @@ def get_video_info(bv: str) -> Dict:
     res['video_reply'] = info['stat']['reply']
     res['video_dislike'] = info['stat']['dislike']
     res['video_cid'] = str(info['cid'])
+    res['video_desc'] = info['desc']
     return res
 
 
@@ -206,6 +207,8 @@ def crawl_comment(oid: int, cookie: str) -> List:
     for i in range(len(comments)):
         comments[i]['comment_text'] = utils.replace_emoji(comments[i]['comment_text'])
         comments[i]['comment_text'] = utils.remove_non_utf8mb3_chars(comments[i]['comment_text'])
+    # if comment_text is too long (>50 chars), remove it
+    comments = [comment for comment in comments if len(comment['comment_text']) <= 50]
     return comments
 
 
