@@ -122,6 +122,7 @@ def parse_arguments():
 
     return parser.parse_args()
 
+max_comments_batch = 50
 
 def main():
     args = parse_arguments()
@@ -147,7 +148,14 @@ def main():
             print(get_error_json_string())
             return
 
-    emotions = inf(comments)
+    # emotions = inf(comments)
+    emotions = []
+    batch_num = len(comments) // max_comments_batch
+    for i in range(0, len(comments), max_comments_batch):
+        emotions += inf(comments[i:i + max_comments_batch])
+    if len(comments) % max_comments_batch != 0:
+        emotions += inf(comments[batch_num * max_comments_batch:])
+    
 
     result = {'emotions': emotions, 'comments': comments}
     result_json = json.dumps(result)
