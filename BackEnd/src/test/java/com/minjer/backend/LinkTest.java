@@ -42,11 +42,11 @@ public class LinkTest {
      * 2.可能存在分表需求，导致sql语句过长
      */
     void addVideoTest() {
-        String bv = "BV17u4y187Ar";
+        String bv = "BV1hH4y1z7c9";
         videoMapper.delByVideoBvid(bv);
         VideoComment videoComment = Crawler.getVideoWithComments(bv);
+        System.out.println(videoComment.getVideo());
         videoMapper.addVideo(videoComment.getVideo());
-
 //        List comments = videoComment.obtainCommentTexts();
 //        for (int i = 0; i < comments.size(); i++) {
 //            System.out.println(i + ": " + comments.get(i));

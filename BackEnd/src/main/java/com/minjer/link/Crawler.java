@@ -55,6 +55,8 @@ public class Crawler {
                 output.append(line).append("\n");
             }
 
+//            log.info("Crawler output: " + output.toString());
+
             // 等待子进程执行完成
             int exitCode = process.waitFor();
 
@@ -66,6 +68,7 @@ public class Crawler {
                     // 爬虫执行成功，但是返回的数据为空
                     return null;
                 }
+//                log.info("Crawler return video: " + videoComment.getVideo().toString());
                 // 设置视频的bv号，与传入的bv号一致，同时设置视频的保存时间
                 videoComment.getVideo().setVideoSavedate(LocalDateTime.now());
                 videoComment.getVideo().setVideoBvid(bv);
