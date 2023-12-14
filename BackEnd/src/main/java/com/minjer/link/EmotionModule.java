@@ -4,10 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.minjer.utils.Tool;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,7 +17,23 @@ import java.util.List;
  *
  * @author Minjer
  */
+@Slf4j
 public class EmotionModule {
+
+    public static List<String> handleSentence(List<String> list) {
+        ArrayList<String> result = new ArrayList<>();
+        for (int i = 0; i < list.size(); i += 40) {
+            ArrayList<String> temp = (ArrayList<String>) subHandleSentence(list.subList(i, Math.min(i + 40, list.size())));
+            if (temp == null || temp.size() == 0) {
+                log.info("EmotionModule Round {}: Failed", (i / 40) + 1);
+                return null;
+            }
+            result.addAll(temp);
+            log.info("EmotionModule Round {}: Success", (i / 40) + 1);
+        }
+        return result;
+    }
+
     /**
      * 调用情感分析模块处理消息列表
      * 执行逻辑：
@@ -32,7 +50,8 @@ public class EmotionModule {
      * @param list 消息列表（纯字符串）
      * @return 返回一个集合，这个集合含有对应的情感
      */
-    public static List<String> handleSentence(List<String> list) {
+    public static List<String> subHandleSentence(List<String> list) {
+        log.info("EmotionModule is called");
         // 将传入的消息列表转换为json字符串
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("comments", list);
@@ -62,16 +81,18 @@ public class EmotionModule {
             if (exitCode == 0) {
                 // 解析 JSON 字符串为 JSON 对象
                 JSONArray jsonArray = JSON.parseObject(output.toString()).getJSONArray("emotions");
-
+                log.info("EmotionModule is finished");
                 // 将 JSON 数组转换为 ArrayList
                 return jsonArray.toJavaList(String.class);
             } else {
+                log.info("The return of EmotionModule is null");
                 return null;
             }
         } catch (Exception e) {
+            log.error("EmotionModule error");
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     /**
