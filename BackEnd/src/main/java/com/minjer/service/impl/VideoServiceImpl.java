@@ -198,6 +198,8 @@ public class VideoServiceImpl implements VideoService {
             @JsonProperty("operation_time")
             @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
             private LocalDateTime videoSavedate;
+            @JsonProperty("video_desc")
+            private String videoDescription;
         }
 
         List<Video> videos = videoMapper.selectAll();
@@ -205,7 +207,7 @@ public class VideoServiceImpl implements VideoService {
         // 按返回格式要求进行包装
         List<Response> responses = new ArrayList<>();
         for (Video video : videos) {
-            responses.add(new Response(video.getVideoBvid(), video.getVideoTitle(), video.getVideoSavedate()));
+            responses.add(new Response(video.getVideoBvid(), video.getVideoTitle(), video.getVideoSavedate(), video.getVideoDescription()));
         }
         Map<String, Object> map = new HashMap<>();
         map.put("videos", responses);

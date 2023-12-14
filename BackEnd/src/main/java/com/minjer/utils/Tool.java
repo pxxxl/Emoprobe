@@ -51,7 +51,7 @@ public class Tool {
      * @param path 保存路径
      */
     public static void saveJsonToFile(String json, String path) {
-        String fileName = path + "/emotion_temp.json";
+        String fileName = path + File.separator +"emotion_temp.json";
 
         try (BufferedWriter writer = new BufferedWriter(
                 new OutputStreamWriter(new FileOutputStream(fileName), StandardCharsets.UTF_8))) {

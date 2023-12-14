@@ -20,19 +20,23 @@ import java.util.List;
 @Slf4j
 public class EmotionModule {
 
-    public static List<String> handleSentence(List<String> list) {
+
+/*    public static List<String> handleSentence(List<String> list) {
+        int patch = 40;
+
         ArrayList<String> result = new ArrayList<>();
-        for (int i = 0; i < list.size(); i += 40) {
-            ArrayList<String> temp = (ArrayList<String>) subHandleSentence(list.subList(i, Math.min(i + 40, list.size())));
+        for (int i = 0; i < list.size(); i += patch) {
+            ArrayList<String> temp = (ArrayList<String>) subHandleSentence(list.subList(i, Math.min(i + patch, list.size())));
             if (temp == null || temp.size() == 0) {
-                log.info("EmotionModule Round {}: Failed", (i / 40) + 1);
+                log.info("EmotionModule Round {}: Failed", (i / patch) + 1);
                 return null;
             }
             result.addAll(temp);
-            log.info("EmotionModule Round {}: Success", (i / 40) + 1);
+
+            log.info("EmotionModule Round {}: Success", (i / patch) + 1);
         }
         return result;
-    }
+    }*/
 
     /**
      * 调用情感分析模块处理消息列表
@@ -50,7 +54,7 @@ public class EmotionModule {
      * @param list 消息列表（纯字符串）
      * @return 返回一个集合，这个集合含有对应的情感
      */
-    public static List<String> subHandleSentence(List<String> list) {
+    public static List<String> handleSentence(List<String> list) {
         log.info("EmotionModule is called");
         // 将传入的消息列表转换为json字符串
         JSONObject jsonObject = new JSONObject();
@@ -74,14 +78,16 @@ public class EmotionModule {
             while ((line = reader.readLine()) != null) {
                 output.append(line).append("\n");
             }
+            log.info("EmotionModule output: {}", output.toString());
 
             // 等待子进程执行完成
             int exitCode = process.waitFor();
-
+            log.info("EmotionModule exitCode: {}", exitCode);
             if (exitCode == 0) {
                 // 解析 JSON 字符串为 JSON 对象
                 JSONArray jsonArray = JSON.parseObject(output.toString()).getJSONArray("emotions");
                 log.info("EmotionModule is finished");
+
                 // 将 JSON 数组转换为 ArrayList
                 return jsonArray.toJavaList(String.class);
             } else {
