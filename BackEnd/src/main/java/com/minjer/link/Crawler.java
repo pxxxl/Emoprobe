@@ -3,6 +3,7 @@ package com.minjer.link;
 import com.alibaba.fastjson.JSON;
 import com.minjer.pojo.VideoComment;
 import com.minjer.utils.Tool;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
  *
  * @author Minjer
  */
+@Slf4j
 public class Crawler {
     /**
      * 调用爬虫爬取对应bv号视频
@@ -60,6 +62,7 @@ public class Crawler {
                 // 爬虫执行成功
                 VideoComment videoComment = JSON.parseObject(String.valueOf(JSON.parseObject(output.toString()).getJSONObject("data")), VideoComment.class);
                 if (videoComment == null) {
+                    log.info("Crawler return null");
                     // 爬虫执行成功，但是返回的数据为空
                     return null;
                 }
@@ -72,11 +75,14 @@ public class Crawler {
                     videoComment.getComments().get(i).setVideoBvid(bv);
                 }
 
+                log.info("Crawler return videoComment");
                 return videoComment;
             } else {
+                log.error("Crawler wrong");
                 return null;
             }
         } catch (Exception e) {
+            log.error("Crawler wrong");
             e.printStackTrace();
             return null;
         }

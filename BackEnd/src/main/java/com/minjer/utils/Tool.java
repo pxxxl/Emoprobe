@@ -10,6 +10,9 @@ import java.util.Map;
 
 public class Tool {
     public static Map<String,Integer> getPerItemNum(List list){
+        if (list == null || list.size() == 0){
+            return new HashMap<>(0);
+        }
         Map<String,Integer> map = new HashMap<>();
         for (Object o : list) {
             String key = o.toString();
