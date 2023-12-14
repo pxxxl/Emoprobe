@@ -19,7 +19,7 @@ def main():
         pure_output = args.p
 
         if not config_path:
-            config_path = libcrawl.get_default_config_file_path()
+            config_path = utils.get_default_config_file_path()
         
         cookie = utils.get_cookie(config_path)
 
