@@ -15,6 +15,7 @@
         <div class="inshow left-float border">收藏数:<b>{{ video_information.video_favorite }}</b></div>
         <div class="inshow left-float border">分享数:<b>{{ video_information.video_share }}</b></div>
         <div class="inshow left-float border">评论数:<b>{{ video_information.video_reply }}</b></div>
+        <div class="inshow left-float border">视频简介:{{video_information.video_desc}}</div>
     </div>
     <div id="charts">
         <h1 class="dis-flex center-flex">评论统计结果</h1>
