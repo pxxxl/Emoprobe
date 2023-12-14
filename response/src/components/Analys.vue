@@ -24,12 +24,12 @@
     <div id="table">
         <div class="pagination-block">
             <h1 class="dis-flex center-flex">评论分析结果</h1>
-            <div v-loading="!datashow_flag" style="height: 200px;width: 100%;" v-if="!datashow_flag"></div>
             <sift @sift="SiftUpdate" v-if="datashow_flag"/>
             <div class="demonstration">
                 <div class="dis-flex center-flex pagecount">
-                    <el-pagination layout="prev, pager, next" style="width: 50vh;" :hide-on-single-page="false" :page-size="page_len" v-model:page-count="all_pagenum" v-model:current-page="pn" background="blue"/>
+                    <el-pagination layout="prev, pager, next" style="width: 50vh;" :hide-on-single-page="true" :page-size="page_len" v-model:page-count="all_pagenum" v-model:current-page="pn" background="blue"/>
                 </div>
+                <div v-loading="!datashow_flag" style="height: 200px;width: 100%;" v-if="!datashow_flag"></div>
                 <el-table :data="per_pageCom" style="width: 100%;" v-if="datashow_flag" :border="true">
                     <el-table-column prop="user_uid" label="用户id" align="center" min-width="100"></el-table-column>
                     <el-table-column prop="user_name" label="用户名称" align="center"></el-table-column>
