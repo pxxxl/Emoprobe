@@ -103,12 +103,6 @@ const ClearAll = ()=>{
     AddSift();
 }
 const AddSift = ()=>{
-    console.log(ip.value);
-    console.log(date.value);
-    console.log(like.value);
-    console.log(reply.value);
-    console.log(gender.value);
-    console.log(emotion.value);
     emit('sift',ip.value.toString(),gender.value,date.value,like.value,reply.value,emotion.value.toString());
 }
 
