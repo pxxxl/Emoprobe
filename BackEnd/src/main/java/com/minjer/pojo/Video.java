@@ -25,6 +25,8 @@ public class Video {
     private String ownerUid;
     @JsonProperty("owner_name")
     private String ownerName;
+    @JsonProperty("video_desc")
+    private String videoDesc;
     @JsonProperty("video_title")
     private String videoTitle;
     @JsonProperty("video_partition")
@@ -53,6 +55,5 @@ public class Video {
     @JsonProperty("operation_time")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime videoSavedate;
-    @JsonProperty("video_desc")
-    private String videoDescription;
+
 }

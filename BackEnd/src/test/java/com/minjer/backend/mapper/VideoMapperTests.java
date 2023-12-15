@@ -30,7 +30,7 @@ public class VideoMapperTests {
 
     @Test
     void addVideo() {
-        Video video = videoMapper.selectByBv("BV1Dd4y1B7uP");
+        Video video = videoMapper.selectByBv("BV1hH4y1z7c9");
         video.setVideoBvid("uhdkw");
         videoMapper.addVideo(video);
     }
