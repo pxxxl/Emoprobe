@@ -1,9 +1,12 @@
 <template>
-    <div id="select-part" class=""> 
-            <img src="/resource/picture/blueArch.png" alt="" :style="{boxShadow:`var(--el-box-shadow-dark)`}">
-            <div class="container dis-flex direction-row-flex center-flex">
-                <el-button class="button border" @mouseleave="(event)=>event.target.blur()" :value="vedio_ComAnaly" @click="TargetChange(vedio_ComAnaly)">{{vedio_analys}}</el-button>
-                <el-button class="button border" @mouseleave="(event)=>event.target.blur()" :value="single_ComAnaly" @click="TargetChange(single_ComAnaly)">{{single_analys}}</el-button>
+    <div id="select-part" class="dis-flex direction-row-flex" :style=" {boxShadow:`var(--el-box-shadow-light)`}"> 
+            <div class="pic-container">
+                <img src="/resource/picture/blueArch.png" style="display: block;width: 100%;height: 100%;">
+            </div>
+
+            <div class="container dis-flex direction-row-flex align-items-center">
+                <el-button class="button " @mouseleave="(event)=>event.target.blur()" :value="vedio_ComAnaly" @click="TargetChange(vedio_ComAnaly)" v-if="bs">{{vedio_analys}}</el-button>
+                <el-button class="button " @mouseleave="(event)=>event.target.blur()" @mousehover="" :value="single_ComAnaly" @click="TargetChange(single_ComAnaly)" v-if="bs">{{single_analys}}</el-button>
             </div>
     </div> 
 </template>
@@ -27,6 +30,7 @@ export default{
             this.$emit("select",this.select);
         }
     },
+    props:['bs'],
     mounted() {
     },
     watch:{
@@ -36,29 +40,29 @@ export default{
 
 <style scoped>
 #select-part{
-    height: 10vh;
+    height: 12vh;
     width: 100%;
     top: 0;
     right: 5%;
     background-color: var(--color-head);
 }
 
-img{
-    height: 100%;
-    width: 20%;
-    margin: 0px;
-    float: left;
-}
-
 .button{
-   flex: 1;
-   height: 80%!important;
+   height: 50%;
+   width: 10%;
+   background-color: var( --color-button-nohover);
+   color: black;
+   border: 0px;
+}
+.button:hover{
+    background-color: var(--color-button-hover);
 }
 
 .container{
-    top: 0px;
-    margin: auto;
-    height: 10vh;
-    width: 20vh;
+    flex: 8;
+}
+
+.pic-container{
+    flex: 2;
 }
 </style>

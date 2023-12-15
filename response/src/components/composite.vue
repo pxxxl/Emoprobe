@@ -5,9 +5,12 @@
             <div class="dis-flex direction-row-flex center-flex">
                 <el-input 
                     v-model.lazy="video" 
+                    type="textarea"
+                    :show-word-limit="true"
+                    :autosize="{ minRows: 3, maxRows: 5 }"
                     :autofocus="true" 
                     :clearable="true" 
-                    class="input-size center" 
+                    class="input-size" 
                     placeholder="Please Input" 
                     :style="{boxShadow:`var(--el-box-shadow-dark)`}"
                     @keyup.enter = "Postdata"
@@ -145,10 +148,11 @@ export default{
 </script>
 
 <style scoped>
+
+
 .input-size{
-    width: 50%;
+    width: 80%;
     border-radius: 4px;
-    border: 1px solid rgba(0, 0, 255,0.3);
     margin-right: 3vh!important;
     margin-left: 0px!important;
 }
@@ -168,7 +172,7 @@ export default{
 }
 
 #notice{
-    font-size: large;
+    font-size: 16px;
     user-select: none;
     margin-bottom: 2vh;
     margin-top: 5vh;

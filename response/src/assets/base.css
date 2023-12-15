@@ -1,20 +1,29 @@
 :root{
     --lite-black:rgba(13, 18, 15, 0.7);
+    --deep-black:rgba(0,0,0);
     --full-whilte:rgba(255,255,255,1);
     --green-blue:rgb(19, 228, 211);
     --green-light: rgba(26, 211, 143, 0.5);
-    --blue-deep:#337ecc;
+    --blue-deep:#2f83de;
     --blue-mid-deep:#409eff;
     --blue-light:#a0cfff;
+    --grey-light:#F1F2F3;
+    --grey-deep:#C9CCD0;
+    --pulple-light:#e84416;
 }
 
 :root{
     --color-background: var(--full-whilte);
-    --color-button:var(--green-blue);
-    --color-head:var(--blue-mid-deep);
+    --color-head:var(--full-whilte);
     --color-inputborder:var(--greeedn-blue);
     --color-Appmainpart:var(--full-whilte);
     --color-tag:var(--green-light);
+    --color-button-nohover:var(--grey-light);
+    --color-button-hover:var(--grey-deep);
+    --color-font-link:var(--pulple-light);
+    --color-font-linkE:var(--blue-deep);
+    --color-font-white:var(--full-whilte);
+    --color-font-black:var(--deep-black);
 }
 
 body{

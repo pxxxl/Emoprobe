@@ -1,7 +1,7 @@
 <template>
-    <div class="dis-flex direction-column-flex align-items-center">
-        <h3 class="select-no">数据库视频列表</h3>
-        <router-link class="none-decoration link dis-flex center-flex" v-for="bv_inform in videolist" :to="{path:'/datashow',query:{bv:bv_inform.video_bid}}" >{{ titleProccess(bv_inform) }}</router-link>
+    <div class="dis-flex direction-column-flex align-items-center list border">
+        <p class="select-no" style="font-size: 16px;"><b>数据库视频列表</b></p>
+        <router-link class="none-decoration link dis-flex center-flex" v-for="bv_inform in videolist" :to="{path:'/datashow',query:{bv:bv_inform.video_bid}}" ><b>{{ titleProccess(bv_inform) }}</b></router-link>
     </div>
 </template>
 
@@ -38,9 +38,9 @@ export default{
     },
     methods:{
         titleProccess(video){
-            if(video.video_title.length > 22)
+            if(video.video_title.length > 20)
             {
-                return video.video_title.slice(0,22) + "...";
+                return video.video_title.slice(0,20) + "...";
             }
             else return video.video_title;
         }
@@ -50,8 +50,20 @@ export default{
 
 <style scoped>
 .link{
-    margin-top: 1vh;
-    margin-bottom: 1vh;
-    font-size: 1.8vh;
+    margin-top: 1.2vh;
+    margin-bottom: 1.2vh;
+    margin-left: 4px;
+    margin-right: 4px;
+    font-size: 13px;
+    text-align: center;
+    color: var( --color-font-black);
+}
+.link:hover{
+    color:  var(--color-font-link);
+}
+.list{
+    border-radius: 3vh;
+    backdrop-filter:blur(6px);
+    color: var( --color-font-black);
 }
 </style>

@@ -1,16 +1,19 @@
 <template>
     <div id="echart">
-        <div id="chart1" class="border"></div>
-        <div id="chart2" class="border"></div>
-        <div id="chart3" class="border"></div>
+        <div id="chart1" class=""></div>
+        <el-divider border-style="double" />
+        <div id="chart2" class=""></div>
+        <el-divider border-style="double" />
+        <div id="chart3" class=""></div>
+        <el-divider border-style="double" />
         <el-select v-model="ip_select" @change="emo_in_ip_chartChange">
             <el-option v-for="(item,key) in ip"
                 :value="key"
                 :label="item"
             >
-        </el-option>
+            </el-option>
         </el-select>
-        <div id="chart4" class="border"></div>
+        <div id="chart4" class=""></div>
     </div>
 </template>
 
@@ -19,16 +22,14 @@ import * as echarts from 'echarts';
 import {onMounted, ref} from 'vue';
 
 const props = defineProps(['overview',"ipAnalys"]);
-const pie_size = 500;
+const pie_size = 400;
 const ip_select = ref(0);
 
 const ip = ref();//ip arrary
 const emotion = ref();//emotion arrary
-emotion.value = props.ipAnalys.emotion;
-ip.value =props.ipAnalys.ip;
 
-const emotionLen = emotion.value.length;
-const ipLen = ip.value.length;
+const emotionLen = ref();
+const ipLen = ref();
 
 const mychart1 = ref();
 const mychart2 = ref();
@@ -39,16 +40,13 @@ const emo_in_ip_chart =ref()
 const ip_people_num = ref();
 const ip_in_emotion_rate = ref();
 const emo_in_ip_rate = ref();
-ip_people_num.value = props.ipAnalys.num_ip_person;
-ip_in_emotion_rate.value = props.ipAnalys.ip_ratio_per_emotion;
-emo_in_ip_rate.value = props.ipAnalys.emotion_ratio_per_ip;
 
 const ip_in_emotion_data = (all_data:any):any=>{
-    console.log(all_data.ip);
+    // console.log(all_data.ip);
     let out_put = new Array<object>();
     let x:number = 0;
     let y:number = 0;
-    for(x = 0;x < emotionLen; x++){
+    for(x = 0;x < emotionLen.value; x++){
         let contamp = {
             name:emotion.value[x],
             type:'pie',
@@ -81,7 +79,7 @@ const ip_in_emotion_title = ()=>{
         out_put.push({
             text:element,
             left: (index % 3)*pie_size + (pie_size/2),
-            top: pie_size *Math.floor(index / 3.0) + 100,
+            top: pie_size *Math.floor(index / 3.0) + 50,
             textAlign:'center'
         })
     });
@@ -121,8 +119,19 @@ const emo_in_ip_chartChange = ()=>{
 }
 
 onMounted(() => {
+    emotion.value = props.ipAnalys.emotion;
+    ip.value =props.ipAnalys.ip;
+    ipLen.value = ip.value.length;
+    emotionLen.value = emotion.value.length;
+    // console.log(props.ipAnalys);
+    // console.log(props.overview);
+
+    ip_people_num.value = props.ipAnalys.num_ip_person;
+    ip_in_emotion_rate.value = props.ipAnalys.ip_ratio_per_emotion;
+    emo_in_ip_rate.value = props.ipAnalys.emotion_ratio_per_ip;
+
     mychart1.value = echarts.init(document.getElementById('chart1'),null,{
-        width:emotionLen * 200,
+        width:emotionLen.value * 200,
         height:300
     });
     mychart1.value.setOption({
@@ -172,8 +181,8 @@ onMounted(() => {
     });
 
     ip_in_emo_chart.value = echarts.init(document.getElementById("chart3"),null,{
-        width:pie_size * ( (emotionLen >= 3) ? 3 : emotionLen ),
-        height:pie_size * ((emotionLen > 3) ? 2 : 1)
+        width:pie_size * ( (emotionLen.value >= 3) ? 3 : emotionLen.value ),
+        height:pie_size * ((emotionLen.value > 3) ? 2 : 1)
     });
     ip_in_emo_chart.value.setOption({
         tooltip:{

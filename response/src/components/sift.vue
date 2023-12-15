@@ -1,87 +1,77 @@
 <template>
-    <div class="sift-button dis-flex align-items-center">
-        <div class="dis-flex direction-column-flex center-flex">
-            <el-button @click="AddSift" style="margin-bottom:1vh ;" @mouseleave="(event)=>{event.target.blur()}">
-                筛选
-            </el-button>
-            <el-button @click="ClearAll" style="margin-top: 1vh;" @mouseleave="(event)=>{event.target.blur()}">
-                清空筛选
+    <div class="">
+        <div class="dis-flex direction-row-flex align-items-center">
+            <span style="margin-left: 10px; margin-right: 2px;">ip</span>
+            <el-select v-model="ip" placeholder="ip选择" :multiple="true">
+                <el-option value="">无</el-option>
+                <el-option v-for="item in ipArr" :value="item">{{item}}</el-option>
+            </el-select>
+            <span style="margin-left: 100px; margin-right: 2px;">日期</span>
+            <el-date-picker
+                v-model="org_date"
+                type="datetimerange"
+                start-placeholder="开始时间"
+                end-placeholder="结束时间"
+                format="YYYY-MM-DD HH:mm:ss"
+                date-format="YYYY/MM/DD ddd"
+                time-format="hh:mm:ss"
+                label-format="YYYY-MM-DD HH:mm:ss"
+                style="
+                    margin-right: 400px!important;
+                    margin-left: 2px;
+                "
+                @change="DateToString"
+            />
+            <el-button class="moresift"  @click="siftShow = !siftShow" @mouseleave="(event)=>event.target.blur()">
+            更多筛选
+                <el-icon v-if="!siftShow"><ArrowDown /></el-icon>
+                <el-icon v-if="siftShow"><ArrowUp /></el-icon>
             </el-button>
         </div>
-                <div class="ip-select">
-                   <h3 class="left-float">ip</h3>
-                   <div class="ipshow">
-                    <el-tag
-                        v-for="tag in dynamicTags"
-                        :key="tag"
-                        class="tag"
-                        closable
-                        :disable-transitions="false"
-                        @close="handleClose(tag)"
-                    >
-                        {{ tag }}
-                    </el-tag>
-                    <el-input
-                        v-if="inputVisible"
-                        ref="InputRef"
-                        v-model="inputValue"
-                        class="ip-input"
-                        size="small"
-                        @keyup.enter="handleInputConfirm"
-                        @blur="handleInputConfirm"
-                    />
-                    <el-button v-else class="button-new-tag" size="small" @click="showInput">
-                        +输入ip
-                    </el-button>
-                    </div>
+        <transition name="morepart">
+            <div v-if="siftShow" class="ms">
+                <div id="gender-sift" class="dis-flex align-items-center direction-row-flex">
+                    <span class="notice-sp">性别</span>
+                    <el-radio-group v-model="gender" size="large">
+                        <el-radio-button label="" class="margin-tblr">无筛选</el-radio-button>
+                        <el-radio-button label="男"  class="margin-tblr"></el-radio-button>
+                        <el-radio-button label="女"  class="margin-tblr"></el-radio-button>
+                        <el-radio-button label="未知"  class="margin-tblr"></el-radio-button>
+                    </el-radio-group>
                 </div>
-                <div class="gender-select">
-                    <h3>性别筛选</h3>
-                    <el-checkbox-group v-model="gender">
-                        <el-checkbox label="男" />
-                        <el-checkbox label="女" />
-                        <el-checkbox label="保密" />
+                <div id="like-sift" class="dis-flex align-items-center direction-row-flex">
+                    <span class="notice-sp">点赞数</span>
+                    <el-radio-group v-model="like" size="large">
+                        <el-radio-button  label=""  class="margin-tblr">无筛选</el-radio-button>
+                        <el-radio-button label="0,50"  class="margin-tblr">0-50</el-radio-button>
+                        <el-radio-button label="51,200"  class="margin-tblr">50-200</el-radio-button>
+                        <el-radio-button label="201,1000"  class="margin-tblr">200-1000</el-radio-button>
+                        <el-radio-button label="1001,"  class="margin-tblr">1000以上</el-radio-button>
+                    </el-radio-group>
+                </div>
+                <div id="reply-sift" class="dis-flex align-items-center direction-row-flex">
+                    <span class="notice-sp">回复数</span>
+                    <el-radio-group v-model="reply" size="large">
+                        <el-radio-button  label=""  class="margin-tblr">无筛选</el-radio-button>
+                        <el-radio-button label="0,50"  class="margin-tblr">0-50</el-radio-button>
+                        <el-radio-button label="51,200"  class="margin-tblr">50-200</el-radio-button>
+                        <el-radio-button label="201,1000"  class="margin-tblr">200-1000</el-radio-button>
+                        <el-radio-button label="1001,"  class="margin-tblr">1000以上</el-radio-button>
+                    </el-radio-group>
+                </div>
+                <div id="emotion-sift" class="dis-flex align-items-center direction-row-flex">
+                    <span class="notice-sp">情感</span>
+                    <el-checkbox-group v-model="emotion" size="small" >
+                        <el-checkbox  label="快乐"  class="margin-tblr"/>
+                        <el-checkbox  label="愤怒"  class="margin-tblr"/>
+                        <el-checkbox label="厌恶"  class="margin-tblr"/>
+                        <el-checkbox  label="恐惧"  class="margin-tblr"/>
+                        <el-checkbox  label="悲伤"  class="margin-tblr"/>
                     </el-checkbox-group>
                 </div>
-                <div class="date-select">
-                    <h3>日期</h3>
-                    <el-date-picker
-                        v-model="date"
-                        type="datetimerange"
-                        start-placeholder="开始时间"
-                        end-placeholder="结束时间"
-                        format="YYYY-MM-DD HH:mm:ss"
-                        date-format="YYYY/MM/DD ddd"
-                        time-format="hh:mm:ss"
-                        value-format="YYYY-MM-DD HH:mm:ss"
-                        style="width: 90%!important;"
-                        @change="DateToString(date)"
-                    />
-                </div>
-                <div class="like-select">
-                    <h3>点赞数</h3>
-                    <div class="dis-flex direction-row-flex align-items-center">
-                        <el-input-number v-model.lazy="like[0]" class="num-input" :controls="false" :precision="0" :max="like[1]" :min="0"/><el-icon size="3vh"><Minus /></el-icon>
-                        <el-input-number v-model.lazy="like[1]" class="num-input" :controls="false" :precision="0" :min="like[0]"/>
-                    </div>
-                </div>
-                <div class="reply-select">
-                    <h3>回复数</h3>
-                    <div class="dis-flex direction-row-flex align-items-center">
-                        <el-input-number v-model.lazy="reply[0]" class="num-input" :controls="false" :precision="0" :max="reply[1]" :min="0"/><el-icon size="3vh"><Minus /></el-icon>
-                        <el-input-number v-model.lazy="reply[1]" class="num-input" :controls="false" :precision="0" :min="reply[0]"/>
-                    </div>
-                </div>
-                <div class="emotion-select">
-                    <h3>情感</h3>
-                    <el-checkbox-group v-model="emotion">
-                    <el-checkbox label="快乐"/>
-                    <el-checkbox label="愤怒"/>
-                    <el-checkbox label="厌恶"/>
-                    <el-checkbox label="恐惧"/>
-                    <el-checkbox label="悲伤"/>
-                    </el-checkbox-group>
-                </div>
+            </div>
+        </transition>
+        
     </div>
 </template>
 
@@ -89,132 +79,130 @@
 import { nextTick, onMounted, ref, watch} from 'vue';
 import { ElInput } from 'element-plus'
 import { da, es, tr } from 'element-plus/es/locale';
-const emit = defineEmits(['sift'])
+const emit = defineEmits(['sift']);
+const props =   defineProps(['ipArr']);
+const ipArr = ref();
 
-const inputVisible = ref(false);
-const inputValue = ref("");
-const InputRef = ref<InstanceType<typeof ElInput>>();
+const ip = ref([])
+const emotion = ref([]);
+const like = ref('');
+const reply = ref('');
+const date = ref('');
+const gender = ref("");
 
-const dynamicTags = ref(Array());
-const date = ref(null);//date
-const gender = ref(new Array("男","女","保密"));
-const like = ref(Array<number|null>(2));
-const reply = ref(Array<number|null>(2));
-const emotion = ref(Array<string>());
-
-const date_string = ref("");
-const emotion_string = ref("");
-const like_string = ref("");
-const reply_string = ref("");
-
-const handleInputConfirm=()=>{
-    if(inputValue.value){
-        if(dynamicTags.value.indexOf(inputValue.value) == -1)dynamicTags.value.push(inputValue.value);
-    }
-    inputVisible.value = false;
-    inputValue.value = '';
-}
-
-const showInput = ()=>{
-    inputVisible.value = true;
-    nextTick(()=>{
-        InputRef.value?.input?.focus();
-    });
-}
-
-const handleClose = (tag:string)=>{
-    dynamicTags.value.splice(dynamicTags.value.indexOf(tag), 1);
-}
+const org_date = ref(null);
+const siftShow = ref(false);
 
 
 const DateToString=(value:string[]|null)=>{
-    if(value)date_string.value = value[0] + ',' + value[1];
-    else date_string.value = "";
-}
-
-const LikeToString = (value:(number|any)[])=>{
-    let v1:string = (value[0]==null)?"":value[0].toString();
-    if(value[1]) like_string.value = v1 + "," + value[1].toString();
-    else like_string.value = v1;
-}
-
-const ReplyToString = (value:(number|null)[])=>{
-    let v1:string = (value[0]==null)?"":value[0].toString();
-    if(value[1]) reply_string.value = v1 + "," + value[1].toString();
-    else reply_string.value = v1;
+    if(value)date.value = value[0] + ',' + value[1];
+    else date.value = "";
 }
 
 const ClearAll = ()=>{
-    dynamicTags.value = [];
-    gender.value = ["男","女","保密"];
-    date.value = null;
-    like.value = [null,null];
-    reply.value = [null,null];
-    emotion.value = [];
     AddSift();
 }
 const AddSift = ()=>{
-    DateToString(date.value);
-    LikeToString(like.value);
-    ReplyToString(reply.value);
-    emit('sift',dynamicTags.value.toString()
-        ,gender.value.toString()
-        ,date_string.value
-        ,like_string.value
-        ,reply_string.value
-        ,emotion.value.toString()
-    );
+    console.log(ip.value);
+    console.log(date.value);
+    console.log(like.value);
+    console.log(reply.value);
+    console.log(gender.value);
+    console.log(emotion.value);
+    emit('sift',ip.value.toString(),gender.value,date.value,like.value,reply.value,emotion.value.toString());
 }
 
+watch([ip,gender,date,like,reply,gender,emotion],()=>{
+    AddSift();
+},{
+    flush: 'post'
+})
+
+onMounted(()=>{
+    ipArr.value = props.ipArr;
+})
 </script>
 
 <style scoped>
-.ip-select{
-    flex: 1;
-    margin-right: 1vh;
-    margin-left: 1vh;
+.morepart-enter-active {
+  animation: bounce-in 0.28s;
+}
+.morepart-leave-active {
+  animation: bounce-in 0.28s reverse;
 }
 
-.gender-select{
-    flex: 1;
+@keyframes bounce-in{
+    0%{
+        transform: scaleY(0)
+    }
+    10%{
+        transform: scaleY(0.1)
+    }
+    20%{
+        transform: scaleY(0.2)
+    }
+    25%{
+        transform: scaleY(0.25)
+    }
+    40%{
+        transform: scaleY(0.4)
+    }
+    50%{
+        transform: scaleY(0.5)
+    }
+    60%{
+        transform: scaleY(0.6)
+    }
+    75%{
+        transform: scaleY(0.75)
+    }
+    80%{
+        transform: scaleY(0.8)
+    }
+    100%{
+        transform: scaleY(1)
+    }
 }
 
-.date-select{
-    flex: 1;
+.ms{
+    overflow: hidden;
+    transform-origin: top;
 }
-
-.like-select{
-    flex: 1;
+.moresift{
+    float: right;
 }
-
-.reply-select{
-    flex: 1;
+#gender-sift{
+    height: 6vh;
+    width: 100%;
+    margin-top: 2vh;
+    margin-bottom: 1vh;
 }
-
-.emotion-select{
-    flex: 1;
+#like-sift{
+    height: 6vh;
+    width: 100%;
+    margin-top: 2vh;
+    margin-bottom: 1vh;
 }
-
-.tag{
-    min-width: 3vh;
-    margin: 0.5vh;
+#reply-sift{
+    height: 6vh;
+    width: 100%;
+    margin-top: 2vh;
+    margin-bottom: 1vh;
 }
-
-.button-new-tag{
-    min-width: 3vh;
-    margin-left: 1.5vh;
+#emotion-sift{
+    height: 6vh;
+    width: 100%;
+    margin-top: 2vh;
+    margin-bottom: 1vh;
 }
-
-.ip-input{
-    width: 10vh;
-    margin-left: 1.5vh;
+.margin-tblr{
+    margin-top: 3px;
+    margin-bottom: 3px;
+    margin-left: 4px;
+    margin-right: 4px;
 }
-
-.ipshow{
-    margin-left: 0.5vh;
-}
-
-.num-input{
-    width: 8vh;
+.notice-sp{
+    font-size:15px;
+    margin-right:3px;
 }
 </style>

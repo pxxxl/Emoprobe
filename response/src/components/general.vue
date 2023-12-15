@@ -1,14 +1,16 @@
 <template>
 
-    <FUNC_SELECT @select ="SelectChange" />
-    <div class="dis-flex direction-row-flex global">
-        <div id="navigate" class="dis-flex justify-content-center border">
-            <VideoList />
-        </div>
-        <div id="mainpart">
-            <composite v-if="select == 1"/>
-            <single v-if="select == 2"/>
-            <BACKTOP />
+    <FUNC_SELECT @select ="SelectChange" :bs="true"/>
+    <div class="container">
+        <div class="dis-flex direction-row-flex global">
+            <div id="navigate">
+                <VideoList />
+            </div>
+            <div id="mainpart">
+                <composite v-if="select == 1"/>
+                <single v-if="select == 2"/>
+                <BACKTOP />
+            </div>
         </div>
     </div>
     
@@ -44,16 +46,21 @@
     
     <style scoped>
     #mainpart{
-        flex: 9;
+        flex: 8;
     }
 
     #navigate{
         flex: 2;
-        border-radius: 3vh;
     }
     .global{
-        min-height: 90vh;
-        margin: 0px;
+        min-height: 88vh;
+        margin-left: 30px;
+        margin-right: 30px;
         padding: 0px;
+    }
+    .container{
+        background-image: url('/resource/picture/back.png');
+        background-repeat: no-repeat;
+        background-size:100% 100%;
     }
     </style>

@@ -11,7 +11,7 @@
           color: #1989fa;
         "
       >
-        顶部
+      <el-icon><ArrowUpBold /></el-icon>
       </div>
     </el-backtop>
   </template>
