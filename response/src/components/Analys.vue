@@ -22,9 +22,10 @@
             </el-descriptions>
             <div id="nav" class="">
                 <ul class="nav-list  margin-auto select-no">
-                    <li @click="TurnToEleView('information-nav')">视频信息</li>
-                    <li @click="TurnToEleView('charts')">数据统计</li>
-                    <li @click="TurnToEleView('table')">评论展示</li>
+                    <p style="font-size: 18px;">前往</p>
+                    <li class="turnto-size" @click="TurnToEleView('information-nav')">视频信息></li>
+                    <li  class="turnto-size" @click="TurnToEleView('charts')">数据统计></li>
+                    <li  class="turnto-size" @click="TurnToEleView('table')">评论展示></li>
                 </ul>
             </div>
         </div>
@@ -245,13 +246,15 @@ watch(pn,(New_pn)=>{
 .nav-list{
     width: 30%;
     height: auto;
-    list-style-type:disc;
+    list-style-type:none;
     padding: 0px;
-    font-size: 18px; 
-    color: green;
+    color: black;
 }
 li:hover{
     color: var(--color-font-linkE);
+}
+.turnto-size{
+    font-size: large;
 }
 .main{
     margin-left: 30px;

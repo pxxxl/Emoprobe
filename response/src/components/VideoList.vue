@@ -1,8 +1,8 @@
 <template>
-    <div class="dis-flex direction-column-flex align-items-center list border">
-        <p class="select-no" style="font-size: 16px;"><b>数据库视频列表</b></p>
+    <el-scrollbar class="list border">
+        <p class="select-no dis-flex center-flex" style="font-size: 16px;"><b>数据库视频列表</b></p>
         <router-link class="none-decoration link dis-flex center-flex" v-for="bv_inform in videolist" :to="{path:'/datashow',query:{bv:bv_inform.video_bid}}" ><b>{{ titleProccess(bv_inform) }}</b></router-link>
-    </div>
+    </el-scrollbar>
 </template>
 
 <script>
@@ -62,6 +62,7 @@ export default{
     color:  var(--color-font-link);
 }
 .list{
+    height: 83vh;
     border-radius: 3vh;
     backdrop-filter:blur(6px);
     color: var( --color-font-black);

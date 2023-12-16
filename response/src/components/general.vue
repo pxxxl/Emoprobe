@@ -61,6 +61,6 @@
     .container{
         background-image: url('/resource/picture/back.png');
         background-repeat: no-repeat;
-        background-size:100% 100%;
+        background-size:cover;
     }
     </style>
