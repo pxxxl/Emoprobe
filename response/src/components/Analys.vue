@@ -154,7 +154,7 @@ const get_page_comment = (bvString:string,autopost:number,pageLen:number,page:nu
         let response:any = org_response.data;
         if(response.code == 408 || !response){
             ShowErrorMessage(response.msg + " 即将跳转");
-            setTimeout(back,5000);
+            // setTimeout(back,5000);
         }
         all_pagenum.value = response.data.total_page_num;
         per_pageCom.value = response.data.comments;
@@ -164,7 +164,7 @@ const get_page_comment = (bvString:string,autopost:number,pageLen:number,page:nu
         GetChartData(ipAnalysurl,1);
     }).catch((error:any)=>{
         ShowErrorMessage(error + " 服务器链接错误，即将跳转");
-        setTimeout(back,5000);
+        // setTimeout(back,5000);
     });
 }
 
@@ -176,7 +176,7 @@ const SiftUpdate = (ip_rq:string,gender_rq:string,date_rq:string,like_rq:string,
     like.value = like_rq;
     reply.value = reply_rq;
     emotion.value = emotion_rq;
-    // console.log(gender.value)
+    console.log(date.value)
 
     get_page_comment(bv.value,1,
         page_len,
@@ -254,7 +254,7 @@ li:hover{
     color: var(--color-font-linkE);
 }
 .turnto-size{
-    font-size: large;
+    font-size: 14px;
 }
 .main{
     margin-left: 30px;

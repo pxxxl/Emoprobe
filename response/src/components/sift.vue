@@ -12,7 +12,7 @@
                 type="datetimerange"
                 start-placeholder="开始时间"
                 end-placeholder="结束时间"
-                format="YYYY-MM-DD HH:mm:ss"
+                value-format="YYYY-MM-DD HH:mm:ss"
                 date-format="YYYY/MM/DD ddd"
                 time-format="hh:mm:ss"
                 label-format="YYYY-MM-DD HH:mm:ss"
@@ -97,6 +97,7 @@ const siftShow = ref(false);
 const DateToString=(value:string[]|null)=>{
     if(value)date.value = value[0] + ',' + value[1];
     else date.value = "";
+    console.log(date.value);
 }
 
 const ClearAll = ()=>{
@@ -104,6 +105,10 @@ const ClearAll = ()=>{
 }
 const AddSift = ()=>{
     emit('sift',ip.value.toString(),gender.value,date.value,like.value,reply.value,emotion.value.toString());
+}
+const CheckDate = (dd):boolean=>{
+    // console.log(dd);
+    return true;
 }
 
 watch([ip,gender,date,like,reply,gender,emotion],()=>{
