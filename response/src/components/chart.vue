@@ -1,10 +1,10 @@
 <template>
     <div id="echart">
-        <div id="chart1" class=""></div>
+        <div id="chart1" class="" :style=" {boxShadow:`var(--el-box-shadow-dark)`}"></div>
         <el-divider border-style="double" />
-        <div id="chart2" class=""></div>
+        <div id="chart2" class="" :style=" {boxShadow:`var(--el-box-shadow-dark)`}"></div>
         <el-divider border-style="double" />
-        <div id="chart3" class=""></div>
+        <div id="chart3" class="" :style=" {boxShadow:`var(--el-box-shadow-dark)`}"></div>
         <el-divider border-style="double" />
         <el-select v-model="ip_select" @change="emo_in_ip_chartChange">
             <el-option v-for="(item,key) in ip"
@@ -13,11 +13,15 @@
             >
             </el-option>
         </el-select>
-        <div id="chart4" class=""></div>
+        <div id="chart4" class="" :style=" {boxShadow:`var(--el-box-shadow-dark)`}"></div>
+        <el-divider border-style="double" />
+        <div id="chart5"  :style=" {boxShadow:`var(--el-box-shadow-dark)`}"></div>
+
     </div>
 </template>
 
 <script lang="ts" setup>
+import axios from 'axios';
 import * as echarts from 'echarts';
 import {onMounted, ref} from 'vue';
 
@@ -34,7 +38,8 @@ const ipLen = ref();
 const mychart1 = ref();
 const mychart2 = ref();
 const ip_in_emo_chart = ref();
-const emo_in_ip_chart =ref()
+const emo_in_ip_chart =ref();
+const geography_chart_china = ref();
 
 
 const ip_people_num = ref();
@@ -118,6 +123,14 @@ const emo_in_ip_chartChange = ()=>{
     })
 }
 
+const get_IP_num=(province:string):number=>{
+    let key:number = ip.value.indexOf(province);
+    if(key === -1)return 0;
+    else{
+        return ip_people_num .value[key];
+    }
+}
+
 onMounted(() => {
     emotion.value = props.ipAnalys.emotion;
     ip.value =props.ipAnalys.ip;
@@ -197,9 +210,87 @@ onMounted(() => {
         height:300
     });
     emo_in_ip_chartChange();
+
+    geography_chart_china.value = echarts.init(document.getElementById('chart5'),null,{
+        width:1000,
+        height:500
+    });
+    axios.get('https://geo.datav.aliyun.com/areas_v3/bound/geojson?code=100000_full')
+    .then((org_response)=>{
+        echarts.registerMap('topo', {geoJSON: org_response.data});
+        geography_chart_china.value.setOption({
+            title:{
+                text:"Ip地理分布图"
+            },
+            dataRange:{
+                x:'left',
+                y:'bottom',
+                splitList:[
+                    {start:2000,label:'2000以上',color:'rgba(50,0,0,0.8)'},
+                    {start:1000,end:2000,label:'1001-2000',color:'rgba(150,0,0,0.8)'},
+                    {start:500,end:1000,label:'501-1000',color:'rgba(255,0,0,0.8)'},
+                    {start:201,end:500,label:'201-500',color:'rgba(255,0,0,0.7)'},
+                    {start:101,end:200,label:'101-200',color:'rgba(255,0,0,0.6)'},
+                    {start:51,end:101,label:'51-101',color:'rgba(255,0,0,0.4)'},
+                    {start:11,end:50,label:'11-50',color:'rgba(255,0,0,0.2)'},
+                    {start:0,end:10,label:'0-10',color:'rgba(255,255,255,1)'},
+                ]
+            },
+            series: [{
+                colorBy:'data',
+                type: 'map',
+                map: 'topo',
+                layoutSize:'100%',
+                data: [{ name: "北京市", value: get_IP_num('北京')},
+                    { name: "天津市", value: get_IP_num('天津') },
+                    { name: "河北省", value: get_IP_num("河北") },
+                    { name: "山西省", value: get_IP_num("山西") },
+                    { name: "内蒙古自治区", value: get_IP_num("内蒙") },
+                    { name: "辽宁省", value: get_IP_num("辽宁") },
+                    { name: "吉林省", value: get_IP_num("吉林") },
+                    { name: "黑龙江省", value: get_IP_num("黑龙江") },
+                    { name: "上海市", value: get_IP_num("上海") },
+                    { name: "江苏省", value: get_IP_num("江苏") },
+                    { name: "浙江省", value: get_IP_num("浙江") },
+                    { name: "安徽省", value: get_IP_num("安徽") },
+                    { name: "福建省", value: get_IP_num("福建") },
+                    { name: "江西省", value: get_IP_num("江西") },
+                    { name: "山东省", value: get_IP_num("山东") },
+                    { name: "河南省", value: get_IP_num("河南") },
+                    { name: "湖北省", value: get_IP_num("湖北") },
+                    { name: "湖南省", value: get_IP_num("湖南") },
+                    { name: "重庆市", value: get_IP_num("重庆") },
+                    { name: "四川省", value: get_IP_num("四川") },
+                    { name: "贵州省", value: get_IP_num("贵州") },
+                    { name: "云南省", value: get_IP_num("云南") },
+                    { name: "西藏自治区", value: get_IP_num("西藏") },
+                    { name: "陕西省", value: get_IP_num("陕西") },
+                    { name: "甘肃省", value: get_IP_num("甘肃") },
+                    { name: "青海省", value: get_IP_num("青海") },
+                    { name: "宁夏回族自治区", value: get_IP_num("宁夏") },
+                    { name: "新疆维吾尔自治区", value: get_IP_num("新疆") },
+                    { name: "广东省", value: get_IP_num("广东") },
+                    { name: "广西壮族自治区", value: get_IP_num("广西") },
+                    { name: "海南省", value: get_IP_num("海南") },
+                    { name: "台湾省", value: get_IP_num("中国台湾") },
+                    { name: "香港特别行政区", value: get_IP_num("中国香港") },
+                    { name: "澳门特别行政区", value: get_IP_num("中国澳门") },
+                ],
+                label:{
+                    show:false,
+                    position: 'top',
+                    formatter:"{b}:{c}"
+                },
+            }]
+        })
+    })
+
 })
 </script>
 
 <style scoped>
+#chart5 canvas{
+    border: 0.5px black;
+}
 
 </style>

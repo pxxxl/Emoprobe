@@ -32,7 +32,7 @@
             <div v-if="siftShow" class="ms">
                 <div id="gender-sift" class="dis-flex align-items-center direction-row-flex">
                     <span class="notice-sp">性别</span>
-                    <el-radio-group v-model="gender" size="large">
+                    <el-radio-group v-model="gender" size="large" :border="true"> 
                         <el-radio-button label="" class="margin-tblr">无筛选</el-radio-button>
                         <el-radio-button label="男"  class="margin-tblr"></el-radio-button>
                         <el-radio-button label="女"  class="margin-tblr"></el-radio-button>
@@ -41,7 +41,7 @@
                 </div>
                 <div id="like-sift" class="dis-flex align-items-center direction-row-flex">
                     <span class="notice-sp">点赞数</span>
-                    <el-radio-group v-model="like" size="large">
+                    <el-radio-group v-model="like" size="large" :border="true">
                         <el-radio-button  label=""  class="margin-tblr">无筛选</el-radio-button>
                         <el-radio-button label="0,50"  class="margin-tblr">0-50</el-radio-button>
                         <el-radio-button label="51,200"  class="margin-tblr">50-200</el-radio-button>
@@ -51,7 +51,7 @@
                 </div>
                 <div id="reply-sift" class="dis-flex align-items-center direction-row-flex">
                     <span class="notice-sp">回复数</span>
-                    <el-radio-group v-model="reply" size="large">
+                    <el-radio-group v-model="reply" size="large" :border="true">
                         <el-radio-button  label=""  class="margin-tblr">无筛选</el-radio-button>
                         <el-radio-button label="0,50"  class="margin-tblr">0-50</el-radio-button>
                         <el-radio-button label="51,200"  class="margin-tblr">50-200</el-radio-button>
@@ -61,7 +61,7 @@
                 </div>
                 <div id="emotion-sift" class="dis-flex align-items-center direction-row-flex">
                     <span class="notice-sp">情感</span>
-                    <el-checkbox-group v-model="emotion" size="small" >
+                    <el-checkbox-group v-model="emotion" size="larger" :border="true" >
                         <el-checkbox  label="快乐"  class="margin-tblr"/>
                         <el-checkbox  label="愤怒"  class="margin-tblr"/>
                         <el-checkbox label="厌恶"  class="margin-tblr"/>
