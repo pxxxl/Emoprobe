@@ -215,7 +215,7 @@ onMounted(() => {
         width:1000,
         height:500
     });
-    axios.get('https://geo.datav.aliyun.com/areas_v3/bound/geojson?code=100000_full')
+    axios.get('/resource/map/china.json')
     .then((org_response)=>{
         echarts.registerMap('topo', {geoJSON: org_response.data});
         geography_chart_china.value.setOption({
