@@ -59,7 +59,7 @@
         padding: 0px;
     }
     .container{
-        background-image: url('/resource/picture/back.png');
+        background-image: url('/resource/picture/back.jpg');
         background-repeat: no-repeat;
         background-size:cover;
     }
