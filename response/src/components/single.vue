@@ -51,6 +51,7 @@ export default {
     },
     methods: {
         Update(){
+            if(this.loadin_flag == true)return;
             if(this.comment == null || this.comment ==""){
                 this.noticevisible = true;
                 setTimeout(()=>{
