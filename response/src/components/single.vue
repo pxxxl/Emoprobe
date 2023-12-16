@@ -108,7 +108,6 @@ export default {
 #input{
     display: flex;
     flex-direction: column;
-    width: 50%;
     margin: auto;
 }
 .center{
@@ -116,7 +115,7 @@ export default {
 }
 
 .input-size{
-    width: 50%;
+    width:45%;
     margin-top: 3vh;
     margin-bottom: 3vh;
 }
