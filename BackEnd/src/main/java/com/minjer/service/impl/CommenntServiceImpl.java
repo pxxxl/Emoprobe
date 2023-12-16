@@ -25,6 +25,8 @@ public class CommenntServiceImpl implements CommentService {
     private CommentMapper commentMapper;
     @Autowired
     private VideoMapper videoMapper;
+    @Autowired
+    private VideoServiceImpl videoService;
 
     /**
      * 感知用户上传的视频评论
@@ -81,12 +83,8 @@ public class CommenntServiceImpl implements CommentService {
         if (videoMapper.selectByBv(filter.getBv()) == null) {
             if (filter.getAutopost() == 1) {
                 // 不存在该视频，且自动爬取
-                VideoComment withComments = Crawler.getVideoWithComments(filter.getBv());
-                if (withComments != null) {
-                    // 爬虫成功,将视频信息和评论信息存入数据库
-                    videoMapper.addVideo(withComments.getVideo());
-                    batchInsertComments(withComments.getComments());
-                } else {
+
+                if (videoService.addVideo(filter.getBv()) != 200) {
                     // 爬虫出错
                     return new DataResult(408, "", null);
                 }
@@ -99,7 +97,7 @@ public class CommenntServiceImpl implements CommentService {
         // 数据库查询出视频信息
         Video video = videoMapper.selectByBv(filter.getBv());
         List<Comment> comments = null;
-        Integer pageNum = 1;
+        int pageNum = 1;
         if (filter.getCommentNum() == 0) {
             // 不进行分页查询
             comments = commentMapper.selectByFilter(

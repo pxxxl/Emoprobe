@@ -230,7 +230,7 @@ public class VideoServiceImpl implements VideoService {
 
         // 若没有评论则返回
         if (comments == null || comments.size() == 0) {
-            return new DataResult(407, "", null);
+            return new DataResult(407, "数据库中没有这个视频的评论数据", null);
         }
 
         // 提取情感分析结果

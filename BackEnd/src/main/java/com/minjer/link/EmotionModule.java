@@ -78,7 +78,7 @@ public class EmotionModule {
             while ((line = reader.readLine()) != null) {
                 output.append(line).append("\n");
             }
-            log.info("EmotionModule output: {}", output.toString());
+//            log.info("EmotionModule output: {}", output.toString());
 
             // 等待子进程执行完成
             int exitCode = process.waitFor();
