@@ -1,5 +1,6 @@
 package com.minjer.service.impl;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.minjer.link.EmotionModule;
 import com.minjer.mapper.SentenceMapper;
@@ -14,8 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.DataFormatException;
 
 @Service
 public class SentenceServiceImpl implements SentenceService {
@@ -48,6 +51,7 @@ public class SentenceServiceImpl implements SentenceService {
             }
 
             @JsonProperty("operation_time")
+            @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
             private LocalDateTime operationTime;
             @JsonProperty("comments")
             private List<Sentence> sentences;

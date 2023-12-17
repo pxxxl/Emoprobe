@@ -44,8 +44,11 @@ public class CommenntServiceImpl implements CommentService {
     @Transactional
     @Override
     public Result handleComments(VideoComment videoComment) {
-        if (videoMapper.selectByBv(videoComment.getVideo().getVideoBvid()) != null) {
-            return new DataResult(405, "", null);
+        Map<String, Object> result = new HashMap<>();
+        Video video = videoMapper.selectByBv(videoComment.getVideo().getVideoBvid());
+        if (video != null) {
+            result.put("video", video);
+            return new DataResult(405, "", result);
         }
 
         videoComment.getVideo().setVideoSavedate(LocalDateTime.now());
@@ -60,7 +63,6 @@ public class CommenntServiceImpl implements CommentService {
             videoMapper.addVideo(videoComment.getVideo());
             batchInsertComments(videoComment.getComments());
 
-            Map<String, Object> result = new HashMap<>();
             result.put("video", videoComment.getVideo());
 
             return new DataResult(200, "", result);
@@ -71,7 +73,6 @@ public class CommenntServiceImpl implements CommentService {
 
     /**
      * 筛选视频评论
-     * 待测试
      *
      * @param filter 筛选条件集合
      * @return 含数据的结果
