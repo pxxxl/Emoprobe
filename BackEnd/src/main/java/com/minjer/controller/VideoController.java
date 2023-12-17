@@ -119,10 +119,23 @@ public class VideoController {
      * @return 统计结果
      */
     @RequestMapping(value = "/api/v1/videos/statistics/ip", method = RequestMethod.GET)
-    public Result etVideoIpOverview(String bv) {
+    public Result getVideoIpOverview(String bv) {
         log.info("getVideoIpOverview: bv={}", bv);
         Result result = videoService.getVideoIpOverview(bv);
         log.info("getVideoIpOverview: result={}", result);
+        return result;
+    }
+
+    /**
+     * 获取视频评论信息
+     * @param bv bv号
+     * @return 评论信息
+     */
+    @RequestMapping(value = "/api/v1/crawl", method = RequestMethod.GET)
+    public Result getCrawlerResult(String bv) {
+        log.info("getCrawlerResult: bv={}", bv);
+        Result result = videoService.getCrawlerResult(bv);
+        log.info("getCrawlerResult: result={}", result);
         return result;
     }
 }

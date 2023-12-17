@@ -230,7 +230,7 @@ public class VideoServiceImpl implements VideoService {
 
         // 若没有评论则返回
         if (comments == null || comments.size() == 0) {
-            return new DataResult(407, "", null);
+            return new DataResult(407, "数据库中没有这个视频的评论数据", null);
         }
 
         // 提取情感分析结果
@@ -351,6 +351,20 @@ public class VideoServiceImpl implements VideoService {
         result.put("num_ip_person", ipNum);
 
         return new DataResult(200, "", result);
+    }
+
+    /**
+     * 获取视频的爬虫结果
+     * @param bv 视频bv号
+     * @return 爬虫结果
+     */
+    @Override
+    public Result getCrawlerResult(String bv) {
+        VideoComment videoComment = Crawler.getVideoWithComments(bv);
+        if (videoComment == null) {
+            return new DataResult(407, "爬虫结果为空", null);
+        }
+        return new DataResult(200, "", videoComment);
     }
 
     /**

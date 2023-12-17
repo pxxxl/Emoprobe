@@ -10,7 +10,6 @@ import emoji
 import random
 import os
 import utils
-from utils import log
 
 
 def get_video_info(bv: str) -> Dict:
@@ -120,20 +119,20 @@ def parserHtml(html) -> List:
     try:
         s = json.loads(html)
     except:
-        log('parserHtml failed: json.loads(html) failed, html: ' + html)
+        utils.log('parserHtml failed: json.loads(html) failed, html: ' + html)
         return []
     commentlist: List[Any] = []
 
     if s is None:
-        log('parserHtml failed: s is None')
+        utils.log('parserHtml failed: s is None')
         return commentlist
     
     if s['code'] != 0:
-        log('parserHtml failed: s[code] != 0')
+        utils.log('parserHtml failed: s[code] != 0')
         return commentlist
 
     if s['data'] is None or s['data']['replies'] is None:
-        log('parserHtml failed: s[data] is None or s[data][replies] is None')
+        utils.log('parserHtml failed: s[data] is None or s[data][replies] is None')
         return commentlist
 
     for i in range(len(s['data']['replies'])):
@@ -191,7 +190,7 @@ def crawl_comment(oid: int, cookie: str) -> List:
             'comment_reply'
         }
     """
-    log('crawl_comment. video oid: ' + str(oid))
+    utils.log('crawl_comment. video oid: ' + str(oid))
     oid_str = str(oid)
     comments: List = []
     for page in range(1,100):
@@ -222,21 +221,21 @@ def crawl_all_info_of_video(bv: str, cookie: str) -> Dict:
     returns:
     - final_dict: Dict
     """
-    log('crawl_all_info_of_video: ' + bv)
+    utils.log('crawl_all_info_of_video: ' + bv)
     try:
         video_dict = get_video_info(bv)
     except Exception as e:
-        log('crawl failed, exception occured while calling get_video_info(), exception: ' + str(e))
+        utils.log('crawl failed, exception occured while calling get_video_info(), exception: ' + str(e))
         final_dict = {
             'code': 1,
             'msg': 'An error occurred while crawling the video.',
             'data': None
         }
         return final_dict
-    log('crawl video basic info successful')
+    utils.log('crawl video basic info successful')
     video_aid = int(video_dict['video_aid'])
     video_comments = crawl_comment(video_aid, cookie)
-    log('crawl video comments successful, total comments num:' + str(len(video_comments)))
+    utils.log('crawl video comments successful, total comments num:' + str(len(video_comments)))
     video_data = {
         'video': video_dict,
         'comments': video_comments
@@ -298,7 +297,7 @@ def get_comment_text_list(bv: str, cookie: str='') -> list:
 
         comment_text: str
     """
-    log('get_comment_text_list: ' + bv)
+    utils.log('get_comment_text_list: ' + bv)
     result_dict = crawl_all_info_of_video(bv, cookie)
     if result_dict['code'] != 0:
         return []
@@ -323,7 +322,7 @@ def get_result_json_string(bv: str, cookie: str='', pure: bool=False) -> str:
     returns:
     - result_json_string: str
     """
-    log('get_result_json_string: ' + bv)
+    utils.log('get_result_json_string: ' + bv)
     result_dict = crawl_all_info_of_video(bv, cookie)
     if pure:
         result_dict = result_dict['data']
@@ -338,7 +337,7 @@ def get_error_json_string() -> str:
     returns:
     - result_json_string: str
     """
-    log('get_error_json_string')
+    utils.log('get_error_json_string')
     result_dict = {
         "code": 1,
         'msg': 'An error occurred while crawling the video.',

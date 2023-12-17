@@ -6,10 +6,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 
 
 /**
  * 过滤条件的实体类
+ *
  * @author Minjer
  */
 @Data
@@ -51,15 +54,17 @@ public class Filter {
      * @return LocalDateTime
      */
     public LocalDateTime splitStartTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         if (date == null || "".equals(date)) {
             return null;
         }
         String[] dates = date.split(",");
+
         if ("".equals(dates[0])) {
-            return LocalDateTime.parse("1970-01-01 00:00:00");
+            return LocalDateTime.parse("1970-01-01 00:00:00", formatter);
         }
 
-        return LocalDateTime.parse(dates[0]);
+        return LocalDateTime.parse(dates[0], formatter);
     }
 
     /**
@@ -69,19 +74,21 @@ public class Filter {
      * @return LocalDateTime
      */
     public LocalDateTime splitEndTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         if (date == null || "".equals(date)) {
             return null;
         }
         String[] dates = date.split(",");
         if (dates.length == 1 || "".equals(dates[1])) {
-            return LocalDateTime.parse("2099-12-31 23:59:59");
+            return LocalDateTime.parse("2099-12-31 23:59:59", formatter);
         }
-        return LocalDateTime.parse(dates[1]);
+        return LocalDateTime.parse(dates[1], formatter);
     }
 
     /**
      * 获取过滤条件中的最少点赞数
      * 如果没有最少点赞数，则返回0
+     *
      * @return Integer
      */
     public Integer splitStartLike() {
@@ -99,6 +106,7 @@ public class Filter {
     /**
      * 获取过滤条件中的最多点赞数
      * 如果没有最多点赞数，则返回Integer.MAX_VALUE
+     *
      * @return Integer
      */
     public Integer splitEndLike() {
@@ -115,6 +123,7 @@ public class Filter {
     /**
      * 获取过滤条件中的最少回复数
      * 如果没有最少回复数，则返回0
+     *
      * @return Integer
      */
     public Integer splitStartReply() {
@@ -131,6 +140,7 @@ public class Filter {
     /**
      * 获取过滤条件中的最多回复数
      * 如果没有最多回复数，则返回Integer.MAX_VALUE
+     *
      * @return Integer
      */
     public Integer splitEndReply() {
