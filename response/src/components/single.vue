@@ -1,28 +1,33 @@
 
 <template>
-    <div id="input" class="center">
-        <span class="center select-no" style="margin-top: 5vh; font-size: 4;">请输入单个评论进行评论分析</span>
-        <el-input id="input" v-model="comment[0]" placeholder="Please Input" class="center input-size" @keyup.enter="Update"></el-input>
-        <el-button type="primary" @mouseleave="(event)=>{event.target.blur()}"  @click="Update" class="center">{{commitNotice}}</el-button>
+    <div id="input" class="center dis-flex center-flex">
+        <span class="center select-no" style="margin-top: 5vh; font-size: 15px;">请输入单个评论进行评论分析</span>
+        <el-input id="input" v-model="comment" placeholder="Please Input" class="center input-size" @keyup.enter="Update"></el-input>
+        <el-button type="primary" @mouseleave="(event)=>{event.target.blur()}"  @click="Update" :loading="loadin_flag" loading-icon="Eleme">{{commitNotice}}</el-button>
         <Transition name="fade" mode="in-out">
             <div class="dis-flex center-flex notice" v-if="noticevisible">
                 内容不能为空
             </div>
         </Transition>
     </div>
-    <div id="Responseshow" v-if="result != null">
-        <table>
-            <tr>
-                <th>评论内容</th>
-                <th>情感</th>
-            </tr>
-            <tr v-for="item in result.comments">
-                <td>{{ item.content }}</td>
-                <td>{{ item.emotion }}</td>
-            </tr>
-        </table>
-    
+    <div id="Responseshow" height="300px" v-if="result != null" style="background-color: white;" :style=" {boxShadow:`var(--el-box-shadow-dark)`}">
+        <el-scrollbar>
+            <el-table :data="result" style="width: 100%" :border="true">
+                <el-table-column prop="key" label="序号" width="60" />
+                <el-table-column prop="content" label="评论" width="210" />
+                <el-table-column prop="emotion" label="情感分析" width="90" />
+                <el-table-column prop="oprate_time" label="操作时间" width="240" />
+            </el-table>
+        </el-scrollbar>
     </div>
+    <el-button type="primary" 
+        @mouseleave="(event)=>{event.target.blur()}"  
+        @click="Clear" 
+        style="margin-left: 50%;margin-top: 2vh;transform: translateX(-50%);"
+        v-if="result != null"
+    >
+    清空列表
+    </el-button>
 </template>
 
 <script>
@@ -33,12 +38,12 @@ import NothingShow from './NothingsShow.vue';
 export default {
     data(){
         return{
-            comment:new Array(1),
+            comment:"",
             commitNotice:"提交",
             api:"/api/v1/sentence",
             result:null,
             noticevisible:false,
-            input:null
+            loadin_flag:false
         }
     },
     components:{
@@ -46,39 +51,64 @@ export default {
     },
     methods: {
         Update(){
-            if(this.comment[0] == null){
+            if(this.loadin_flag == true)return;
+            if(this.comment == null || this.comment ==""){
                 this.noticevisible = true;
                 setTimeout(()=>{
                     this.noticevisible = false;
                 },1000);
                 return;
             }
-            axios.post(this.api,this.comment).then((response)=>{
-                    let org =  response.data;
-                    this.DataProccess(org);
+            this.loadin_flag = true;
+            axios.post(this.api,JSON.stringify({
+                comments:[this.comment]
+            }),{
+                headers:{
+                   ' content-type':'application/json'
+                }
+            }).then((org_response)=>{
+                    let data =  org_response.data;
+                    this.DataProccess(data);
             }).catch((error_msg)=>{
                 ShowErrorMessage(error_msg);
             })
         },
-        DataProccess(org_data){
-            if(org_data.code === 200) {
+        DataProccess(res){
+            if(res.code == 409) {
                 ShowErrorMessage("感知失败");
                 return;
             }
-            this.result =org_data.data;
+            if(this.result == null)this.result = new Array();
+            let key = this.result.length + 1;
+            this.result.push({
+                key:key,
+                oprate_time:res.data.operation_time,
+                content:res.data.comments[0].content,
+                emotion:res.data.comments[0].emotion
+            });
+            this.comment = "";
+            console.log(this.result);
+            this.loadin_flag = false;
+        },
+        Clear(){
+            this.result = null;
         }
     },
     mounted() {
-        this.input = document.getElementById('input');
     },
 }
 </script>
 
 <style scoped>
+#Responseshow{
+    height: 300px;
+    width: 600px;
+    margin: auto;
+    margin-top: 5vh;
+}
 #input{
     display: flex;
     flex-direction: column;
-    width: 50%;
     margin: auto;
 }
 .center{
@@ -86,8 +116,8 @@ export default {
 }
 
 .input-size{
-    width: 40%;
-    margin-top: 5vh;
+    width:45%;
+    margin-top: 3vh;
     margin-bottom: 3vh;
 }
 
@@ -97,9 +127,7 @@ export default {
     margin-top: 3vh;
     width: 100px;
     height: 40px;
-    margin-left: 50%;
     border-radius: 10px;
-    transform: translateX(-50%);
     transition: all 1s;
 }
 

@@ -508,3 +508,70 @@ emotion_ratio_per_ip列表里的对象均遵从如下格式：
 | num_emotion       | list  | 每个情感分类的人数，列表中的元素均为num    | 与emotion列表的长度相同，同下标元素也对应       |
 
 
+## 调用爬虫
+
+> /api/v1/crawl
+
+*请求方式：GET
+**正文参数：**
+
+| 参数名  | 类型 | 内容                     | 必要性         | 备注                                 |
+| ------- | ---- | ------------------------ | -------------- | ------------------------------------ |
+| bv      | str  | 视频bv号                | 必要           |   形式：“BVXXXXXX”             |
+
+
+**效果：**
+调用爬虫爬取视频信息，将不会更新到数据库。
+
+
+**json回复：**
+根对象：
+
+| 字段    | 类型 | 内容     | 备注                          |
+| ------- | ---- | -------- | ----------------------------- |
+| code    | num  | 返回值   | 200：成功<br />407：爬取失败 |
+| msg | str  | 错误信息 | 默认为空字符串                       |
+| data     | obj  | 数据        |                               |
+
+data对象：
+
+| 字段    | 类型 | 内容     | 备注                          |
+| ------- | ---- | -------- | ----------------------------- |
+| video       | object  | 视频信息    |        |
+| comments       | list  | 评论列表    |                        |
+
+video对象：
+| 字段    | 类型 | 内容     | 备注                          |
+| ------- | ---- | -------- | ----------------------------- |
+| operation_time    | str  | 时间   | 后端处理这条视频的评论的时间，示例："2023-10-08 12:40:32" |
+| video_bid       | str  | 视频bv号    | 形式：“BVXXXXXX”       |
+| video_aid       | str  | 视频aid号    | 字符串，但是是数字                       |
+| owner_uid       | str  | UP主用户uid |  字符串，但是是数字                      |
+| owner_name      | str  | UP主用户名   |                        |
+| video_title     | str  | 视频标题     |                        |
+| video_partition | str  | 视频分区     |                        |
+| video_tables    | str  | 视频分区     |                        |
+| video_pubdate   | str  | 视频发布时间 | 格式为"2023-10-08 12:40:32"       |
+| video_duration  | num  | 视频时长     | 单位为秒                |
+| video_like      | num  | 点赞数       |                        |
+| video_coin      | num  | 投币数       |                        |
+| video_favorite  | num  | 收藏数       |                        |
+| video_share     | num  | 分享数       |                        |
+| video_reply     | num  | 评论数       |                        |
+| video_dislike   | num  | 点踩数       |                        |
+| video_cid       | str  | 视频cid号    | 字符串，但是是数字       |
+| video_desc      | str  | 视频简介     |                        |
+
+
+comments列表，其中所有对象都以以下格式组织：
+
+| 字段  | 类型 | 内容     | 备注                          |
+| ------- | ---- | -------- | ----------------------------- |
+| user_uid          |      |   str       |  字符串，但是是数字                        |
+| user_name         |      |   str       |                          |
+| user_ip           |      |   str       |                          |
+| user_sex          |      |  str        | 有“保密”、“男”、“女”   |
+| comment_date      |      |  str        | 示例："2023-10-08 12:40:32" |
+| comment_text      |      |  str        |                          |
+| comment_like      |      |  num        | 点赞数量                         |
+| comment_reply     |      |  num        | 回复数量                         |
