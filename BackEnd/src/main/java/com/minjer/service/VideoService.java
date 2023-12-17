@@ -64,4 +64,12 @@ public interface VideoService {
      * @return 含有数据的结果信息
      */
     public Result getVideoIpOverview(String bv);
+
+
+    /**
+     * 获取视频评论有关IP的统计信息
+     * @param bv 视频bv号
+     * @return 含有数据的结果信息
+     */
+    Result getCrawlerResult(String bv);
 }

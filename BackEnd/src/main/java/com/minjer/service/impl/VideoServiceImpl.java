@@ -354,6 +354,20 @@ public class VideoServiceImpl implements VideoService {
     }
 
     /**
+     * 获取视频的爬虫结果
+     * @param bv 视频bv号
+     * @return 爬虫结果
+     */
+    @Override
+    public Result getCrawlerResult(String bv) {
+        VideoComment videoComment = Crawler.getVideoWithComments(bv);
+        if (videoComment == null) {
+            return new DataResult(407, "爬虫结果为空", null);
+        }
+        return new DataResult(200, "", videoComment);
+    }
+
+    /**
      * 批量插入评论
      * 存在两种使用方法
      * 1.未确定分批大小时，默认为80
