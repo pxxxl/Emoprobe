@@ -64,7 +64,7 @@ export default {
                 comments:[this.comment]
             }),{
                 headers:{
-                   ' content-type':'application/json'
+                   'content-type':'application/json'
                 }
             }).then((org_response)=>{
                     let data =  org_response.data;

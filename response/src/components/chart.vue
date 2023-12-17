@@ -226,14 +226,14 @@ onMounted(() => {
                 x:'left',
                 y:'bottom',
                 splitList:[
-                    {start:2000,label:'2000以上',color:'rgba(50,0,0,0.8)'},
-                    {start:1000,end:2000,label:'1001-2000',color:'rgba(150,0,0,0.8)'},
-                    {start:500,end:1000,label:'501-1000',color:'rgba(255,0,0,0.8)'},
-                    {start:201,end:500,label:'201-500',color:'rgba(255,0,0,0.7)'},
-                    {start:101,end:200,label:'101-200',color:'rgba(255,0,0,0.6)'},
-                    {start:51,end:101,label:'51-101',color:'rgba(255,0,0,0.4)'},
-                    {start:11,end:50,label:'11-50',color:'rgba(255,0,0,0.2)'},
-                    {start:0,end:10,label:'0-10',color:'rgba(255,255,255,1)'},
+                    {start:1000,label:'1000以上',color:'rgba(50,0,0,0.8)'},
+                    {start:101,end:1000,label:'101-1000',color:'rgba(150,0,0,0.8)'},
+                    {start:50,end:101,label:'50-100',color:'rgba(255,0,0,0.8)'},
+                    {start:41,end:50,label:'41-50',color:'rgba(255,0,0,0.7)'},
+                    {start:31,end:40,label:'31-40',color:'rgba(255,0,0,0.6)'},
+                    {start:21,end:30,label:'21-30',color:'rgba(255,0,0,0.4)'},
+                    {start:5,end:20,label:'5-20',color:'rgba(255,0,0,0.2)'},
+                    {start:0,end:4,label:'0-4',color:'rgba(255,255,255,1)'},
                 ]
             },
             series: [{
