@@ -236,6 +236,9 @@ watch(pn,(New_pn)=>{
 </script>
 
 <style scoped>
+#backpart{
+    margin-bottom: 3vh;
+}
 .inforlist{
     width: 70%;
 }
@@ -272,6 +275,7 @@ li:hover{
 
 #table{
     width: 100%;
+    margin-bottom: 5vh;
 }
 
 .transition-animate{
