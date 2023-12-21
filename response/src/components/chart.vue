@@ -1,6 +1,6 @@
 <template>
     <div id="echart">
-        <div id="chart1" class="" :style=" {boxShadow:`var(--el-box-shadow-dark)`}"></div>
+        <div id="chart1" class="" :style=" {boxShadow:`var(--el-box-shadow-dark)`,margin:50}"></div>
         <el-divider border-style="double" />
         <div id="chart2" class="" :style=" {boxShadow:`var(--el-box-shadow-dark)`}"></div>
         <el-divider border-style="double" />
@@ -93,6 +93,9 @@ const ip_in_emotion_title = ()=>{
 
 const emo_in_ip_chartChange = ()=>{
     emo_in_ip_chart.value.setOption({
+        tooltip:{
+            trigger:'item'
+        },
         dataset:{
             source:[
                 emo_in_ip_rate.value.emotion[ip_select.value],
@@ -100,7 +103,8 @@ const emo_in_ip_chartChange = ()=>{
             ]
         },
         title:{
-                text:"每个ip里的情感比例"
+            text:"每个ip里的情感比例",
+            padding:[5, 15]
         },
         series:{
             type:'pie',
@@ -149,7 +153,8 @@ onMounted(() => {
     });
     mychart1.value.setOption({
         title: {
-            text: "评论中各个情感分类的人数"
+            text: "评论中各个情感分类的人数",
+            padding:[5, 15]
         },
         xAxis: {
             type: 'category',
@@ -171,7 +176,8 @@ onMounted(() => {
             trigger:'item'
         },
         title:{
-            text:"视频评论的Ip占比"
+            text:"视频评论的Ip占比",
+            padding:[5, 15]
         },
         dataset:{
             source:[ip.value,ip_people_num.value]
@@ -220,7 +226,8 @@ onMounted(() => {
         echarts.registerMap('topo', {geoJSON: org_response.data});
         geography_chart_china.value.setOption({
             title:{
-                text:"Ip地理分布图"
+                text:"Ip地理分布图",
+                padding:[5, 15]
             },
             dataRange:{
                 x:'left',
