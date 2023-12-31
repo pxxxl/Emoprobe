@@ -1,14 +1,10 @@
 import argparse
 import json
-import time
-
 import jieba
 import torch
 import numpy as np
 import pickle
 import logging
-import tqdm
-
 from typing import *
 
 from train.utils import get_batch, make_mask, create_word_bag
@@ -67,7 +63,6 @@ def parse_arguments():
 
 
 def main():
-    t1 = time.time()
     args = parse_arguments()
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     jieba.setLogLevel(logging.INFO)
@@ -105,7 +100,6 @@ def main():
         emotions += inf(comments[i:i + MAX_COMMENTS], w2v_model, net, vocab, device)
         # pbar.set_description(f"Processing batch {i// MAX_COMMENTS+1}/{len(comments) // MAX_COMMENTS}")
         # pbar.update()
-        print(time.time() - t1)
     if len(comments) % MAX_COMMENTS != 0:
         emotions += inf(comments[batch_num * MAX_COMMENTS:], w2v_model, net, vocab, device)
     # pbar.close()

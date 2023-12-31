@@ -75,6 +75,6 @@ def create_word_bag(sentences, vocab):
     for i in range(len(sentences)):
         for word in sentences[i]:
             if word in vocab:
-                index = np.where(vocab == word)[0][0]  # 获取词汇在词汇表中的索引
-                new_word_bag[i][index] = 1  # 将词汇在词袋中的对应位置设为1
+                index = np.where(vocab == word)[0][0]
+                new_word_bag[i][index] = 1
     return new_word_bag
