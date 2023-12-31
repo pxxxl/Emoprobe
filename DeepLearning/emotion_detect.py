@@ -1,15 +1,21 @@
 import argparse
 import json
+
+import jieba
 import torch
 import numpy as np
 import pickle
+import tqdm
+import time
+import logging
+
 from typing import *
 
 from train.utils import get_batch, make_mask, create_word_bag
 
 MAX_COMMENTS = 50
 
-
+t1 = time.time()
 def inf(comments: str) -> List[str]:
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     IN_DIM = 300
@@ -36,8 +42,8 @@ def inf(comments: str) -> List[str]:
         new_word_bag = torch.from_numpy(create_word_bag(comments, vocab)).float().to(device)
 
     net.eval()
-    _, out = net(new_word_bag, batch_x, batch_mask, compute_loss=False)
 
+    _, out = net(new_word_bag, batch_x, batch_mask, compute_loss=False)
     _, mood = torch.max(out, dim=1)
     mood_list = mood.tolist()
     mood_list = [mood_dict[mood] for mood in mood_list]
@@ -66,6 +72,7 @@ def parse_arguments():
 
 def main():
     args = parse_arguments()
+    jieba.setLogLevel(logging.INFO)
 
     if args.i is None and args.fi is None:
         print(get_error_json_string())
@@ -88,14 +95,17 @@ def main():
             print(get_error_json_string())
             return
 
-    # emotions = inf(comments)
+    # pbar = tqdm.tqdm(range(0, len(comments), MAX_COMMENTS))
+
     emotions = []
     batch_num = len(comments) // MAX_COMMENTS
     for i in range(0, len(comments), MAX_COMMENTS):
         emotions += inf(comments[i:i + MAX_COMMENTS])
+        # pbar.set_description(f"Processing batch {i// MAX_COMMENTS+1}/{len(comments) // MAX_COMMENTS}")
+        # pbar.update()
     if len(comments) % MAX_COMMENTS != 0:
         emotions += inf(comments[batch_num * MAX_COMMENTS:])
-
+    # pbar.close()
     result = {'emotions': emotions, 'comments': comments}
     result_json = json.dumps(result)
 

@@ -21,14 +21,14 @@ def csv_divider(csv_file, num_class):
             parts = line.strip().split(',')
             if len(parts) >= 2:
                 if not int(parts[0]) in tag:
-                    warnings.warn('出现错误标签！')
+                    warnings.warn('Error label!')
                     continue
                 label = int(parts[0])
                 chinese_text = parts[1]
                 labels.append(label)
                 sentences.append(chinese_text)
             else:
-                warnings.warn('格式错误！')
+                warnings.warn('Error format')
 
     # Hot-key code
     num_samples = len(labels)
@@ -42,7 +42,7 @@ def csv_divider(csv_file, num_class):
     # Divide sentences into word by jieba
     with open('dataset/word.txt', 'w', encoding='utf-8') as word_file:
         for sentence in sentences:
-            words = jieba.cut(sentence)  # 使用 jieba 进行分词
+            words = jieba.cut(sentence)
             word_file.write(' '.join(words) + '\n')
     print('Label and word files created successfully.')
 
@@ -50,17 +50,13 @@ def csv_divider(csv_file, num_class):
 def create_word_bag():
     with open('dataset/word.txt', 'r', encoding='utf-8') as file:
         lines = file.readlines()
-
-    # 构建词汇表
     vocab = set()
     for line in lines:
         words = line.strip().split()
         vocab.update(words)
 
-    # 创建词袋表示的空数组
     word_bag = np.zeros((len(lines), len(vocab)), dtype=int)
 
-    # 填充词袋表示
     for i, line in enumerate(lines):
         words = line.strip().split()
         for word in words:

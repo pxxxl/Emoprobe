@@ -22,7 +22,7 @@ def parse_args():
     parser.add_argument('--variance', default=0.995, type=float, help='default variance in prior normal')
 
     # training arguments
-    parser.add_argument('--device', default='cuda', type=str, help='device used for training')
+    parser.add_argument('--device', default='cpu', type=str, help='device used for training')
     parser.add_argument('--L', default=0.03, type=float, help='the lambda in the loss function')
     parser.add_argument('--num_epoch', default=60, type=int, help='number of total epochs to run')
     parser.add_argument('--batch_size', default=8, type=int, help='batchsize for optimizer updates')

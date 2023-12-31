@@ -12,7 +12,6 @@ from preprocess.preprocess import preprocess
 
 
 args = parse_args()
-args.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 if args.need_preprocess:
     tagged_sentences_file = 'raw_data'
@@ -37,6 +36,7 @@ label_tr = torch.from_numpy(label[:args.train_size]).float()
 label_te = torch.from_numpy(label[args.train_size:]).float()
 print('Data loaded')
 
+# num_input is the len of vocabulary
 net_arch = args
 net_arch.num_input = tensor_tr.shape[1]
 net = TESAN(net_arch).cuda()
