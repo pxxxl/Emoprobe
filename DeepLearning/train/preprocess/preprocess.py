@@ -62,7 +62,7 @@ def create_word_bag():
         for word in words:
             if word in vocab:
                 word_bag[i, list(vocab).index(word)] = 1
-
+    vocab = np.array(list(vocab))
     np.save('../model/vocab.npy', vocab)
     np.save('dataset/word_bag.npy', word_bag)
 

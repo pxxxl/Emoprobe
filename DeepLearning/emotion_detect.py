@@ -1,23 +1,22 @@
 import argparse
 import json
+import time
 
 import jieba
 import torch
 import numpy as np
 import pickle
-import tqdm
-import time
 import logging
+import tqdm
 
 from typing import *
 
 from train.utils import get_batch, make_mask, create_word_bag
 
-MAX_COMMENTS = 50
+MAX_COMMENTS = 10
 
-t1 = time.time()
-def inf(comments: str) -> List[str]:
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+def inf(comments: str, w2v_model, net, vocab, device) -> List[str]:
     IN_DIM = 300
     mood_dict = {
         0: '快乐',
@@ -27,11 +26,6 @@ def inf(comments: str) -> List[str]:
         4: '悲伤',
         5: '惊讶'
     }
-
-    w2v_model = pickle.load(open('model/sgns.weibo.pickle', 'rb'))
-    net = torch.load('model/model.pkl').to(device)
-    vocab = np.load('model/vocab.npy', allow_pickle=True).tolist()
-
     index = []
     segmented_comments = []
     for i in range(len(comments)):
@@ -43,10 +37,9 @@ def inf(comments: str) -> List[str]:
         batch_x = torch.from_numpy(get_batch(segmented_comments, w2v_model, index, IN_DIM)).float().to(device)
         batch_mask = torch.from_numpy(make_mask(segmented_comments, index, batch_x.shape[1])).float().to(device)
         new_word_bag = torch.from_numpy(create_word_bag(segmented_comments, vocab)).float().to(device)
-
     net.eval()
-
     _, out = net(new_word_bag, batch_x, batch_mask, compute_loss=False)
+
     _, mood = torch.max(out, dim=1)
     mood_list = mood.tolist()
     mood_list = [mood_dict[mood] for mood in mood_list]
@@ -74,7 +67,9 @@ def parse_arguments():
 
 
 def main():
+    t1 = time.time()
     args = parse_arguments()
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     jieba.setLogLevel(logging.INFO)
 
     if args.i is None and args.fi is None:
@@ -102,12 +97,17 @@ def main():
 
     emotions = []
     batch_num = len(comments) // MAX_COMMENTS
+
+    w2v_model = pickle.load(open('model/sgns.weibo.pickle', 'rb'))
+    net = torch.load('model/model.pkl').to(device)
+    vocab = np.load('model/vocab.npy', allow_pickle=True)
     for i in range(0, len(comments), MAX_COMMENTS):
-        emotions += inf(comments[i:i + MAX_COMMENTS])
+        emotions += inf(comments[i:i + MAX_COMMENTS], w2v_model, net, vocab, device)
         # pbar.set_description(f"Processing batch {i// MAX_COMMENTS+1}/{len(comments) // MAX_COMMENTS}")
         # pbar.update()
+        print(time.time() - t1)
     if len(comments) % MAX_COMMENTS != 0:
-        emotions += inf(comments[batch_num * MAX_COMMENTS:])
+        emotions += inf(comments[batch_num * MAX_COMMENTS:], w2v_model, net, vocab, device)
     # pbar.close()
     result = {'emotions': emotions, 'comments': comments}
     result_json = json.dumps(result)

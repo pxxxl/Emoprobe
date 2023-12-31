@@ -90,7 +90,6 @@ for epoch in range(args.num_epoch):
     for batch_indices in all_indices:
         # get a batch of wordvecs
         batch_x = get_batch(text_data, w2v_model, batch_indices + tensor_tr.shape[0], args.in_dim)
-        # 禁用梯度计算
         with (torch.no_grad()):
             batch_x = torch.from_numpy(batch_x).float().to(args.device)
             batch_mask = torch.from_numpy(make_mask(text_data, batch_indices + tensor_tr.shape[0], batch_x.shape[1])
