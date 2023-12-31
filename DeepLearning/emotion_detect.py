@@ -57,7 +57,7 @@ def inf(comments: str) -> List[str]:
 
     w2v_model = pickle.load(open('model/sgns.weibo.pickle', 'rb'))
     net = torch.load('model/model.pkl')
-    net = net.to(device=try_gpu())
+    net = net.to(device=try_gpu)
 
     # 读取词袋
 

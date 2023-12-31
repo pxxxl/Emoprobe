@@ -63,6 +63,7 @@ def create_word_bag():
     np.save('../dataset/word_bag.npy', word_bag)
 
 
-csv_file = os.path.join('raw_data', 'tagged_sentences.csv')
-csv_divider(csv_file)
-create_word_bag()
+def preprocess(tagged_sentences_file):
+    csv_file = os.path.join('../raw_data', tagged_sentences_file)
+    csv_divider(csv_file)
+    create_word_bag()
