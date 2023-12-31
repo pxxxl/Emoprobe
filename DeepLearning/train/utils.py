@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def load_data():
     # text
     text_data = []
@@ -18,7 +19,7 @@ def get_batch(text_data, w2v_model, indices, in_dim):
     text_length = []
     for idx in indices:
         text_length.append(len(text_data[idx]))
-    # 一个二维数组，存储了一个 batch 的文字信息，长为 batch_size，即 indice 的长度，宽为最长那句话的长度
+    # 一个二维数组，存储了一个 batch 的文字信息，长为 batch_size，即 index 的长度，宽为最长那句话的长度
     batch_x = np.zeros((batch_size, max(text_length), in_dim), dtype=np.float32)
 
     # 将第 i 句话的第 j 个词的词向量存储在 batch_x 中
