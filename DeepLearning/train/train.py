@@ -60,7 +60,7 @@ for epoch in range(args.num_epoch):
         train_input = tensor_tr[batch_indices].to(args.device)
         y = label_tr[batch_indices].to(args.device)
 
-        recon, loss, out = net(input, batch_x, batch_mask, compute_loss=True)
+        recon, loss, out = net(train_input, batch_x, batch_mask, compute_loss=True)
 
         # Find max value's index
         _, pred = torch.max(out, dim=1)
@@ -90,15 +90,16 @@ for epoch in range(args.num_epoch):
     for batch_indices in all_indices:
         # get a batch of wordvecs
         batch_x = get_batch(text_data, w2v_model, batch_indices + tensor_tr.shape[0], args.in_dim)
+        # 禁用梯度计算
         with (torch.no_grad()):
             batch_x = torch.from_numpy(batch_x).float().to(args.device)
             batch_mask = torch.from_numpy(make_mask(text_data, batch_indices + tensor_tr.shape[0], batch_x.shape[1])
                                           ).float().to(args.device)
 
-            train_input = tensor_te[batch_indices].to(args.device)
+            test_input = tensor_te[batch_indices].to(args.device)
             y = label_te[batch_indices].to(args.device)
 
-        recon, loss, out = net(input, batch_x, batch_mask, compute_loss=True)
+        recon, loss, out = net(test_input, batch_x, batch_mask, compute_loss=True)
         _, pred = torch.max(out, dim=1)
         _, truth = torch.max(y, dim=1)
         acc.extend((pred == truth).cpu().data.tolist())

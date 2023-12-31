@@ -1,8 +1,11 @@
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
-from torch.nn import Parameter
 import torch.nn.functional as F
+
+from parameter import parse_args
+
+args = parse_args()
 
 
 # module for self-attention
