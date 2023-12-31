@@ -45,3 +45,32 @@ def make_mask(text_data, indices, sent_length):
     for i in range(batch_size):
         mask[i][0:text_length[i]] = 0.0
     return mask
+
+
+def create_word_bag(sentences, vocab):
+    new_word_bag = np.zeros((len(sentences), len(vocab)), dtype=int)
+    for i in range(len(sentences)):
+        # 对单个语句进行分词
+        words = sentences[i].strip().split()
+        # 遍历新语句的每个词汇
+        for word in words:
+            if word in vocab:
+                np_vocab = np.array(list(vocab))
+                index = np.where(np_vocab == word)[0][0]  # 获取词汇在词汇表中的索引
+                new_word_bag[i][index] = 1  # 将词汇在词袋中的对应位置设为1
+
+    return new_word_bag
+
+def create_word_bag(sentences, vocab):
+    new_word_bag = np.zeros((len(sentences), len(vocab)), dtype=int)
+    for i in range(len(sentences)):
+        # 对单个语句进行分词
+        words = sentences[i].strip().split()
+        # 遍历新语句的每个词汇
+        for word in words:
+            if word in vocab:
+                np_vocab = np.array(list(vocab))
+                index = np.where(np_vocab == word)[0][0]  # 获取词汇在词汇表中的索引
+                new_word_bag[i][index] = 1  # 将词汇在词袋中的对应位置设为1
+
+    return new_word_bag

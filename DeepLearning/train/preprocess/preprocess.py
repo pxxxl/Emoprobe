@@ -1,9 +1,12 @@
 import numpy as np
-import os
 import jieba
+from ..utils import create_word_bag
 
 
 def csv_divider(csv_file):
+    """
+    Read CSV file and process it to
+    """
     # 1. 读取CSV文件，提取标签和中文字符串
     labels = []  # 用于存储标签
     sentences = []  # 用于存储中文字符串
@@ -28,10 +31,10 @@ def csv_divider(csv_file):
     for i, label in enumerate(labels):
         one_hot_labels[i, label] = 1
 
-    np.save('../dataset/label.npy', one_hot_labels)
+    np.save('dataset/label.npy', one_hot_labels)
 
     # 3. 对中文字符串进行分词并保存到 word.txt
-    with open('../dataset/word.txt', 'w', encoding='utf-8') as word_file:
+    with open('dataset/word.txt', 'w', encoding='utf-8') as word_file:
         for sentence in sentences:
             words = jieba.cut(sentence)  # 使用jieba进行分词
             word_file.write(' '.join(words) + '\n')
@@ -40,7 +43,7 @@ def csv_divider(csv_file):
 
 
 def create_word_bag():
-    with open('../dataset/word.txt', 'r', encoding='utf-8') as file:
+    with open('dataset/word.txt', 'r', encoding='utf-8') as file:
         lines = file.readlines()
 
     # 构建词汇表
@@ -54,16 +57,15 @@ def create_word_bag():
 
     # 填充词袋表示
     for i, line in enumerate(lines):
-        words = line.strip( ).split( )
+        words = line.strip().split()
         for word in words:
             if word in vocab:
                 word_bag[i, list(vocab).index(word)] = 1
 
-    np.save('../dataset/vocab.npy', vocab)
-    np.save('../dataset/word_bag.npy', word_bag)
+    np.save('../model/vocab.npy', vocab)
+    np.save('dataset/word_bag.npy', word_bag)
 
 
-def preprocess(tagged_sentences_file):
-    csv_file = os.path.join('../raw_data', tagged_sentences_file)
+def preprocess(csv_file):
     csv_divider(csv_file)
     create_word_bag()

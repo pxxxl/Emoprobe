@@ -5,7 +5,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from model_tesan import TESAN
+from DeepLearning.model_tesan import TESAN
 from parameter import parse_args
 from utils import load_data, get_batch, make_mask
 from preprocess.preprocess import preprocess
