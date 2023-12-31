@@ -17,7 +17,7 @@ args.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 if args.need_preprocess:
     tagged_sentences_file = 'raw_data'
     tagged_sentences_file = os.path.join(tagged_sentences_file, 'tagged_sentences.csv')
-    preprocess(tagged_sentences_file)
+    preprocess(tagged_sentences_file, args.num_class)
 
 # Load wordvecs model
 w2v_model = pickle.load(open(args.WORD2VEC_DIR, 'rb'))

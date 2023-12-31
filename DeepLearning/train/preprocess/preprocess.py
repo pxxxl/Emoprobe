@@ -1,30 +1,36 @@
 import numpy as np
 import jieba
-from ..utils import create_word_bag
+import warnings
 
 
-def csv_divider(csv_file):
+def csv_divider(csv_file, num_class):
     """
-    Read CSV file and process it to
+    Read CSV file and process it.
+
+    :param csv_file: path to csv file
+    :param num_class: number of emotion's classes
     """
-    # 1. 读取CSV文件，提取标签和中文字符串
-    labels = []  # 用于存储标签
-    sentences = []  # 用于存储中文字符串
-    tag = [0, 1, 2, 3, 4, 5]
+    labels = []
+    sentences = []
+    tag = []
+    for emo_class in range(num_class):
+        tag.append(emo_class)
 
     with open(csv_file, 'r', encoding='utf-8') as file:
         for line in file:
-            parts = line.strip( ).split(',')
+            parts = line.strip().split(',')
             if len(parts) >= 2:
                 if not int(parts[0]) in tag:
-                    print('出现错误标签！')
+                    warnings.warn('出现错误标签！')
                     continue
-                label = int(parts[0])  # 提取标签（第一个字符）
-                chinese_text = parts[1]  # 提取中文字符串
+                label = int(parts[0])
+                chinese_text = parts[1]
                 labels.append(label)
                 sentences.append(chinese_text)
+            else:
+                warnings.warn('格式错误！')
 
-    # 2. 对标签进行独热编码并存储为 label.npy
+    # Hot-key code
     num_samples = len(labels)
     one_hot_labels = np.zeros((num_samples, 6))
 
@@ -33,12 +39,11 @@ def csv_divider(csv_file):
 
     np.save('dataset/label.npy', one_hot_labels)
 
-    # 3. 对中文字符串进行分词并保存到 word.txt
+    # Divide sentences into word by jieba
     with open('dataset/word.txt', 'w', encoding='utf-8') as word_file:
         for sentence in sentences:
-            words = jieba.cut(sentence)  # 使用jieba进行分词
+            words = jieba.cut(sentence)  # 使用 jieba 进行分词
             word_file.write(' '.join(words) + '\n')
-
     print('Label and word files created successfully.')
 
 
@@ -66,6 +71,6 @@ def create_word_bag():
     np.save('dataset/word_bag.npy', word_bag)
 
 
-def preprocess(csv_file):
-    csv_divider(csv_file)
+def preprocess(csv_file, num_class):
+    csv_divider(csv_file, num_class)
     create_word_bag()
