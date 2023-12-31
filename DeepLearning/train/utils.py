@@ -1,6 +1,7 @@
 import numpy as np
 import jieba
 
+
 def load_data():
     """
     load text and label for training
@@ -73,8 +74,7 @@ def create_word_bag(sentences, vocab):
     """
     new_word_bag = np.zeros((len(sentences), len(vocab)), dtype=int)
     for i in range(len(sentences)):
-        words = jieba.cut(sentences[i])
-        for word in words:
+        for word in sentences[i]:
             if word in vocab:
                 np_vocab = np.array(list(vocab))
                 index = np.where(np_vocab == word)[0][0]  # 获取词汇在词汇表中的索引

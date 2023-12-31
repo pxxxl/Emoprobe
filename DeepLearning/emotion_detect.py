@@ -33,13 +33,16 @@ def inf(comments: str) -> List[str]:
     vocab = np.load('model/vocab.npy', allow_pickle=True).tolist()
 
     index = []
+    segmented_comments = []
     for i in range(len(comments)):
         index.append(i)
+        segmented_comment = list(jieba.cut(comments[i]))
+        segmented_comments.append(segmented_comment)
 
     with torch.no_grad():
-        batch_x = torch.from_numpy(get_batch(comments, w2v_model, index, IN_DIM)).float().to(device)
-        batch_mask = torch.from_numpy(make_mask(comments, index, batch_x.shape[1])).float().to(device)
-        new_word_bag = torch.from_numpy(create_word_bag(comments, vocab)).float().to(device)
+        batch_x = torch.from_numpy(get_batch(segmented_comments, w2v_model, index, IN_DIM)).float().to(device)
+        batch_mask = torch.from_numpy(make_mask(segmented_comments, index, batch_x.shape[1])).float().to(device)
+        new_word_bag = torch.from_numpy(create_word_bag(segmented_comments, vocab)).float().to(device)
 
     net.eval()
 
