@@ -14,16 +14,17 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from DeepLearning.common import model_tesan
-from parameter import parse_args
-from DeepLearning.common.utils import load_data, get_batch, make_mask
-from preprocess.preprocess import preprocess
+from common import model_tesan
+from train.parameter import parse_args
+from common.utils import load_data, get_batch, make_mask
+from train.preprocess.preprocess import preprocess
 
 
 args = parse_args()
 
 if args.need_preprocess:
-    tagged_sentences_file = 'raw_data'
+    tagged_sentences_file = 'train'
+    tagged_sentences_file = os.path.join(tagged_sentences_file, 'raw_data')
     tagged_sentences_file = os.path.join(tagged_sentences_file, 'tagged_sentences.csv')
     preprocess(tagged_sentences_file, args.num_class)
 
@@ -31,7 +32,10 @@ if args.need_preprocess:
 w2v_model = pickle.load(open(args.WORD2VEC_DIR, 'rb'))
 
 # load data for NTM
-data_bow = np.load('dataset/word_bag.npy')
+word_bag_path = 'train'
+word_bag_path = os.path.join(word_bag_path, 'dataset')
+word_bag_path = os.path.join(word_bag_path, 'word_bag.npy')
+data_bow = np.load(word_bag_path)
 # Divide data for train and for test
 data_tr = data_bow[:args.train_size]
 data_te = data_bow[args.train_size:]
@@ -89,7 +93,7 @@ for epoch in range(args.num_epoch):
         # report
         loss_epoch += total_loss.data.item()
     print('Train Loss={:.4f}, Train Acc={:.4f}'.format(loss_epoch / len(all_indices), acc / args.train_size))
-    torch.save(net, '../model/model.pkl')
+    torch.save(net, 'model/model.pkl')
     # test
     all_indices = torch.arange(tensor_te.size(0)).long().split(args.batch_size)
     loss_epoch = []
