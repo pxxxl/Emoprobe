@@ -87,7 +87,7 @@ const page_len = 20;
 const video_information = ref();
 const bv = ref();
 const pn=ref(1);
-bv.value = route.query.bv.toString();
+if(route.query.bv != null)bv.value = route.query.bv.toString();
 video_information.value = {
     video_bid:null,
     video_title:null,
@@ -156,7 +156,7 @@ const get_page_comment = (bvString:string,autopost:number,pageLen:number,page:nu
         let response:any = org_response.data;
         if(response.code == 408 || !response){
             ShowErrorMessage(response.msg + " 即将跳转");
-            // setTimeout(back,5000);
+            setTimeout(back,5000);
         }
         all_pagenum.value = response.data.total_page_num;
         per_pageCom.value = response.data.comments;
@@ -166,7 +166,7 @@ const get_page_comment = (bvString:string,autopost:number,pageLen:number,page:nu
         GetChartData(ipAnalysurl,1);
     }).catch((error:any)=>{
         ShowErrorMessage(error + " 服务器链接错误，即将跳转");
-        // setTimeout(back,5000);
+        setTimeout(back,5000);
     });
 }
 
