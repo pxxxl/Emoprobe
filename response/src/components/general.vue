@@ -1,6 +1,8 @@
 <template>
-
-    <FUNC_SELECT @select ="SelectChange" :bs="true"/>
+    <div style="min-height: 100vh;" class="dis-flex direction-column-flex">
+        <div class="head">
+            <FUNC_SELECT @select ="SelectChange" :bs="true"/>
+        </div>
     <div class="container">
         <div class="dis-flex direction-row-flex global">
             <div id="navigate">
@@ -9,18 +11,18 @@
             <div id="mainpart">
                 <composite v-if="select == 1"/>
                 <single v-if="select == 2"/>
-                <BACKTOP />
+                <fileup v-if="select == 3"></fileup>
             </div>
         </div>
     </div>
-    
+    </div>
     </template>
     
     <script>
     import FUNC_SELECT from './fun_select.vue'
     import composite from './composite.vue' 
-    import BACKTOP from './backtop.vue'
     import single from './single.vue'
+    import fileup from './fileUp.vue'
     import VideoList from './VideoList.vue'
     
     export default{
@@ -32,9 +34,9 @@
         components:{
             FUNC_SELECT,
             composite,
-            BACKTOP,
             single,
-            VideoList
+            VideoList,
+            fileup
         },
         methods: {
             SelectChange(re){
@@ -62,5 +64,9 @@
         background-image: url('/resource/picture/back.jpg');
         background-repeat: no-repeat;
         background-size:cover;
+        flex: 1;
+    }
+    .head{
+        flex-shrink: 0;
     }
     </style>
