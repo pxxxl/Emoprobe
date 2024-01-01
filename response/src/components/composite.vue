@@ -160,10 +160,10 @@ export default{
                 this.filelist = [];
             }
         },
-        handleError(error, uploadFile, uploadFiles){
+        handleError(error, uploadFile, uploadFiles){//back up
             ShowErrorMessage("Fail connect : "+error);
         },  
-        handleSuccess(org_response,file,files){
+        handleSuccess(org_response,file,files){//back up
             console.log(org_response);
         },
         submit(){

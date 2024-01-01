@@ -10,6 +10,7 @@
     --grey-light:#F1F2F3;
     --grey-deep:#C9CCD0;
     --pulple-light:#e84416;
+    --grey-middle:#E3E5E7;
 }
 
 :root{
@@ -19,7 +20,8 @@
     --color-Appmainpart:var(--full-whilte);
     --color-tag:var(--green-light);
     --color-button-nohover:var(--grey-light);
-    --color-button-hover:var(--grey-deep);
+    --color-button-hover:var(--grey-middle);
+    --color-button-act:var(--grey-deep);
     --color-font-link:var(--pulple-light);
     --color-font-linkE:var(--blue-deep);
     --color-font-white:var(--full-whilte);

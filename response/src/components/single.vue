@@ -76,6 +76,7 @@ export default {
         DataProccess(res){
             if(res.code == 409) {
                 ShowErrorMessage("感知失败");
+                this.loadin_flag = false;
                 return;
             }
             if(this.result == null)this.result = new Array();
