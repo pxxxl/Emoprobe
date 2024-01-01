@@ -6,10 +6,10 @@ def load_data():
     load text and label for training
     """
     text_data = []
-    with open('dataset/word.txt', 'r', encoding='utf-8') as f:
+    with open('../train/dataset/word.txt', 'r', encoding='utf-8') as f:
         for line in f:
             text_data.append(line.strip('\n').split(' '))
-    label = np.load('dataset/label.npy')
+    label = np.load('../train/dataset/label.npy')
     return text_data, label
 
 
