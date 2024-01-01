@@ -201,6 +201,7 @@ onMounted(()=>{
     margin-right: 4px;
 }
 .notice-sp{
+    width: 100px;
     font-size:15px;
     margin-right:3px;
 }

@@ -1,7 +1,7 @@
 <template>
     <el-scrollbar class="list border">
         <p class="select-no dis-flex center-flex" style="font-size: 16px;"><b>数据库视频列表</b></p>
-        <router-link class="none-decoration link dis-flex center-flex" v-for="bv_inform in videolist" :to="{path:'/datashow',query:{bv:bv_inform.video_bid}}" ><b>{{ titleProccess(bv_inform) }}</b></router-link>
+        <router-link class="none-decoration link" v-for="bv_inform in videolist" :to="{path:'/datashow',query:{bv:bv_inform.video_bid}}" ><b>{{ titleProccess(bv_inform) }}</b></router-link>
     </el-scrollbar>
 </template>
 
@@ -50,13 +50,14 @@ export default{
 
 <style scoped>
 .link{
-    margin-top: 1.2vh;
-    margin-bottom: 1.2vh;
-    margin-left: 4px;
-    margin-right: 4px;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    padding-left: 5px;
+    padding-right: 4px;
     font-size: 13px;
-    text-align: center;
+    width: 100%;
     color: var( --color-font-black);
+    display: flex;
 }
 .link:hover{
     color:  var(--color-font-link);

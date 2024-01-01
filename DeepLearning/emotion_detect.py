@@ -1,19 +1,20 @@
 import argparse
+import os
+import sys
 import json
+import jieba
 import torch
 import numpy as np
 import pickle
-from torch.autograd import Variable
+import logging
 from typing import *
+from common.utils import get_batch, make_mask, create_word_bag
 
-def try_gpu(i=0):  #@save
-    """如果存在，则返回gpu(i)，否则返回cpu()"""
-    if torch.cuda.device_count() >= i + 1:
-        return torch.device(f'cuda:{i}')
-    return torch.device('cpu')
+MAX_COMMENTS = 10
 
 
-def inf(comments: str) -> List[str]:
+def inf(comments: str, w2v_model, net, vocab, device) -> List[str]:
+    IN_DIM = 300
     mood_dict = {
         0: '快乐',
         1: '愤怒',
@@ -22,78 +23,17 @@ def inf(comments: str) -> List[str]:
         4: '悲伤',
         5: '惊讶'
     }
-
-    def get_batch(text_data, w2v_model, indices):
-        batch_size = len(indices)
-        # 一个 list 用来存储每句话的长度
-        text_length = []
-        for idx in indices:
-            text_length.append(len(text_data[idx]))
-        # 一个二维数组，存储了一个 batch 的文字信息，长为 batch_size，即 indice 的长度，宽为最长那句话的长度
-        batch_x = np.zeros((batch_size, max(text_length), 300), dtype=np.float32)
-
-        # 将第 i 句话的第 j 个词的词向量存储在 batch_x 中
-        for i, idx in enumerate(indices, 0):
-            for j, word in enumerate(text_data[idx], 0):
-                try:
-                    batch_x[i][j] = w2v_model[word]
-                except KeyError:
-                    batch_x[i][j] = w2v_model['。']
-        # 返回的是 numpy 数组
-        return batch_x
-
-    def make_mask(text_data, indices, sent_length):
-        batch_size = len(indices)
-        text_length = [len(text_data[idx]) for idx in indices]
-        # 上面两行和之前的写法其实等效的
-
-        # 填充负无穷
-        mask = np.full((batch_size, sent_length, 1), float('-inf'), dtype=np.float32)
-
-        # 创建了掩码，将没有文字的部分掩掉
-        for i in range(batch_size):
-            mask[i][0:text_length[i]] = 0.0
-        return mask
-
-    w2v_model = pickle.load(open('model/sgns.weibo.pickle', 'rb'))
-    net = torch.load('model/model.pkl')
-    net = net.to(device=try_gpu())
-
-    # 读取词袋
-
-    vocab = np.load('model/vocab.npy', allow_pickle=True)
-    vocab = vocab.tolist()
-
-    def create_word_bag(sentences, vocab):
-        new_word_bag = np.zeros((len(sentences), len(vocab)), dtype=int)
-        for i in range(len(sentences)):
-            # 对单个语句进行分词
-            words = sentences[i].strip().split()
-            # 遍历新语句的每个词汇
-            for word in words:
-                if word in vocab:
-                    np_vocab = np.array(list(vocab))
-                    index = np.where(np_vocab == word)[0][0]  # 获取词汇在词汇表中的索引
-                    new_word_bag[i][index] = 1  # 将词汇在词袋中的对应位置设为1
-
-        return new_word_bag
     index = []
+    segmented_comments = []
     for i in range(len(comments)):
         index.append(i)
-
-    new_word_bag = create_word_bag(comments, vocab)
+        segmented_comment = list(jieba.cut(comments[i]))
+        segmented_comments.append(segmented_comment)
 
     with torch.no_grad():
-        batch_x = get_batch(comments, w2v_model, index)
-        batch_x = Variable(torch.from_numpy(batch_x).float())
-        batch_x = batch_x.to(device=try_gpu())
-        batch_mask = make_mask(comments, index, batch_x.shape[1])
-        batch_mask = Variable(torch.from_numpy(batch_mask).float())
-        batch_mask = batch_mask.to(device=try_gpu())
-
-        new_word_bag = torch.from_numpy(new_word_bag).float()
-        new_word_bag = new_word_bag.to(device=try_gpu())
-
+        batch_x = torch.from_numpy(get_batch(segmented_comments, w2v_model, index, IN_DIM)).float().to(device)
+        batch_mask = torch.from_numpy(make_mask(segmented_comments, index, batch_x.shape[1])).float().to(device)
+        new_word_bag = torch.from_numpy(create_word_bag(segmented_comments, vocab)).float().to(device)
     net.eval()
     _, out = net(new_word_bag, batch_x, batch_mask, compute_loss=False)
 
@@ -122,10 +62,13 @@ def parse_arguments():
 
     return parser.parse_args()
 
-max_comments_batch = 50
 
 def main():
     args = parse_arguments()
+    device = torch.device('cuda'if torch.cuda.is_available() else 'cpu')
+    jieba.setLogLevel(logging.INFO)
+    sys.path.append(os.path.abspath('../'))
+
 
     if args.i is None and args.fi is None:
         print(get_error_json_string())
@@ -148,15 +91,23 @@ def main():
             print(get_error_json_string())
             return
 
-    # emotions = inf(comments)
-    emotions = []
-    batch_num = len(comments) // max_comments_batch
-    for i in range(0, len(comments), max_comments_batch):
-        emotions += inf(comments[i:i + max_comments_batch])
-    if len(comments) % max_comments_batch != 0:
-        emotions += inf(comments[batch_num * max_comments_batch:])
-    
+    # pbar = tqdm.tqdm(range(0, len(comments), MAX_COMMENTS))
 
+    emotions = []
+    batch_num = len(comments) // MAX_COMMENTS
+    current_folder_path = os.path.dirname(os.path.abspath(__file__))
+
+    w2v_model = pickle.load(open(os.path.join(current_folder_path, 'model/sgns.weibo.pickle'), 'rb'))
+    net = torch.load(os.path.join(current_folder_path, 'model/model.pkl'),  map_location=device)
+
+    vocab = np.load(os.path.join(current_folder_path,'model/vocab.npy'), allow_pickle=True)
+    for i in range(0, len(comments), MAX_COMMENTS):
+        emotions += inf(comments[i:i + MAX_COMMENTS], w2v_model, net, vocab, device)
+        # pbar.set_description(f"Processing batch {i// MAX_COMMENTS+1}/{len(comments) // MAX_COMMENTS}")
+        # pbar.update()
+    if len(comments) % MAX_COMMENTS != 0:
+        emotions += inf(comments[batch_num * MAX_COMMENTS:], w2v_model, net, vocab, device)
+    # pbar.close()
     result = {'emotions': emotions, 'comments': comments}
     result_json = json.dumps(result)
 
@@ -168,6 +119,7 @@ def main():
             print(get_error_json_string())
     else:
         print(result_json)
+
 
 if __name__ == '__main__':
     main()

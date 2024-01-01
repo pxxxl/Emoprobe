@@ -29,11 +29,13 @@
                 </ul>
             </div>
         </div>
+        <el-divider border-style="double" />
         <div id="charts">
             <h1 class="dis-flex center-flex">评论统计结果</h1>
             <div v-loading="!(chartshow0_flag && chartshow1_flag)" style="height: 200px;width: 100%;" v-if="!(chartshow0_flag && chartshow1_flag)"></div>
             <chart :overview="chartdata[0]" :ipAnalys="chartdata[1]" v-if="chartshow0_flag && chartshow1_flag" />
         </div>
+        <el-divider border-style="double" />
         <div id="table">
             <div class="pagination-block">
                 <h1 class="dis-flex center-flex">评论分析结果</h1>
@@ -48,7 +50,7 @@
                         <el-table-column prop="user_name" label="用户名称" align="center"></el-table-column>
                         <el-table-column prop="user_ip" label="用户IP" align="center"></el-table-column>
                         <el-table-column prop="user_sex" label="性别" align="center"></el-table-column>
-                        <el-table-column prop="comment_date" label="日期" align="center"></el-table-column>
+                        <el-table-column prop="comment_date" label="日期" align="center" min-width="150"></el-table-column>
                         <el-table-column prop="comment_text" label="评论文本" align="center" min-width="400"></el-table-column>
                         <el-table-column prop="comment_like" label="点赞数" align="center"></el-table-column>
                         <el-table-column prop="comment_reply" label="回复数" align="center"></el-table-column>
@@ -85,7 +87,7 @@ const page_len = 20;
 const video_information = ref();
 const bv = ref();
 const pn=ref(1);
-bv.value = route.query.bv.toString();
+if(route.query.bv != null)bv.value = route.query.bv.toString();
 video_information.value = {
     video_bid:null,
     video_title:null,
@@ -154,7 +156,7 @@ const get_page_comment = (bvString:string,autopost:number,pageLen:number,page:nu
         let response:any = org_response.data;
         if(response.code == 408 || !response){
             ShowErrorMessage(response.msg + " 即将跳转");
-            // setTimeout(back,5000);
+            setTimeout(back,5000);
         }
         all_pagenum.value = response.data.total_page_num;
         per_pageCom.value = response.data.comments;
@@ -164,7 +166,7 @@ const get_page_comment = (bvString:string,autopost:number,pageLen:number,page:nu
         GetChartData(ipAnalysurl,1);
     }).catch((error:any)=>{
         ShowErrorMessage(error + " 服务器链接错误，即将跳转");
-        // setTimeout(back,5000);
+        setTimeout(back,5000);
     });
 }
 
@@ -236,6 +238,12 @@ watch(pn,(New_pn)=>{
 </script>
 
 <style scoped>
+h1{
+    margin-bottom: 5vh;
+}
+#backpart{
+    margin-bottom: 3vh;
+}
 .inforlist{
     width: 70%;
 }
@@ -272,6 +280,7 @@ li:hover{
 
 #table{
     width: 100%;
+    margin-bottom: 5vh;
 }
 
 .transition-animate{

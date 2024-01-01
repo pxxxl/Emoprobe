@@ -1,6 +1,6 @@
 <template>
     <div id="echart">
-        <div id="chart1" class="" :style=" {boxShadow:`var(--el-box-shadow-dark)`}"></div>
+        <div id="chart1" class="" :style=" {boxShadow:`var(--el-box-shadow-dark)`,margin:50}"></div>
         <el-divider border-style="double" />
         <div id="chart2" class="" :style=" {boxShadow:`var(--el-box-shadow-dark)`}"></div>
         <el-divider border-style="double" />
@@ -93,6 +93,9 @@ const ip_in_emotion_title = ()=>{
 
 const emo_in_ip_chartChange = ()=>{
     emo_in_ip_chart.value.setOption({
+        tooltip:{
+            trigger:'item'
+        },
         dataset:{
             source:[
                 emo_in_ip_rate.value.emotion[ip_select.value],
@@ -100,7 +103,8 @@ const emo_in_ip_chartChange = ()=>{
             ]
         },
         title:{
-                text:"每个ip里的情感比例"
+            text:"每个ip里的情感比例",
+            padding:[5, 15]
         },
         series:{
             type:'pie',
@@ -149,7 +153,8 @@ onMounted(() => {
     });
     mychart1.value.setOption({
         title: {
-            text: "评论中各个情感分类的人数"
+            text: "评论中各个情感分类的人数",
+            padding:[5, 15]
         },
         xAxis: {
             type: 'category',
@@ -171,7 +176,8 @@ onMounted(() => {
             trigger:'item'
         },
         title:{
-            text:"视频评论的Ip占比"
+            text:"视频评论的Ip占比",
+            padding:[5, 15]
         },
         dataset:{
             source:[ip.value,ip_people_num.value]
@@ -220,20 +226,21 @@ onMounted(() => {
         echarts.registerMap('topo', {geoJSON: org_response.data});
         geography_chart_china.value.setOption({
             title:{
-                text:"Ip地理分布图"
+                text:"Ip地理分布图",
+                padding:[5, 15]
             },
             dataRange:{
                 x:'left',
                 y:'bottom',
                 splitList:[
-                    {start:2000,label:'2000以上',color:'rgba(50,0,0,0.8)'},
-                    {start:1000,end:2000,label:'1001-2000',color:'rgba(150,0,0,0.8)'},
-                    {start:500,end:1000,label:'501-1000',color:'rgba(255,0,0,0.8)'},
-                    {start:201,end:500,label:'201-500',color:'rgba(255,0,0,0.7)'},
-                    {start:101,end:200,label:'101-200',color:'rgba(255,0,0,0.6)'},
-                    {start:51,end:101,label:'51-101',color:'rgba(255,0,0,0.4)'},
-                    {start:11,end:50,label:'11-50',color:'rgba(255,0,0,0.2)'},
-                    {start:0,end:10,label:'0-10',color:'rgba(255,255,255,1)'},
+                    {start:1000,label:'1000以上',color:'rgba(50,0,0,0.8)'},
+                    {start:101,end:1000,label:'101-1000',color:'rgba(150,0,0,0.8)'},
+                    {start:50,end:101,label:'50-100',color:'rgba(255,0,0,0.8)'},
+                    {start:41,end:50,label:'41-50',color:'rgba(255,0,0,0.7)'},
+                    {start:31,end:40,label:'31-40',color:'rgba(255,0,0,0.6)'},
+                    {start:21,end:30,label:'21-30',color:'rgba(255,0,0,0.4)'},
+                    {start:5,end:20,label:'5-20',color:'rgba(255,0,0,0.2)'},
+                    {start:0,end:4,label:'0-4',color:'rgba(255,255,255,1)'},
                 ]
             },
             series: [{

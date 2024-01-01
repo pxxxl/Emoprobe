@@ -13,7 +13,6 @@
                     class="input-size" 
                     placeholder="Please Input" 
                     :style="{boxShadow:`var(--el-box-shadow-dark)`}"
-                    @keyup.enter = "Postdata"
                     />
 
                 <el-button 
@@ -30,7 +29,7 @@
                     class="dis-flex center-flex upload"
                     :action = "api"
                     :show-file-list="false"
-                    :ref= "uploadRef"
+                    ref= "uploadRef"
                     :auto-upload = "false"
                     :limit = "1"
                     accept = ".json"
@@ -48,6 +47,16 @@
                         <el-icon><FolderOpened class="scale"/></el-icon>
                     </el-button> 
                 </el-upload>
+                
+                <el-button 
+                    type="primary" 
+                    native="button" 
+                    class="button center" 
+                    @mouseleave="(event)=>event.target.blur()" 
+                    @click="getFile">
+                    <el-icon><Download /></el-icon>
+                </el-button>
+
             </div>
         </form>
     </div>
@@ -82,12 +91,41 @@ export default{
             success:false,
             filelist:[],
             uploadRef:null,
+            api:'/api/v1/comments'
         }
     },
     components:{
         NothingShow
     },
     methods: {
+        getFile(){
+            let bv_str = "";
+            console.log("下载");
+            bv_str = translateBV(this.video);
+            if(bv_str == "error"){
+                ShowErrorMessage("提取bv号出现错误");
+                return;
+            }
+            axios.get("/api/v1/crawl",{
+                params:{
+                    bv:bv_str
+                }
+            }).then((org_response)=>{
+                let response = org_response.data;
+                if(response.code == 407){
+                    ShowErrorMessage("爬取信息失败");
+                    return;
+                }
+                const a = document.createElement('a');
+                a.download = "数据结果"+ bv_str +".json";
+                a.style.display = 'none';
+                const blob = new Blob([JSON.stringify(response.data)]);
+                a.href = URL.createObjectURL(blob);
+                a.click();
+                document.body.removeChild(a);
+                this.video = "";
+            })
+        },
         Postdata(){
             let bv_number = "";
             if(this.filelist.length > 0){
@@ -122,23 +160,37 @@ export default{
                 this.filelist = [];
             }
         },
-        handleError(error, uploadFile, uploadFiles){
+        handleError(error, uploadFile, uploadFiles){//back up
             ShowErrorMessage("Fail connect : "+error);
         },  
-        handleSuccess(org_response,file,files){
-           let response = JSON.parse(org_response);
-           if(response.code == 409){
-                ShowErrorMessage(response.msg);
-                return;
-           }
-           let bv_num = response.data.video_bid;
-           this.$router.push({
-                path:"/datashow",
-                query:{bv:bv_num}
-           })
+        handleSuccess(org_response,file,files){//back up
+            console.log(org_response);
         },
         submit(){
-            this.uploadRef.submit();
+            let fileread = new FileReader();
+            fileread.onload = ()=>{
+                // console.log(fileread.result);
+                axios.post(this.api,fileread.result,{
+                    headers:{
+                        ' content-type':'application/json'
+                    }
+                }).then((org_repsone)=>{
+                    let response = org_repsone.data;
+                    if(response.code == 409){
+                        ShowErrorMessage("感知错误");
+                        this.filelist = [];
+                        return;
+                    }
+                    console.log(response);
+                    let bv_num = response.data.video.video_bid;
+                    this.$router.push({
+                        path:"/datashow",
+                        query:{bv:bv_num}
+                    });
+                })
+            }
+            let filestring = fileread.readAsText(this.filelist[0].raw);
+            // this.uploadRef.submit();
         }
     },
     mounted() {
