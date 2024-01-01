@@ -1,13 +1,22 @@
-# coding: utf-8
+"""
+This is a collection of common functions.
+
+File Name: manual_tagger.py
+Author: Lin Ziyao (GitHub: Sen-Yao)
+Date Created: 2024-01-01
+Purpose: Tag comments' emotions
+
+"""
+
 import os
 import pickle
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from DeepLearning.model_tesan import TESAN
+from DeepLearning.common import model_tesan
 from parameter import parse_args
-from utils import load_data, get_batch, make_mask
+from DeepLearning.common.utils import load_data, get_batch, make_mask
 from preprocess.preprocess import preprocess
 
 
@@ -39,7 +48,7 @@ print('Data loaded')
 # num_input is the len of vocabulary
 net_arch = args
 net_arch.num_input = tensor_tr.shape[1]
-net = TESAN(net_arch).cuda()
+net = model_tesan.TESAN(net_arch).cuda()
 optimizer = optim.Adam(net.parameters(), args.lr, betas=(args.momentum, 0.999), weight_decay=args.wd)
 criterion = nn.KLDivLoss(reduction='batchmean')
 
