@@ -1,33 +1,37 @@
 <template>
     <div class="dis-flex direction-column-flex composite">
-        <el-button @click="FileUpShow($event)" type="success" @mouseleave="(event) => event.target.blur()"
-            class="uploadfilenbtn">
-            <el-icon>
-                <Upload />
-            </el-icon>
-        </el-button>
-        <FileUp :visiable="vs" />
+        <FileUp :visiable="vsu" />
+        <FileDown :visiable="vsd"/>
         <div class="backimg"></div>
-            <form id="form1" class="center-flex">
+            <form id="form1" class="center-flex direction-column-flex">
                 <!-- <span id="notice" class="dis-flex center-flex">{{ url_notice }}</span>  -->
                 <div class="dis-flex direction-row-flex center-flex in">
                     <el-input v-model.lazy="video" :show-word-limit="true"
                         :autofocus="true" :clearable="true" class="input-size"
                         :placeholder="url_notice" 
                         size="large"
-                        />
-
+                    />
                     <el-button type="primary" native="button" class="button center"
                         @mouseleave="(event) => event.target.blur()" @click="Postdata">
                         <el-icon>
                             <Search class="scale" />
                         </el-icon>
                     </el-button>
-
-                    <el-button type="primary" native="button" class="buttonD center"
-                        @mouseleave="(event) => event.target.blur()" @click="getFile">
-                        爬取评论 <el-icon>
+                </div>
+                <div style="margin-top: 20px;">
+                    <el-button  native="button" id="buttonD" class="center"
+                        @mouseleave="(event) => event.target.blur()" @click="FileDownShow($event)">
+                        爬取评论文件
+                        <el-icon>
                             <Download class="scale" style="margin-left: 3px;" />
+                        </el-icon>
+                    </el-button>
+
+                    <el-button @click="FileUpShow($event)"  @mouseleave="(event) => event.target.blur()"
+                        id="buttonU" >
+                        上传评论文件
+                        <el-icon>
+                            <Upload />
                         </el-icon>
                     </el-button>
                 </div>
@@ -36,10 +40,10 @@
 </template>
 
 <script>
-import axios from 'axios'
 import { translateBV, ShowErrorMessage } from '@/assets/g.js'
 import NothingShow from './NothingsShow.vue'
 import FileUp from './fileUp.vue'
+import FileDown from './fileDown.vue'
 
 export default {
     data() {
@@ -50,41 +54,16 @@ export default {
             com: null,
             show: null,
             success: false,
-            vs: false,
+            vsu: false,
+            vsd:false
         }
     },
     components: {
         NothingShow,
-        FileUp
+        FileUp,
+        FileDown
     },
     methods: {
-        getFile() {
-            let bv_str = "";
-            console.log("下载");
-            bv_str = translateBV(this.video);
-            if (bv_str == "error") {
-                ShowErrorMessage("提取bv号出现错误");
-                return;
-            }
-            axios.get("/api/v1/crawl", {
-                params: {
-                    bv: bv_str
-                }
-            }).then((org_response) => {
-                let response = org_response.data;
-                if (response.code == 407) {
-                    ShowErrorMessage("爬取信息失败");
-                    return;
-                }
-                const a = document.createElement('a');
-                a.download = "数据结果" + bv_str + ".json";
-                a.style.display = 'none';
-                const blob = new Blob([JSON.stringify(response.data)]);
-                a.href = URL.createObjectURL(blob);
-                a.click();
-                this.video = "";
-            })
-        },
         Postdata() {
             let bv_number = "";
             bv_number = translateBV(this.video);
@@ -99,8 +78,14 @@ export default {
         },
         FileUpShow(event) {
             event.target.blur();
-            this.vs = !this.vs;
+            document.getElementById('buttonU').blur();
+            this.vsu = !this.vsu;
 
+        },
+        FileDownShow(event) {
+            event.target.blur();
+            document.getElementById('buttonD').blur();
+            this.vsd = !this.vsd;
         },
     },
     mounted() {
@@ -125,12 +110,6 @@ export default {
 }
 
 .composite {}
-
-.uploadfilenbtn {
-    position: absolute;
-    top: 70px;
-    right: 0px;
-}
 
 .input-size {
     width: 100%;

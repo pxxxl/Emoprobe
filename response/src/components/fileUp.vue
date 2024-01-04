@@ -25,7 +25,7 @@
                     </el-button> 
                 </el-upload>
 
-                <div v-if="filelist.length == 0" class="notice dis-flex center-flex" style="font-size: larger;">
+                <div v-if="filelist.length == 0" class="notice dis-flex center-flex select-no" style="font-size: larger;">
                     请选择文件
                 </div>
 
@@ -106,7 +106,7 @@ export default{
                     }
                 }).then((org_repsone)=>{
                     let response = org_repsone.data;
-                    if(response.code == 409){
+                    if(response.code == 409 || response.code == 500){
                         ShowErrorMessage("感知错误");
                         return;
                     }

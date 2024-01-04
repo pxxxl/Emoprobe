@@ -24,7 +24,7 @@
     <el-button type="primary" 
         @mouseleave="(event)=>{event.target.blur()}"  
         @click="Clear" 
-        style="margin-left: 50%;margin-top: 2vh;transform: translateX(-50%);"
+        style="margin-left: 50%;margin-top: 2vh;transform: translateX(-50%);margin-bottom: 40px;"
         v-if="result != null"
     >
     清空列表
