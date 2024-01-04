@@ -34,5 +34,6 @@ body{
         color 0.5s  ease-in-out,
         background-image 2s ease-in-out;
     background-color:  var(--color-background);
+    min-width: 100%;
     margin: 0;
 }

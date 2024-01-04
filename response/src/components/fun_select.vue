@@ -1,12 +1,11 @@
 <template>
     <div id="select-part" class="dis-flex direction-row-flex" :style=" {boxShadow:`var(--el-box-shadow-light)`}"> 
-            <div class="pic-container">
+            <div class="pic-container" @click="$emit('back')">
                 <img src="/resource/picture/blueArch.png" style="display: block;width: 100%;height: 100%;">
             </div>
             <div class="container dis-flex direction-row-flex align-items-center">
                     <button v-bind:class="button_1_class " @mouseleave="(event)=>event.target.blur()" :value="vedio_ComAnaly" @click="TargetChange(vedio_ComAnaly)" v-if="bs">{{vedio_analys_notice}}</button>
                     <button v-bind:class="button_2_class" @mouseleave="(event)=>event.target.blur()" :value="single_ComAnaly" @click="TargetChange(single_ComAnaly)" v-if="bs">{{single_analys_notice}}</button>
-                    <button v-bind:class="button_3_class " @mouseleave="(event)=>event.target.blur()" :value="file_ComAnaly" @click="TargetChange(file_ComAnaly)" v-if="bs">{{file_analys_notice}}</button>
             </div>
     </div> 
 </template>
@@ -73,9 +72,9 @@ export default{
 .button{
    font-size: 15px;
    height: 50%;
-   width: 10%;
-   margin-left: 2px;
-   margin-right: 2px;
+   margin-left: 5px;
+   margin-right: 5px;
+   padding: 6px;
    background-color: var( --color-button-nohover);
    color: black;
    border: 0px;
@@ -87,9 +86,9 @@ export default{
 .button-act{
     font-size: 15px;
    height: 50%;
-   width: 10%;
-   margin-left: 2px;
-   margin-right: 2px;
+   padding: 6px;
+   margin-left: 5px;
+   margin-right: 5px;
    background-color: var( --color-button-act);
    color: black;
    border: 0px;
@@ -101,5 +100,6 @@ export default{
 
 .pic-container{
     flex: 2;
+    cursor: pointer;
 }
 </style>

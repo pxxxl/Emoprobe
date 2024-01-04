@@ -1,9 +1,6 @@
 <template>
-    <div  class="dis-flex direction-column-flex align-items-center">
-            <span id="notice">
-                文件上传评论分析
-            </span>
-            <div class="dis-flex direction-row-flex ">
+    <el-dialog  class="dis-flex direction-column-flex align-items-center border" v-model="dialogVisiable" title="文件上传评论分析">
+            <div class="dis-flex direction-column-flex ">
                 <el-upload
                     v-model:file-list = "filelist"
                     class="dis-flex center-flex upload"
@@ -24,38 +21,51 @@
                         class="button center" 
                         @mouseleave="(event) => event.target.blur()" 
                     >
-                        <el-icon><FolderOpened class="scale"/></el-icon>
+                       选择文件
                     </el-button> 
                 </el-upload>
 
-                <el-button  class="button center"  type="primary" @click="submit">
-                    <el-icon><Upload class="scale"/></el-icon>
-                </el-button>
+                <div v-if="filelist.length == 0" class="notice dis-flex center-flex" style="font-size: larger;">
+                    请选择文件
+                </div>
+
+                <div v-if="filelist.length > 0" class="notice margin-auto">
+                    <upload-item v-for="file in filelist" 
+                        :file="file" 
+                        :key="file.uid" 
+                        class="dis-flex direction-row-flex center-flex item margin-auto"
+                    >  
+                        <el-icon class="set-interval"><Document /></el-icon>
+                        <div class="name">{{ file.name }}</div>
+                        <el-icon class="icon dis-flex center-flex"><Delete @click="Delete" class="pointer bigger"/></el-icon>
+                    </upload-item>
+                </div>
+
+                <div class="dis-flex direction-row-flex">
+                    <el-button  class="button center"  type="primary" @click="submit"  @mouseleave="(event) => event.target.blur()" :disabled="filelist.length == 0" :loading="load_flag">
+                        提交
+                    </el-button>
+                    <el-button  class="button center"  type="primary" @click="dialogVisiable=false"  @mouseleave="(event) => event.target.blur()" >
+                        取消
+                    </el-button>
+                </div>
             </div>
 
-            <div v-if="filelist.length > 0" class="fl margin-auto">
-                <upload-item v-for="file in filelist" 
-                    :file="file" 
-                    :key="file.uid" 
-                    class="dis-flex direction-row-flex center-flex item margin-auto"
-                >  
-                    <el-icon class="set-interval"><Document /></el-icon>
-                    <div class="name">{{ file.name }}</div>
-                    <el-icon class="icon dis-flex center-flex"><Delete @click="Delete" class="pointer bigger"/></el-icon>
-                    </upload-item>
-            </div>
-        </div>
+        </el-dialog>
 </template>
 
 <script>
 import axios from 'axios'
 import {translateBV,ShowErrorMessage} from '@/assets/g.js'
 export default{
+    props:['visiable'],
     data() {
         return {
             filelist:[],
             uploadRef:null,
-            api:'/api/v1/comments'
+            api:'/api/v1/comments',
+            dialogVisiable:false,
+            load_flag:false
         }
     },
     methods:{
@@ -83,26 +93,33 @@ export default{
             console.log(org_response);
         },
         submit(){
+            if(this.filelist == 0){
+                ShowErrorMessage('请选择文件');
+                return;
+            }
+            this.load_flag = true;
             let fileread = new FileReader();
             fileread.onload = ()=>{
-                // console.log(fileread.result);
                 axios.post(this.api,fileread.result,{
                     headers:{
-                        ' content-type':'application/json'
+                        'content-type':'application/json'
                     }
                 }).then((org_repsone)=>{
                     let response = org_repsone.data;
                     if(response.code == 409){
                         ShowErrorMessage("感知错误");
-                        this.filelist = [];
                         return;
                     }
                     console.log(response);
                     let bv_num = response.data.video.video_bid;
+                    this.load_flag = false;
                     this.$router.push({
                         path:"/datashow",
                         query:{bv:bv_num}
                     });
+                }).catch((error)=>{
+                    ShowErrorMessage(error);
+                    this.load_flag = false;
                 })
             }
             let filestring = fileread.readAsText(this.filelist[0].raw);
@@ -112,6 +129,11 @@ export default{
     mounted() {
         this.uploadRef = this.$refs.uploadRef;
     },
+    watch:{
+        visiable(){
+            this.dialogVisiable = true;
+        }
+    }
 }
 
 
@@ -119,26 +141,19 @@ export default{
 </script>
 
 <style scoped>
-#notice{
-    font-size: 16px;
-    user-select: none;
-    margin-bottom: 2vh;
-    margin-top: 5vh;
+.notice{
+    width: 100%;
+    height: 100px;
 }
 .center{
     margin: auto;
 }
 
 .button{
-    width: 5vh;
-    margin-left: 0px!important;
-    margin-right: 2vh!important;
-}
-.fl{
-    position: relative;
-    top: 5vh;
-    width: 60%;
-    min-height: 5vh;
+    margin-top: 1vh;
+    margin-right: 1vh;
+    margin-left: 1vh;
+    margin-bottom: 1vh;
 }
 .bigger{
     scale: 1.2;
@@ -152,6 +167,8 @@ export default{
 }
 .name{
     font-size: large;
+    margin-right:  1vh;
+    margin-left: 2vh;
     flex: 7;
 }
 .icon{
@@ -159,6 +176,10 @@ export default{
 }
 .scale{
     scale: 1.3;
+}
+.upload{
+    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 </style>

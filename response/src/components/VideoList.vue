@@ -67,5 +67,6 @@ export default{
     border-radius: 3vh;
     backdrop-filter:blur(6px);
     color: var( --color-font-black);
+    margin-top: 3vh;
 }
 </style>
