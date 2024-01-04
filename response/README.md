@@ -17,7 +17,7 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 
 推荐使用Git进行仓库管理、支持vue3索引的插件
 
-## 项目构建指令
+## 项目构建和依赖安装指令
 
 ```sh
 npm install
@@ -34,6 +34,4 @@ npm run dev
 ```sh
 npm run build
 ```
-
-
->   公共目录：public --- 用于存放团队协作的交互文件
+> 配置文件vite.config.js
