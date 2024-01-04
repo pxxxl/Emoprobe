@@ -1,7 +1,7 @@
 import numpy as np
 import jieba
 import warnings
-
+import os
 
 def csv_divider(csv_file, num_class):
     """
@@ -15,7 +15,7 @@ def csv_divider(csv_file, num_class):
     tag = []
     for emo_class in range(num_class):
         tag.append(emo_class)
-
+    print(os.getcwd())
     with open(csv_file, 'r', encoding='utf-8') as file:
         for line in file:
             parts = line.strip().split(',')
@@ -36,11 +36,16 @@ def csv_divider(csv_file, num_class):
 
     for i, label in enumerate(labels):
         one_hot_labels[i, label] = 1
+    label_path = 'train'
+    label_path = os.path.join(label_path, 'dataset')
+    label_path = os.path.join(label_path, 'label.npy')
+    np.save(label_path, one_hot_labels)
 
-    np.save('dataset/label.npy', one_hot_labels)
-
+    word_path = 'train'
+    word_path = os.path.join(word_path, 'dataset')
+    word_path = os.path.join(word_path, 'word.txt')
     # Divide sentences into word by jieba
-    with open('dataset/word.txt', 'w', encoding='utf-8') as word_file:
+    with open(word_path, 'w', encoding='utf-8') as word_file:
         for sentence in sentences:
             words = jieba.cut(sentence)
             word_file.write(' '.join(words) + '\n')
@@ -48,7 +53,10 @@ def csv_divider(csv_file, num_class):
 
 
 def create_word_bag():
-    with open('dataset/word.txt', 'r', encoding='utf-8') as file:
+    word_path = 'train'
+    word_path = os.path.join(word_path, 'dataset')
+    word_path = os.path.join(word_path, 'word.txt')
+    with open(word_path, 'r', encoding='utf-8') as file:
         lines = file.readlines()
     vocab = set()
     for line in lines:
@@ -63,8 +71,13 @@ def create_word_bag():
             if word in vocab:
                 word_bag[i, list(vocab).index(word)] = 1
     vocab = np.array(list(vocab))
-    np.save('../model/vocab.npy', vocab)
-    np.save('dataset/word_bag.npy', word_bag)
+    vocab_path = 'model'
+    vocab_path = os.path.join(vocab_path, 'vocab.npy')
+    word_bag_path = 'train'
+    word_bag_path = os.path.join(word_bag_path, 'dataset')
+    word_bag_path = os.path.join(word_bag_path, 'word_bag.npy')
+    np.save(vocab_path, vocab)
+    np.save(word_bag_path, word_bag)
 
 
 def preprocess(csv_file, num_class):

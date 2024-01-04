@@ -6,7 +6,7 @@ def parse_args():
     parser = argparse.ArgumentParser(
         description='Topic-Enhanced Self-Attention Network for Social Emotion Classification')
     # word2vec
-    parser.add_argument('--WORD2VEC_DIR', default='../model/sgns.weibo.pickle')
+    parser.add_argument('--WORD2VEC_DIR', default='model/sgns.weibo.pickle')
 
     # dataset
     parser.add_argument('--need_preprocess', default=False, type=bool, help='need preprocess the csv file')

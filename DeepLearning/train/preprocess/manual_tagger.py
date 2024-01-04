@@ -39,7 +39,7 @@ class ManualTagger:
         Deletes the first line from the specified text file.
         """
         with open(self.txt_file, 'r', encoding='utf-8') as file:
-            lines = file.readlines( )
+            lines = file.readlines()
 
         if lines:
             # Remove first line
@@ -54,15 +54,15 @@ class ManualTagger:
         """
         with open(self.txt_file, 'r', encoding='utf-8', errors='replace') as txtfile:
             for line in txtfile:
-                line = line.strip( )
+                line = line.strip()
                 print(f'\nOriginal comments: {line}')
 
                 user_input = input("Enter a number or press Enter to skip: ")
 
-                if user_input.strip( ).isdigit( ):
+                if user_input.strip().isdigit():
                     line_to_write = [user_input, line]
                     self.append_to_csv(line_to_write)
-                self.delete_line_from_txt_file( )
+                self.delete_line_from_txt_file()
 
         print(f'Data has been processed and saved to {self.csv_file}')
 
