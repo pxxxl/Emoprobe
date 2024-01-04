@@ -1,5 +1,5 @@
 <template>
-    <div class="dis-flex direction-row-flex composite">
+    <div class="dis-flex direction-column-flex composite">
         <el-button @click="FileUpShow($event)" type="success" @mouseleave="(event) => event.target.blur()"
             class="uploadfilenbtn">
             <el-icon>
@@ -7,13 +7,15 @@
             </el-icon>
         </el-button>
         <FileUp :visiable="vs" />
-        <div class="backimg">
-            <form id="form1" :style="{ boxShadow: `var(--el-box-shadow-dark)` }" class="center-flex">
+        <div class="backimg"></div>
+            <form id="form1" class="center-flex">
                 <!-- <span id="notice" class="dis-flex center-flex">{{ url_notice }}</span>  -->
                 <div class="dis-flex direction-row-flex center-flex in">
-                    <el-input v-model.lazy="video" type="textarea" :show-word-limit="true"
-                        :autosize="{ minRows: 3, maxRows: 5 }" :autofocus="true" :clearable="true" class="input-size"
-                        :placeholder="url_notice" :style="{ boxShadow: `var(--el-box-shadow-dark)` }" />
+                    <el-input v-model.lazy="video" :show-word-limit="true"
+                        :autofocus="true" :clearable="true" class="input-size"
+                        :placeholder="url_notice" 
+                        size="large"
+                        />
 
                     <el-button type="primary" native="button" class="button center"
                         @mouseleave="(event) => event.target.blur()" @click="Postdata">
@@ -30,7 +32,6 @@
                     </el-button>
                 </div>
             </form>
-        </div>
     </div>
 </template>
 
@@ -112,10 +113,11 @@ export default {
 .backimg {
     width: 60%;
     margin: auto;
-    padding: 1px;
+    height: 200px;
     background-image: url('/resource/picture/blueArch.png');
     background-repeat: no-repeat;
     background-size: 100% 100%;
+    margin-top: 1vh;
 }
 
 .in {
@@ -139,12 +141,12 @@ export default {
 
 #form1 {
     display: flex;
-    width: 85%;
+    width: 60%;
     margin: auto;
-    margin-top: 25vh;
     padding: 5px;
     height: 110px;
     backdrop-filter: blur(6px);
+    border-radius: 10px;
 }
 
 .button {

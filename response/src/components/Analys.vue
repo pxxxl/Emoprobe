@@ -24,17 +24,17 @@
                 }}</el-descriptions-item>
             </el-descriptions>
         </div>
-        <el-radio-group v-model="show" style="margin-left: 50px;">
-            <el-radio :label="1" size="large">情感分类的人数</el-radio>
+        <h1 class="dis-flex center-flex" style="margin-top: 50px;">评论统计结果</h1>
+        <el-radio-group v-model="show" style="margin-left: 50px;margin-bottom: 20px;">
+            <el-radio :label="1" size="large">评论中国Ip分布</el-radio>
             <el-radio :label="2" size="large">Ip占比</el-radio>
             <el-radio :label="3" size="large">各情感的Ip占比</el-radio>
             <el-radio :label="4" size="large">各Ip的情感占比</el-radio>
-            <el-radio :label="5" size="large">评论中国Ip分布</el-radio>
+            <el-radio :label="5" size="large">情感分类的人数</el-radio>
             <el-radio :label="6" size="large">分析结果列表一览</el-radio>
         </el-radio-group>
         <!-- <el-divider border-style="double" /> -->
         <div id="charts" v-show="show != 6">
-            <h1 class="dis-flex center-flex">评论统计结果</h1>
             <div v-loading="!(chartshow0_flag && chartshow1_flag)" style="height: 200px;width: 100%;"
                 v-if="!(chartshow0_flag && chartshow1_flag)"></div>
             <chart :overview="chartdata[0]" :ipAnalys="chartdata[1]" v-if="chartshow0_flag && chartshow1_flag"
@@ -44,7 +44,6 @@
 
         <div id="table" v-show="show == 6">
             <div class="pagination-block">
-                <h1 class="dis-flex center-flex">评论分析结果</h1>
                 <sift @sift="SiftUpdate" v-if="datashow_flag && chartshow0_flag && chartshow1_flag" :ipArr="ipArr" />
                 <div class="demonstration">
                     <div class="dis-flex center-flex pagecount">

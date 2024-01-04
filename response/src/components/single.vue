@@ -1,15 +1,16 @@
 
 <template>
-    <div id="input" class="center dis-flex center-flex">
-        <span class="center select-no" style="margin-top: 5vh; font-size: 15px;">请输入单个评论进行评论分析</span>
-        <el-input id="input" v-model="comment" placeholder="Please Input" class="center input-size" @keyup.enter="Update"></el-input>
-        <el-button type="primary" @mouseleave="(event)=>{event.target.blur()}"  @click="Update" :loading="loadin_flag" loading-icon="Eleme">{{commitNotice}}</el-button>
-        <Transition name="fade" mode="in-out">
-            <div class="dis-flex center-flex notice" v-if="noticevisible">
-                内容不能为空
-            </div>
-        </Transition>
-    </div>
+        <div class="backimg"></div>
+        <div id="input" class="center dis-flex center-flex">
+            <!-- <span class="center select-no" style="margin-top: 5vh; font-size: 15px;">请输入单个评论进行评论分析</span> -->
+            <el-input id="" v-model="comment" placeholder="请输入单个评论进行评论分析" class="center input-size" @keyup.enter="Update" size="large"></el-input>
+            <el-button type="primary" @mouseleave="(event) => { event.target.blur() }"  @click="Update" :loading="loadin_flag" loading-icon="Eleme" class="commitbtn">{{ commitNotice }}</el-button>
+            <Transition name="fade" mode="in-out">
+                <div class="dis-flex center-flex notice" v-if="noticevisible">
+                    内容不能为空
+                </div>
+            </Transition>
+        </div>
     <div id="Responseshow" height="300px" v-if="result != null" style="background-color: white;" :style=" {boxShadow:`var(--el-box-shadow-dark)`}">
         <el-scrollbar>
             <el-table :data="result" style="width: 100%" :border="true">
@@ -101,6 +102,18 @@ export default {
 </script>
 
 <style scoped>
+.commitbtn{
+    margin-top: 5px;
+}
+.backimg{
+    width: 60%;
+    height: 200px;
+    margin: auto;
+    background-image: url('/resource/picture/blueArch.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    margin-top: 1vh;
+}
 #Responseshow{
     height: 300px;
     width: 600px;
@@ -110,7 +123,10 @@ export default {
 #input{
     display: flex;
     flex-direction: column;
-    margin: auto;
+    height: 160px;
+    width: 60%;
+    backdrop-filter: blur(6px);
+    border-radius: 10px;
 }
 .center{
     margin: auto;
@@ -118,8 +134,8 @@ export default {
 
 .input-size{
     width:45%;
-    margin-top: 3vh;
-    margin-bottom: 3vh;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .notice{
