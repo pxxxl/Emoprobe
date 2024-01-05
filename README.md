@@ -5,7 +5,7 @@ Emoprobe，为解决该需求而诞生的项目。针对bilibili视频网站进�
 
 
 
-Emoprobe一是款免费开源项目，地址[Emoprobe，数据可视化的情感分析系统](https://github.com/pxxxl/Emoprobe)
+Emoprobe是一个免费开源项目，地址[Emoprobe，数据可视化的情感分析系统](https://github.com/pxxxl/Emoprobe)
 
 
 
@@ -39,7 +39,7 @@ FrontEnd support, thanks [@nianmobai](https://github.com/nianmobai)
 
 - **文件操作：** 可下载和上传爬虫爬取的视频文件
 
-- **远程部署：** 本项目已支持并成功部署在服务器上
+- **远程部署：** 本项目已支持并成功部署在服务器上，欢迎大家体验 [Emoprobe System]](http://116.204.9.108/#/)
 
   
 
