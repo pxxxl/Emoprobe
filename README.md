@@ -39,7 +39,7 @@ FrontEnd support, thanks [@nianmobai](https://github.com/nianmobai)
 
 - **文件操作：** 可下载和上传爬虫爬取的视频文件
 
-- **远程部署：** 本项目已支持并成功部署在服务器上，可前往[Emoprobe System](http://116.204.9.108/)使用
+- **远程部署：** 本项目已支持并成功部署在服务器上
 
   
 
