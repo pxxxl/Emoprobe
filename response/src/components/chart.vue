@@ -1,31 +1,26 @@
 <template>
     <div id="echart">
-        <div id="chart1" class="" :style=" {boxShadow:`var(--el-box-shadow-dark)`,margin:50}"></div>
-        <el-divider border-style="double" />
-        <div id="chart2" class="" :style=" {boxShadow:`var(--el-box-shadow-dark)`}"></div>
-        <el-divider border-style="double" />
-        <div id="chart3" class="" :style=" {boxShadow:`var(--el-box-shadow-dark)`}"></div>
-        <el-divider border-style="double" />
-        <el-select v-model="ip_select" @change="emo_in_ip_chartChange">
+        <div id="chart1" class="chart" :style=" {boxShadow:`var(--el-box-shadow-dark)`}" v-show="showpart == 5"></div>
+        <div id="chart2" class="chart" :style=" {boxShadow:`var(--el-box-shadow-dark)`}" v-show="showpart == 2"></div>
+        <div id="chart3" class="chart" :style=" {boxShadow:`var(--el-box-shadow-dark)`}" v-show="showpart == 3"></div>
+        <el-select v-model="ip_select" @change="emo_in_ip_chartChange" v-show="showpart == 4">
             <el-option v-for="(item,key) in ip"
                 :value="key"
                 :label="item"
             >
             </el-option>
         </el-select>
-        <div id="chart4" class="" :style=" {boxShadow:`var(--el-box-shadow-dark)`}"></div>
-        <el-divider border-style="double" />
-        <div id="chart5"  :style=" {boxShadow:`var(--el-box-shadow-dark)`}"></div>
-
+        <div id="chart4" class="chart" :style=" {boxShadow:`var(--el-box-shadow-dark)`}" v-show="showpart == 4"></div>
+        <div id="chart5"  class="chart" :style=" {boxShadow:`var(--el-box-shadow-dark)`}" v-show="showpart == 1"></div>
     </div>
 </template>
 
 <script lang="ts" setup>
 import axios from 'axios';
 import * as echarts from 'echarts';
-import {onMounted, ref} from 'vue';
+import {onMounted, ref,Ref} from 'vue';
 
-const props = defineProps(['overview',"ipAnalys"]);
+const props = defineProps(['overview',"ipAnalys","showpart"]);
 const pie_size = 400;
 const ip_select = ref(0);
 
@@ -300,4 +295,7 @@ onMounted(() => {
     border: 0.5px black;
 }
 
+.chart{
+    
+}
 </style>

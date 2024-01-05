@@ -1,5 +1,5 @@
 <template>
-    <div class="">
+    <div class="background">
         <div class="dis-flex direction-row-flex align-items-center">
             <span style="margin-left: 10px; margin-right: 2px;">ip</span>
             <el-select v-model="ip" placeholder="ip选择" :multiple="true">
@@ -123,6 +123,10 @@ onMounted(()=>{
 </script>
 
 <style scoped>
+.background{
+    background-color: rgba(0, 0, 0,0.1);
+    padding: 20px;
+}
 .morepart-enter-active {
   animation: bounce-in 0.28s;
 }

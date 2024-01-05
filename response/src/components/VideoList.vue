@@ -1,6 +1,6 @@
 <template>
     <el-scrollbar class="list border">
-        <p class="select-no dis-flex center-flex" style="font-size: 16px;"><b>数据库视频列表</b></p>
+        <p class="select-no dis-flex center-flex" style="font-size: 16px;"><b>视频列表</b></p>
         <router-link class="none-decoration link" v-for="bv_inform in videolist" :to="{path:'/datashow',query:{bv:bv_inform.video_bid}}" ><b>{{ titleProccess(bv_inform) }}</b></router-link>
     </el-scrollbar>
 </template>
@@ -67,5 +67,6 @@ export default{
     border-radius: 3vh;
     backdrop-filter:blur(6px);
     color: var( --color-font-black);
+    margin-top: 3vh;
 }
 </style>
