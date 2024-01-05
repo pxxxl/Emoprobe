@@ -247,7 +247,7 @@ onMounted(() => {
                     { name: "天津市", value: get_IP_num('天津') },
                     { name: "河北省", value: get_IP_num("河北") },
                     { name: "山西省", value: get_IP_num("山西") },
-                    { name: "内蒙古自治区", value: get_IP_num("内蒙") },
+                    { name: "内蒙古自治区", value: get_IP_num("内蒙古") },
                     { name: "辽宁省", value: get_IP_num("辽宁") },
                     { name: "吉林省", value: get_IP_num("吉林") },
                     { name: "黑龙江省", value: get_IP_num("黑龙江") },
