@@ -18,8 +18,8 @@ BackEnd support, thanks [@mj3622](https://github.com/mj3622)
 FrontEnd support, thanks [@nianmobai](https://github.com/nianmobai)
 
 
-
-![](https://img.shields.io/github/commit-activity/m/pxxxl/Emoprobe?color=4e4c97) ![](https://img.shields.io/tokei/lines/github/pxxxl/Emoprobe?color=4e4c97) ![](https://img.shields.io/github/repo-size/pxxxl/Emoprobe?color=4e4c97)  
+![](https://img.shields.io/github/commit-activity/m/pxxxl/Emoprobe?color=4e4c97) [![Lines Of Code](https://tokei.rs/b1/github/pxxxl/Emoprobe?category=code)](https://github.com/pxxxl/Emoprobe)
+ ![](https://img.shields.io/github/repo-size/pxxxl/Emoprobe?color=4e4c97)  
 
 这是一张Web预览图
 
