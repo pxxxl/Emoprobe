@@ -54,9 +54,9 @@
 
 由于上文中给出了两种Java环境的配置方案，因此下面分别介绍两种方案的启动方式：
 
-**方案一：**使用使用命令行工具，在Backend文件夹下运行`java -jar .\BackEnd.jar`
+**方案一：** 使用使用命令行工具，在Backend文件夹下运行`java -jar .\BackEnd.jar`
 
-**方案二：**运行`BackEnd/src/main/java/com/minjer/BackEndApplication.java`文件
+**方案二：** 运行`BackEnd/src/main/java/com/minjer/BackEndApplication.java`文件
 
 
 
