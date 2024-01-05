@@ -87,11 +87,13 @@ public class EmotionModule {
                 // 解析 JSON 字符串为 JSON 对象
                 JSONArray jsonArray = JSON.parseObject(output.toString()).getJSONArray("emotions");
                 log.info("EmotionModule is finished");
-
+                List<String> emotions = jsonArray.toJavaList(String.class);
+                log.info("The result of EmotionModule is: {}", emotions.toString());
                 // 将 JSON 数组转换为 ArrayList
-                return jsonArray.toJavaList(String.class);
+                return emotions;
             } else {
                 log.info("The return of EmotionModule is null");
+                log.info("The output of EmotionModule is: {}", output.toString());
                 return null;
             }
         } catch (Exception e) {

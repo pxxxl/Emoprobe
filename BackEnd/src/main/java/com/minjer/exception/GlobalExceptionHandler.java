@@ -16,7 +16,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public Result handleException(Exception e) {
-        e.printStackTrace();
+        log.error("handleException: ", e);
+        log.error("handleException: " + e.getMessage());
         return new Result(500, "服务器出现异常，请联系管理员");
     }
 }
