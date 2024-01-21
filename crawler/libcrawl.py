@@ -322,7 +322,7 @@ def get_result_json_string(bv: str, cookie: str='', pure: bool=False) -> str:
     returns:
     - result_json_string: str
     """
-    utils.log('get_result_json_string: ' + bv)
+    utils.log('get_result_json_string: bv:' + bv)
     result_dict = crawl_all_info_of_video(bv, cookie)
     if pure:
         result_dict = result_dict['data']

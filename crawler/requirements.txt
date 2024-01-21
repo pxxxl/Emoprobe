@@ -1,3 +1,6 @@
 bilibili_api_python==16.1.1
 emoji==2.8.0
 Requests==2.31.0
+flask==2.0.1
+gunicorn==20.1.0
+Werkzeug==2.2.2

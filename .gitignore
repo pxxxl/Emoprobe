@@ -8,3 +8,5 @@ deploy/zip/
 deploy/.mypy_cache/
 response/dist/index.html
 draft/
+crawler/emoprobe_crawler_venv/
+DeepLearning/model/sgns.weibo.pickle

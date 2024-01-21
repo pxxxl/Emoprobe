@@ -1,0 +1,14 @@
+# 使用官方 Python 镜像
+FROM python:3.9-slim
+
+ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+EXPOSE 5001
+
+COPY requirements.txt .
+RUN python -m pip install --no-cache-dir --upgrade -r requirements.txt
+
+WORKDIR /app
+COPY . /app
+
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5001", "emotion_serve:app"]
