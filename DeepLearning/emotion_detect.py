@@ -97,7 +97,7 @@ def main():
     w2v_model = pickle.load(open(os.path.join(current_folder_path, 'model/sgns.weibo.pickle'), 'rb'))
     net = torch.load(os.path.join(current_folder_path, 'model/model.pkl'),  map_location=device)
 
-    vocab = np.load(os.path.join(current_folder_path,'model/vocab.npy'), allow_pickle=True)
+    vocab = np.load(os.path.join(current_folder_path, 'model/vocab.npy'), allow_pickle=True)
     for i in range(0, len(comments), MAX_COMMENTS):
         emotions += inf(comments[i:i + MAX_COMMENTS], w2v_model, net, vocab, device)
         # pbar.set_description(f"Processing batch {i// MAX_COMMENTS+1}/{len(comments) // MAX_COMMENTS}")
