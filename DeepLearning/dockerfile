@@ -11,4 +11,4 @@ RUN python -m pip install --no-cache-dir --upgrade -r requirements.txt
 WORKDIR /app
 COPY . /app
 
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5001", "emotion_serve:app"]
+CMD ["gunicorn", "-w", "1", "-b", "0.0.0.0:5001", "emotion_serve:app"]
